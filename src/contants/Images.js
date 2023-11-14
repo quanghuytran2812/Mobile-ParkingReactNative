@@ -1,0 +1,17 @@
+export default {
+    PLATE: require('../assets/images/logoindex.png'),
+    BUSUP: require('../assets/images/busup.png'),
+    PLATE1: require('../assets/images/logoremove.png'),
+    LOCATION: require('../assets/images/buslocation.png'),
+    ME: require('../assets/images/me.png'),
+    ROAD: require('../assets/images/road.png'),
+    ROAD1: require('../assets/images/road1.png'),
+    CARAVATAR: require('../assets/images/caravatar.png'),
+    CARUP: require('../assets/images/carup.png'),
+    VNPAY: require('../assets/images/vnpay.png'),
+    PIN: require("../assets/images/pin.png"),
+    CAR: require("../assets/images/car.png"),
+    RED: require("../assets/images/red-pin.png"),
+    BENXE: require("../assets/images/benxe.jpg"),
+    BENXE1: require("../assets/images/bx.jpg"),
+};
