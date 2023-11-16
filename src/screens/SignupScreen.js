@@ -10,6 +10,7 @@ import Feather from "react-native-vector-icons/Feather"
 
 const SignupScreen = ({ navigation }) => {
     const [isPasswordShow, setPasswordShow] = useState(false)
+    const [isPasswordShow1, setPasswordShow1] = useState(false)
     return (
         <View style={styles.container}>
             <StatusBar
@@ -93,18 +94,18 @@ const SignupScreen = ({ navigation }) => {
                         style={{ marginRight: 10 }}
                     />
                     <TextInput
-                        secureTextEntry={isPasswordShow ? false : true}
+                        secureTextEntry={isPasswordShow1 ? false : true}
                         placeholder="Xác nhận mật khẩu"
                         placeholderTextColor={Colors.DEFAULT_GREY}
                         selectionColor={Colors.DEFAULT_GREY}
                         style={styles.inputText}
                     />
                     <Feather
-                        name={isPasswordShow ? "eye" : 'eye-off'}
+                        name={isPasswordShow1 ? "eye" : 'eye-off'}
                         size={22}
                         color={Colors.DEFAULT_GREY}
                         style={{ marginRight: 10 }}
-                        onPress={() => setPasswordShow(!isPasswordShow)}
+                        onPress={() => setPasswordShow1(!isPasswordShow1)}
                     />
                 </View>
             </View>

@@ -7,6 +7,8 @@ import { TimePickerModal } from "react-native-paper-dates";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Display } from '../utils';
 import { Colors } from '../contants';
+import { verticalScale } from 'react-native-size-matters';
+
 
 const DateTimeScreen = ({navigation}) => {
     const [visible, setVisible] = React.useState(false);
@@ -89,7 +91,7 @@ const DateTimeScreen = ({navigation}) => {
                 <Text>{"Ngày kết thúc :" + selectedEndtDate}</Text>
             </View>
 
-            <Text style={{ marginTop: 30, fontWeight: 700 }}>Chọn thời gian</Text>
+            <Text style={{ marginTop: 30, fontWeight: 700  }}>Chọn thời gian</Text>
 
             <SafeAreaProvider style={{ flexDirection: 'row', marginTop: 20 }}>
                 <View style={{ flex: 1, alignItems: 'center', marginTop: 10 }}>
@@ -151,7 +153,8 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         height: Display.setHeight(6),
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: verticalScale(15)
     },
     signinButtonText: {
         fontSize: 18,

@@ -36,16 +36,19 @@ export default function PaymentScreen({ navigation }) {
                         <View style={styles.durationTextContainer}>
                             <Text style={styles.durationText}>Thông Tin</Text>
                             <Text style={styles.selectedDateTime}>
-                                Ngày giờ : Monday 14, 2023 : 8:00 am - Tuesday 25,2023 : 13:00 pm
+                                Ngày giờ : Thứ 2, 14, 2023 : 8:00 am - Thứ 3, 25,2023 : 13:00 pm
                             </Text>
                             <Text style={styles.selectedDateTime}>
-                                Bãi đổ : 97 Cao Sơn Pháo, Hoà Minh, Cẩm Lệ, Đà Nẵng
+                                Bãi đổ : Trung tâm bến xe Thành phố Đà Nẵng
                             </Text>
                             <Text style={styles.selectedDateTime}>
                                 Vị trí đổ : A05
                             </Text>
                             <Text style={styles.selectedDateTime}>
-                                Xe : Ford (43C-13234)
+                                Sđt : 0906037470
+                            </Text>
+                            <Text style={styles.selectedDateTime}>
+                                hotline : 02363767428
                             </Text>
                         </View>
                     </View>

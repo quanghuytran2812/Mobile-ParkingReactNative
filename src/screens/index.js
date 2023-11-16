@@ -12,7 +12,10 @@ import BookingScreen from "./BookingScreen";
 import PaymentScreen from "./PaymentScreen";
 import EditProfileScreen from "./EditProfileScreen";
 import HistoryScreen from "./HistoryScreen";
-
+import CompletedScreen from "./CompletedScreen";
+import CanceledScreen from "./CanceledScreen";
+import ReportScreen from "./ReportScreen";
+import TicketScreen from "./TicketScreen";
 
 export {
     PirstScreen,
@@ -28,5 +31,9 @@ export {
     BookingScreen,
     PaymentScreen,
     EditProfileScreen,
-    HistoryScreen
+    HistoryScreen,
+    CompletedScreen,
+    CanceledScreen,
+    ReportScreen,
+    TicketScreen
 };

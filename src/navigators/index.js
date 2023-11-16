@@ -15,7 +15,11 @@ import {
     BookingScreen,
     PaymentScreen,
     EditProfileScreen,
-    HistoryScreen
+    HistoryScreen,
+    CompletedScreen,
+    CanceledScreen,
+    ReportScreen,
+    TicketScreen,
 } from "../screens";
 import GoogleMap from "./BottomTabs"
 // import FlashMessage from "react-native-flash-message";
@@ -38,6 +42,10 @@ const Navigators = () => {
                 <Stack.Screen name="Payment" component={PaymentScreen} />
                 <Stack.Screen name="EditProfile" component={EditProfileScreen} />
                 <Stack.Screen name="History" component={HistoryScreen} />
+                <Stack.Screen name="Completed" component={CompletedScreen} />
+                <Stack.Screen name="Canceled" component={CanceledScreen} />
+                <Stack.Screen name="Report" component={ReportScreen} />
+                <Stack.Screen name="Ticket" component={TicketScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )

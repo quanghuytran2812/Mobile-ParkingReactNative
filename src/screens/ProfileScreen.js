@@ -61,8 +61,9 @@ const ProfileScreen = ({ navigation }) => {
                             size={18}
                             color={Colors.DEFAULT_GREEN}
                         />
-                        <Text style={styles.sectionText}
-                        >Quản lý hồ sơ</Text>
+                        <Text style={styles.sectionText}>
+                            Quản lý hồ sơ
+                        </Text>
                     </View>
                     <Feather
                         name="chevron-right"
@@ -78,13 +79,33 @@ const ProfileScreen = ({ navigation }) => {
                             size={18}
                             color={Colors.DEFAULT_GREEN}
                         />
-                        <Text style={styles.sectionText}>lịch sử đặt chỗ</Text>
+                        <Text style={styles.sectionText}>
+                            lịch sử đặt chỗ
+                        </Text>
                     </View>
                     <Feather
                         name="chevron-right"
                         color={Colors.INACTIVE_GREY}
                         size={20}
-                        onPress={() => navigation.navigate("History")} 
+                        onPress={() => navigation.navigate("History")}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.sectionContainer} activeOpacity={0.8}>
+                    <View style={styles.sectionTextContainer}>
+                        <FontAwesome5
+                            name="paper-plane"
+                            size={18}
+                            color={Colors.DEFAULT_GREEN}
+                        />
+                        <Text style={styles.sectionText}>
+                             Ý kiến đánh giá
+                        </Text>
+                    </View>
+                    <Feather
+                        name="chevron-right"
+                        color={Colors.INACTIVE_GREY}
+                        size={20}
+                        onPress={() => navigation.navigate("Report")}
                     />
                 </TouchableOpacity>
 

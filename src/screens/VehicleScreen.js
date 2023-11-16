@@ -11,7 +11,7 @@ const VehicleScreen = ({ navigation }) => {
         <>
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
-                    <Text style={styles.headerTitle}>Chọn Xe</Text>
+                    <Text style={{fontSize: 20, fontWeight: 700}}>Chọn Xe</Text>
                 </View>
                 <ScrollView style={styles.containerCar}>
                     <TouchableOpacity style={styles.vehicleCard} >
@@ -24,7 +24,7 @@ const VehicleScreen = ({ navigation }) => {
                             <TouchableOpacity style={styles.vehicleRemoveButton}>
                                 <Ionicons name="trash-outline" size={20} color="red" />
                             </TouchableOpacity>
-                            <Text style={styles.vehicleName}>Toyota</Text>
+                            <Text style={styles.vehicleName}>32 chỗ</Text>
                             <Text style={styles.vehicleLicensePlate}>43C-123.45</Text>
                         </View>
                     </TouchableOpacity>
@@ -40,7 +40,7 @@ const VehicleScreen = ({ navigation }) => {
                             <TouchableOpacity style={styles.vehicleRemoveButton}>
                                 <Ionicons name="trash-outline" size={20} color="red" />
                             </TouchableOpacity>
-                            <Text style={styles.vehicleName}>Toyota</Text>
+                            <Text style={styles.vehicleName}>64 chỗ</Text>
                             <Text style={styles.vehicleLicensePlate}>43C-123.45</Text>
                         </View>
                     </TouchableOpacity>
@@ -56,7 +56,7 @@ const VehicleScreen = ({ navigation }) => {
                             <TouchableOpacity style={styles.vehicleRemoveButton}>
                                 <Ionicons name="trash-outline" size={20} color="red" />
                             </TouchableOpacity>
-                            <Text style={styles.vehicleName}>Toyota</Text>
+                            <Text style={styles.vehicleName}> 32 chỗ</Text>
                             <Text style={styles.vehicleLicensePlate}>43C-123.45</Text>
                         </View>
                     </TouchableOpacity>
@@ -79,8 +79,8 @@ const VehicleScreen = ({ navigation }) => {
                             borderRadius: 10
                         }}
                     >
-                        <Text
-                        >Thêm xe
+                        <Text>
+                            Thêm xe
                         </Text>
                     </TouchableOpacity>
 
@@ -119,14 +119,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingHorizontal: 3,
         marginTop: 5,
-    },
-    headerTitle: {
-        fontSize: 20,
-        lineHeight: 20 * 1.4,
-        width: Display.setWidth(80),
-        textAlign: 'center',
-        fontWeight: 600,
-        paddingLeft: 5
     },
     containerCar: {
         flex: 1,

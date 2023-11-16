@@ -20,18 +20,21 @@ const HistoryScreen = ({navigation}) => {
           horizontal={true}
           showsHorizontalScrollIndicator={false}>
           <View style={styles.containerArea}>
-            <TouchableOpacity style={styles.AreaName}
-            >
+            <TouchableOpacity style={styles.AreaName}>
               <Text style={styles.TextAreaName}>
                 đang diễn ra
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.AreaName}>
+            <TouchableOpacity 
+            onPress={() => navigation.navigate('Completed')}
+            style={styles.AreaName}>
               <Text style={styles.TextAreaName}>
                 hoàn thành
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.AreaName}>
+            <TouchableOpacity 
+            onPress={() => navigation.navigate('Canceled')}
+            style={styles.AreaName}>
               <Text style={styles.TextAreaName}>
                 đã hủy bỏ
               </Text>
@@ -57,17 +60,17 @@ const HistoryScreen = ({navigation}) => {
 
                 <View style={{ marginTop: 10 }}>
                   <Text style={styles.selectedDateTime}>
-                    Vị trí đổ : A05
+                    Vị trí đổ : A09
                   </Text>
                 </View>
 
                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={styles.selectedDateTime}>
-                    68.000 VND / 4 hour
+                    34.000 VND / 2 hour
                   </Text>
                   <View>
-                    <Text style={{ color: Colors.DEFAULT_RED, paddingLeft: 50 }}>
-                      đã hủy bỏ
+                    <Text style={{ color: 'blue', paddingLeft: 20 }}>
+                     đang hoạt động
                     </Text>
                   </View>
                 </View>
@@ -90,7 +93,6 @@ const HistoryScreen = ({navigation}) => {
                 <Text style={styles.selectedDateTime}>
                   Bến xe Trung Tâm Đà Nẵng
                 </Text>
-
                 <View style={{ marginTop: 10 }}>
                   <Text style={styles.selectedDateTime}>
                     Vị trí đổ : A07
@@ -102,8 +104,8 @@ const HistoryScreen = ({navigation}) => {
                     17.000 VND / 1 hour
                   </Text>
                   <View>
-                    <Text style={{ color: Colors.DEFAULT_RED, paddingLeft: 50 }}>
-                      đã hủy bỏ
+                    <Text style={{ color: Colors.DEFAULT_GREEN, paddingLeft: 50 }}>
+                      đã trả xe
                     </Text>
                   </View>
                 </View>
