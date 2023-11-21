@@ -5,9 +5,20 @@ import { ToggleButton } from "../components";
 import Feather from "react-native-vector-icons/Feather";
 import { Colors } from "../contants";
 import { Display } from "../utils";
+import { useDispatch } from "react-redux";
+import { login } from "../store/authSlice";
 
 const SigninScreen = ({ navigation }) => {
     const [isPasswordShow, setPasswordShow] = useState(false)
+    const dispatch = useDispatch();
+    const [payload, setPayload] = useState({
+        phoneNumber: '',
+        password: ''
+    })
+    const handleLogin = () => {
+        dispatch(login(payload));
+    };
+
     return (
         <View style={styles.container}>
             <StatusBar
@@ -36,6 +47,8 @@ const SigninScreen = ({ navigation }) => {
                         placeholderTextColor={Colors.DEFAULT_GREY}
                         selectionColor={Colors.DEFAULT_GREY}
                         style={styles.inputText}
+                        value={payload.phoneNumber}
+                        onChangeText={(text) => setPayload(prev => ({ ...prev, phoneNumber: text }))}
                     />
                 </View>
             </View>
@@ -54,6 +67,8 @@ const SigninScreen = ({ navigation }) => {
                         placeholderTextColor={Colors.DEFAULT_GREY}
                         selectionColor={Colors.DEFAULT_GREY}
                         style={styles.inputText}
+                        value={payload.password}
+                        onChangeText={(text) => setPayload(prev => ({ ...prev, password: text }))}
                     />
                     <Feather
                         name={isPasswordShow ? "eye" : 'eye-off'}
@@ -67,11 +82,11 @@ const SigninScreen = ({ navigation }) => {
             <Text></Text>
             <View style={styles.forgotPasswordContainer}>
                 <View style={styles.toggleContainer}>
-                    <ToggleButton size={0.6} />
+                    {/* <ToggleButton size={0.6} />
                     <Text
                         style={styles.rememberMeText} >
                         Nhớ Tài Khoản
-                    </Text>
+                    </Text> */}
                 </View>
                 <Text
                     style={styles.forgotPasswordText}
@@ -81,7 +96,9 @@ const SigninScreen = ({ navigation }) => {
             </View>
             <TouchableOpacity
                 style={styles.siginButton}
-                onPress={() => navigation.navigate('GoogleMap')}>
+                // onPress={() => navigation.navigate('GoogleMap')}
+                onPress={handleLogin}
+            >
                 <Text
                     style={styles.signinButtonText}>
                     Đăng Nhập
