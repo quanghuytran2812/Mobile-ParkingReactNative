@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity } from "react-native";
 import Separator from "../components/Separator";
-import { ToggleButton } from "../components";
 import Feather from "react-native-vector-icons/Feather";
 import { Colors } from "../contants";
 import { Display } from "../utils";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/authSlice";
 
 const SigninScreen = ({ navigation }) => {
     const [isPasswordShow, setPasswordShow] = useState(false)
     const dispatch = useDispatch();
+    const { isAuthenticate, currentData } = useSelector(
+        (state) => state.auth
+    )
     const [payload, setPayload] = useState({
         phoneNumber: '',
         password: ''
@@ -18,6 +20,14 @@ const SigninScreen = ({ navigation }) => {
     const handleLogin = () => {
         dispatch(login(payload));
     };
+
+    useEffect(() => {
+        if (isAuthenticate || currentData) {
+            if (currentData.role === "Driver") {
+                navigation.navigate('GoogleMap');
+            }
+        }
+    }, [isAuthenticate, currentData]);
 
     return (
         <View style={styles.container}>
@@ -43,10 +53,12 @@ const SigninScreen = ({ navigation }) => {
                         color={Colors.DEFAULT_GREY}
                         style={{ marginRight: 10 }}
                     />
-                    <TextInput placeholder="Tên đăng nhập"
+                    <TextInput 
+                        placeholder="Tên đăng nhập"
                         placeholderTextColor={Colors.DEFAULT_GREY}
                         selectionColor={Colors.DEFAULT_GREY}
                         style={styles.inputText}
+                        keyboardType="number-pad"
                         value={payload.phoneNumber}
                         onChangeText={(text) => setPayload(prev => ({ ...prev, phoneNumber: text }))}
                     />

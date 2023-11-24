@@ -6,7 +6,7 @@ export default {
     ME: require('../assets/images/me.png'),
     ROAD: require('../assets/images/road.png'),
     ROAD1: require('../assets/images/road1.png'),
-    CARAVATAR: require('../assets/images/caravatar.png'),
+    CARAVATAR: require('../assets/images/carslive.png'),
     CARUP: require('../assets/images/carup.png'),
     VNPAY: require('../assets/images/vnpay.png'),
     PIN: require("../assets/images/pin.png"),

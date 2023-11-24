@@ -389,10 +389,10 @@ const GoogleMapScreen = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            {renderMap()}
+            {/* {renderMap()}
             {renderDestinationHeader()}
             {renderDeliveryInfo()}
-            {renderButtons()}
+            {renderButtons()} */}
         </View>
     )
 }

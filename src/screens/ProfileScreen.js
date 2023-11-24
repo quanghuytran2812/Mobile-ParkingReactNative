@@ -13,8 +13,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FontAwesome5 } from '@expo/vector-icons'
+import StorageService from '../services/StorageService';
+import { useDispatch } from 'react-redux';
+import { logout } from '../store/authSlice';
 
 const ProfileScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
+
+    const handleLogout = () => {
+        StorageService.setToken('');
+        dispatch(logout())
+        navigation.navigate('Signin');
+    }
+
     return (
         <View style={styles.container}>
             <StatusBar
@@ -121,7 +132,7 @@ const ProfileScreen = ({ navigation }) => {
                         />
                         <Text
                             style={styles.sectionText}
-                            onPress={() => navigation.navigate('Signin')}
+                            onPress={handleLogout}
                         >
                             Đăng xuất
                         </Text>

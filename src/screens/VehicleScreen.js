@@ -1,106 +1,129 @@
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native'
-import React from 'react'
-import Ionicons from "react-native-vector-icons/Ionicons"
-import { Colors, Images } from '../contants';
-import { Display } from '../utils';
-import { Platform } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal, Platform } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Images } from '../contants';
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { verticalScale } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchVehicle } from '../store/vehicleSlice';
+import { ModalAddVehicle } from '../components';
+import ModalUpdateVehicle from '../components/Modal/ModalUpdateVehicle';
 
 const VehicleScreen = ({ navigation }) => {
+    const [selectedRadio, setSelectedRadio] = useState("")
+    const [openModal, setOpenModal] = useState(false);
+    const [openUpdateModal, setOpenUpdateModal] = useState(false);
+    const [dataEdit, setDataEdit] = useState({});
+    const listVehicle = useSelector((state) => state.vehicle.list);
+    const dispatch = useDispatch();
+
+    const fetchData = useCallback(() => {
+        try {
+            dispatch(fetchVehicle());
+        } catch (error) {
+            console.error('Error fetching vehicle data:', error);
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
+        fetchData()
+    }, [fetchData]);
+
+    const handleGetData = (data) => {
+        setSelectedRadio(data.vehicleId)
+        setDataEdit(data)
+    }
+
+    const handleUpdateData = () => {
+        fetchData();
+    };
+
     return (
         <>
             <View style={styles.container}>
                 <View style={styles.headerContainer}>
-                    <Text style={{fontSize: 20, fontWeight: 700}}>Chọn Xe</Text>
+                    <Ionicons
+                        name="arrow-back-outline" size={22}
+                        onPress={() => navigation.goBack()}
+                    />
+                    <Text style={styles.headerContainerText}>Chọn Xe</Text>
                 </View>
-                <ScrollView style={styles.containerCar}>
-                    <TouchableOpacity style={styles.vehicleCard} >
-                        <View style={styles.vehicleAvatarContainer} >
-                            <Image
-                                source={Images.CARAVATAR}
-                            />
-                        </View>
-                        <View style={styles.vehicleContent}>
-                            <TouchableOpacity style={styles.vehicleRemoveButton}>
-                                <Ionicons name="trash-outline" size={20} color="red" />
+                <FlatList
+                    data={listVehicle}
+                    style={styles.containerListCar}
+                    keyExtractor={item => item.vehicleId}
+                    renderItem={({ item }) => (
+                        <View style={styles.containerCar}>
+                            <TouchableOpacity
+                                style={styles.vehicleCard}
+                                onPress={() => handleGetData(item)}>
+                                <View style={styles.vehicleAvatarContainer}>
+                                    <Image source={Images.CARAVATAR}
+                                        style={{ height: '100%', width: '100%', resizeMode: 'contain' }} />
+                                </View>
+                                <View style={styles.vehicleContent}>
+                                    <View style={styles.vehicleRadioButton}>
+                                        {selectedRadio === item.vehicleId ? <View style={styles.radioBg}></View> : null}
+                                    </View>
+                                    <Text style={styles.vehicleName}>{item.vehicleCategory.vehicleCategoryName}</Text>
+                                    <Text style={styles.vehicleLicensePlate}>{item.plateNumber}</Text>
+                                </View>
                             </TouchableOpacity>
-                            <Text style={styles.vehicleName}>32 chỗ</Text>
-                            <Text style={styles.vehicleLicensePlate}>43C-123.45</Text>
                         </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.vehicleCard} >
-                        <View style={styles.vehicleAvatarContainer} >
-                            <Image
-                                source={Images.CARAVATAR}
-                            />
-                        </View>
-
-                        <View style={styles.vehicleContent}>
-                            <TouchableOpacity style={styles.vehicleRemoveButton}>
-                                <Ionicons name="trash-outline" size={20} color="red" />
-                            </TouchableOpacity>
-                            <Text style={styles.vehicleName}>64 chỗ</Text>
-                            <Text style={styles.vehicleLicensePlate}>43C-123.45</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.vehicleCard} >
-                        <View style={styles.vehicleAvatarContainer} >
-                            <Image
-                                source={Images.CARAVATAR}
-                            />
-                        </View>
-
-                        <View style={styles.vehicleContent}>
-                            <TouchableOpacity style={styles.vehicleRemoveButton}>
-                                <Ionicons name="trash-outline" size={20} color="red" />
-                            </TouchableOpacity>
-                            <Text style={styles.vehicleName}> 32 chỗ</Text>
-                            <Text style={styles.vehicleLicensePlate}>43C-123.45</Text>
-                        </View>
-                    </TouchableOpacity>
-
-                </ScrollView>
+                    )}
+                />
                 <View
-                    style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                    }}
+                    style={styles.containerBtn}
                 >
                     <TouchableOpacity
-                        style={{
-                            flex: 1,
-                            height: 50,
-                            marginRight: 10,
-                            backgroundColor: Colors.DEFAULT_GREEN,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 10
-                        }}
+                        style={styles.btnCommon1}
+                        onPress={() => setOpenModal(true)}
                     >
-                        <Text>
+                        <Text style={styles.btnTextCommon1}>
                             Thêm xe
                         </Text>
                     </TouchableOpacity>
 
+                    {Object.keys(dataEdit).length === 0 ? null : (
+                        <TouchableOpacity
+                            style={styles.btnCommon1}
+                            onPress={() => setOpenUpdateModal(true)}
+                        >
+                            <Text style={styles.btnTextCommon1}>Cập nhật</Text>
+                        </TouchableOpacity>
+                    )}
+
                     <TouchableOpacity
+                        style={styles.btnCommon}
                         onPress={() => navigation.navigate('DateTime')}
-                        style={{
-                            flex: 1,
-                            height: 50,
-                            backgroundColor: Colors.DEFAULT_GREEN,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 10
-                        }}
                     >
-                        <Text style={{ color: Colors.DEFAULT_WHITE }}>
+                        <Text style={styles.btnTextCommon}>
                             Tiếp tục
                         </Text>
                     </TouchableOpacity>
                 </View>
             </View>
+            <Modal
+                transparent={true}
+                animationType='fade'
+                visible={openModal}
+            >
+                <ModalAddVehicle
+                    onClose={() => setOpenModal(false)}
+                    handleUpdateData={handleUpdateData}
+                />
+            </Modal>
+            <Modal
+                transparent={true}
+                animationType='fade'
+                visible={openUpdateModal}
+            >
+                <ModalUpdateVehicle
+                    open={openUpdateModal}
+                    onClose={() => setOpenUpdateModal(false)}
+                    dataUpdate={dataEdit}
+                    handleUpdateData={handleUpdateData}
+                />
+            </Modal>
         </>
     );
 }
@@ -113,26 +136,32 @@ const styles = StyleSheet.create({
         paddingRight: 20,
         paddingBottom: 20,
         paddingLeft: 20,
-        alignItems: 'center',
     },
     headerContainer: {
         flexDirection: 'row',
-        paddingHorizontal: 3,
-        marginTop: 5,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    headerContainerText: {
+        fontSize: 21,
+        marginLeft: 10,
+        fontWeight: '700'
+    },
+    containerListCar: {
+        flexGrow: 1,
+        width: '100%',
+        marginTop: verticalScale(15)
     },
     containerCar: {
-        flex: 1,
-        width: '100%',
-        height: 'auto',
-        padding: 10,
-        marginTop: verticalScale(15),
+        paddingLeft: 2,
+        paddingRight: 2
     },
     vehicleCard: {
         width: '100%',
-        height: 90,
-        borderRadius: 5,
-        backgroundColor: '#ffffff',
+        height: 85,
+        borderRadius: 15,
         padding: 15,
+        backgroundColor: '#ffffff',
         marginBottom: 10,
         flexDirection: 'row',
         alignItems: 'center',
@@ -164,40 +193,72 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start'
     },
-    vehicleRemoveButton: {
-        width: 40,
-        height: 40,
+    radioBg: {
+        backgroundColor: 'black',
+        width: 12,
+        height: 12,
+        borderRadius: 20,
+    },
+    vehicleRadioButton: {
+        width: 18,
+        height: 18,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
         right: 0,
+        borderColor: 'black',
+        borderRadius: 20,
+        borderWidth: 2
     },
     vehicleName: {
         fontSize: 16,
-        color: 'black'
+        color: 'black',
+        fontWeight: '600',
     },
     vehicleLicensePlate: {
-        fontSize: 15,
+        fontSize: 14,
         color: '#7d7d7d'
     },
-    siginButton: {
-        backgroundColor: Colors.DEFAULT_GREEN,
-        marginHorizontal: 20,
-        borderRadius: 8,
-        height: Display.setHeight(6),
-        justifyContent: 'center',
+    containerBtn: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    btnCommon: {
+        flex: 1,
+        borderRadius: 15,
+        backgroundColor: '#fcfcfc',
+        shadowColor: '#000',
+        shadowOffset: { width: 4, height: 8 },
+        shadowOpacity: 0.27,
+        shadowRadius: -3,
+        elevation: 4,
         alignItems: 'center',
-        marginTop: 750,
-        width: '100%',
-        position: 'absolute',
-
+        justifyContent: 'center',
     },
-    signinButtonText: {
-        fontSize: 18,
-        lineHeight: 18 * 1.4,
-        color: Colors.DEFAULT_WHITE,
+    btnTextCommon: {
+        color: '#212121',
+        fontWeight: 'bold',
+        fontSize: 17,
     },
-
+    btnCommon1: {
+        flex: 1,
+        height: 50,
+        borderRadius: 15,
+        marginRight: 10,
+        backgroundColor: '#000',
+        shadowColor: '#000',
+        shadowOffset: { width: 4, height: 8 },
+        shadowOpacity: 0.27,
+        shadowRadius: -3,
+        elevation: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    btnTextCommon1: {
+        color: '#fcfcfc',
+        fontWeight: 'bold',
+        fontSize: 17,
+    }
 })
 
 
