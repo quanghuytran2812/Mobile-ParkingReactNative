@@ -5,9 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { IconButton } from "react-native-paper";
 import { TimePickerModal } from "react-native-paper-dates";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Display } from '../utils';
-import { Colors } from '../contants';
-import { verticalScale } from 'react-native-size-matters';
+import { AnimatedIcon } from '../components';
 
 
 const DateTimeScreen = ({ navigation }) => {
@@ -41,7 +39,7 @@ const DateTimeScreen = ({ navigation }) => {
     const [selectedStartDate, setSelectedStartDate] = useState('DD/MM/YYYY')
     const [selectedEndtDate, setSelectedEndDate] = useState('DD/MM/YYYY')
     const onDateChange = (date, type) => {
-        console.log(JSON.stringify(date))
+        // console.log(JSON.stringify(date))
         const newDate = JSON.stringify(date);
         const newDate1 = newDate.substring(1, newDate.length - 1)
         const dates = newDate1.split("T")
@@ -64,43 +62,51 @@ const DateTimeScreen = ({ navigation }) => {
     return (
         <>
             <View style={styles.container}>
-                <View style={styles.headerContainer}>
+            <View style={styles.containerTopHearder}>
+            <View style={styles.headerContainer}>
                     <Ionicons
                         name="arrow-back-outline" size={22}
                         onPress={() => navigation.goBack()}
                     />
                     <Text style={styles.headerContainerText}>Chọn ngày và thời gian</Text>
                 </View>
+                    <AnimatedIcon />
+                </View>
+                
                 <View style={{ marginTop: 20 }}>
                     <Text style={styles.selectDayTitle}>Chọn ngày </Text>
                 </View>
 
-                <View style={{ paddingTop: 15 }}>
+                <View style={styles.calendarPickerStyle}>
                     <CalendarPicker
                         startFromMonday={true}
                         allowRangeSelection={true}
+                        previousTitle="<"
+                        nextTitle=">"
+                        headerWrapperStyle={{width: '100%'}}
                         minDate={minDate}
                         maxDate={maxDate}
-                        todayBackgroundColor="#f2e6ff"
-                        selectedDayColor="#7300e6"
+                        width={370}
+                        todayBackgroundColor="#000"
+                        selectedDayColor="#000"
                         selectedDayTextColor="#FFFFFF"
                         onDateChange={onDateChange}
                     />
-                    <Text>{"Ngày bắt đầu :" + selectedStartDate}</Text>
-                    <Text>{"Ngày kết thúc :" + selectedEndtDate}</Text>
+                    {/* <Text>{"Ngày bắt đầu :" + selectedStartDate}</Text>
+                    <Text>{"Ngày kết thúc :" + selectedEndtDate}</Text> */}
                 </View>
 
-                <Text style={{ marginTop: 30, fontWeight: 700 }}>Chọn thời gian</Text>
+                <Text style={styles.selectTimeTitle}>Chọn thời gian</Text>
 
-                <SafeAreaProvider style={{ flexDirection: 'row', marginTop: 20 }}>
+                <SafeAreaProvider style={{ flexDirection: 'row' }}>
                     <View style={{ flex: 1, alignItems: 'center', marginTop: 10 }}>
-                        <Text>Thời gian bắt đầu</Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, padding: 5, borderRadius: 20, justifyContent: 'center' }}>
+                        <Text style={styles.timeSelectTitle}>Thời gian bắt đầu</Text>
+                        <View style={styles.selectTimeData}>
                             <IconButton
-                                icon={() => <Ionicons name="time-outline" size={25} color="red" />} // Use the calendar icon
+                                icon={() => <Ionicons name="time-outline" size={25} color="#000" />} // Use the calendar icon
                                 onPress={() => setVisible(true)}
                             />
-                            <Text style={{ fontSize: 15, paddingRight: 10 }}>{selectedTime.hours}:{selectedTime.minutes}</Text>
+                            <Text style={styles.showTimeSelected}>{selectedTime.hours}:{selectedTime.minutes}</Text>
                         </View>
                         <TimePickerModal
                             visible={visible}
@@ -115,13 +121,13 @@ const DateTimeScreen = ({ navigation }) => {
                         name='arrow-forward-outline' size={20}
                     />
                     <View style={{ flex: 1, alignItems: 'center', marginTop: 10 }}>
-                        <Text>Thời gian kết thúc</Text>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, padding: 5, borderRadius: 20, justifyContent: 'center' }}>
+                        <Text style={styles.timeSelectTitle}>Thời gian kết thúc</Text>
+                        <View style={styles.selectTimeData}>
                             <IconButton
-                                icon={() => <Ionicons name="time-outline" size={25} color="red" />} // Use the calendar icon
+                                icon={() => <Ionicons name="time-outline" size={25} color="#000" />} // Use the calendar icon
                                 onPress={() => setVisible2(true)}
                             />
-                            <Text style={{ fontSize: 15, paddingRight: 10 }}>{selectedTime2.hours}:{selectedTime2.minutes}</Text>
+                            <Text style={styles.showTimeSelected}>{selectedTime2.hours}:{selectedTime2.minutes}</Text>
                         </View>
                         <TimePickerModal
                             visible={visible2}
@@ -134,10 +140,10 @@ const DateTimeScreen = ({ navigation }) => {
                 </SafeAreaProvider>
                 <View>
                     <TouchableOpacity
+                        style={styles.btnCommon1}
                         onPress={() => navigation.navigate('Booking')}
-                        style={styles.siginButton}>
-                        <Text
-                            style={styles.signinButtonText}>
+                    >
+                        <Text style={styles.btnTextCommon1}>
                             Tiếp tục
                         </Text>
                     </TouchableOpacity>
@@ -155,6 +161,10 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingLeft: 20,
     },
+    containerTopHearder: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
     headerContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
@@ -166,10 +176,77 @@ const styles = StyleSheet.create({
         fontWeight: '700'
     },
     selectDayTitle: {
-        display: 'flex',
-        fontWeight: '600',
-        fontSize: 13,
+        fontWeight: '700',
+        fontSize: 15,
         marginBottom: 4,
+    },
+    calendarPickerStyle: {
+        marginTop: 20,
+        borderRadius: 15,
+        backgroundColor: '#ffffff',
+        marginBottom: 20,
+        ...Platform.select({
+            ios: {
+                shadowColor: 'rgba(0, 0, 0, 0.4)',
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 1,
+                shadowRadius: 2,
+            },
+            android: {
+                elevation: 4,
+            },
+        }),
+    },
+    selectTimeTitle: {
+        fontWeight: '700',
+        fontSize: 15,
+        marginBottom: 20,
+    },
+    timeSelectTitle: {
+        fontWeight: '600',
+        fontSize: 14,
+    },
+    selectTimeData: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 15,
+        justifyContent: 'center',
+        paddingHorizontal: 10,
+        marginTop: 10,
+        backgroundColor: '#ffffff',
+        ...Platform.select({
+            ios: {
+                shadowColor: 'rgba(0, 0, 0, 0.4)',
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 1,
+                shadowRadius: 2,
+            },
+            android: {
+                elevation: 4,
+            },
+        }),
+    },
+    showTimeSelected: {
+        fontSize: 15,
+        paddingRight: 10,
+        fontWeight: '600'
+    },
+    btnCommon1: {
+        height: 50,
+        borderRadius: 15,
+        backgroundColor: '#000',
+        shadowColor: '#000',
+        shadowOffset: { width: 4, height: 5 },
+        shadowOpacity: 0.27,
+        shadowRadius: -3,
+        elevation: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    btnTextCommon1: {
+        color: '#fcfcfc',
+        fontWeight: 'bold',
+        fontSize: 17,
     }
 })
 export default DateTimeScreen

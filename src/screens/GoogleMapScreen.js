@@ -5,18 +5,18 @@ import {
     Image,
     TouchableOpacity,
     Alert,
+    Linking,
 } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import MapViewDirections from "react-native-maps-directions";
 import { COLORS, SIZES, GOOGLE_API_KEY, Images } from "../contants";
 import * as Location from 'expo-location';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Colors } from "../contants";
-
-
+import { useIsFocused } from "@react-navigation/native";
 
 const GoogleMapScreen = ({ navigation }) => {
-
+    const isFocused = useIsFocused();
     const mapView = React.useRef()
     const [streetName, setStreetName] = React.useState("")
     const [fromLocation, setFromLocation] = React.useState(null)
@@ -27,49 +27,62 @@ const GoogleMapScreen = ({ navigation }) => {
     const [isReady, setIsReady] = React.useState(false)
     const [angle, setAngle] = React.useState(0)
     const [isReadB, setIsReadB] = useState(false);
-
-    const [glatitude, setLatitude] = useState(null);
-    const [glongitude, setLongitude] = useState(null);
-    useEffect(() => {
-        (async () => {
-
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                Alert.alert('Permission to access location was denied');
-                return;
-            }
-
-            let location = await Location.getCurrentPositionAsync({});
-            setLatitude(location.coords.latitude)
-            setLongitude(location.coords.longitude);
-        })();
-    }, []);
-
-    useEffect(() => {
-        if (glatitude !== null && glongitude !== null) {
-            let fromLoc = {
-                latitude: glatitude,
-                longitude: glongitude,
-            };
-            let toLoc = {
-                latitude: 16.056120388735188,
-                longitude: 108.1731154803814,
-            };
-            let street = "Bến Xe Trung Tâm TP Đà Nẵng";
-
-            let mapRegion = {
-                latitude: (fromLoc.latitude + toLoc.latitude) / 2,
-                longitude: (fromLoc.longitude + toLoc.longitude) / 2,
-                latitudeDelta: Math.abs(fromLoc.latitude - toLoc.latitude) * 2,
-                longitudeDelta: Math.abs(fromLoc.longitude - toLoc.longitude) * 2,
-            };
-
-            setStreetName(street);
-            setFromLocation(fromLoc);
-            setToLocation(toLoc);
-            setRegion(mapRegion);
+    const [origin, setOrigin] = useState({
+        latitude: 15.9684812,
+        longitude: 108.2605568
+    });
+    React.useEffect(() => {
+        if (isFocused) {
+            getLocaltionPermisson();
         }
-    }, [glatitude, glongitude]);
+    }, [isFocused]);
+
+    async function getLocaltionPermisson() {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+
+        if (status !== 'granted') {
+            Alert.alert('Permission to access location was denied');
+            return;
+        }
+
+        if (status === 'granted') {
+            let location = await Location.getCurrentPositionAsync({});
+            const current = {
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude
+            };
+            setOrigin(current);
+        }
+
+    }
+
+    async function getLocationData() {
+        let fromLoc = {
+            latitude: origin.latitude,
+            longitude: origin.longitude,
+        };
+        let toLoc = {
+            latitude: 16.056120388735188,
+            longitude: 108.1731154803814,
+        };
+        let street = "Bến Xe Trung Tâm TP Đà Nẵng";
+
+        let mapRegion = {
+            latitude: (fromLoc.latitude + toLoc.latitude) / 2,
+            longitude: (fromLoc.longitude + toLoc.longitude) / 2,
+            latitudeDelta: Math.abs(fromLoc.latitude - toLoc.latitude) * 2,
+            longitudeDelta: Math.abs(fromLoc.longitude - toLoc.longitude) * 2,
+        };
+
+        setStreetName(street);
+        setFromLocation(fromLoc);
+        setToLocation(toLoc);
+        setRegion(mapRegion);
+    }
+
+    React.useEffect(() => {
+        getLocationData();
+    }, [origin]);
 
     function calculateAngle(coordinates) {
         let startLat = coordinates[0]["latitude"]
@@ -80,6 +93,11 @@ const GoogleMapScreen = ({ navigation }) => {
         let dy = endLng - startLng
 
         return Math.atan2(dy, dx) * 180 / Math.PI
+    }
+
+    function makePhoneCall() {
+        const url = 'tel://0906037470';
+        Linking.openURL(url);
     }
 
     function zoomIn() {
@@ -130,7 +148,7 @@ const GoogleMapScreen = ({ navigation }) => {
                             borderRadius: 15,
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: 'silver'
+                            backgroundColor: '#02aab0'
                         }}
                     >
                         <Image
@@ -147,20 +165,26 @@ const GoogleMapScreen = ({ navigation }) => {
         )
 
         const carIcon = () => (
-            <Marker
-                coordinate={fromLocation}
-                anchor={{ x: 0.5, y: 0.5 }}
-                flat={true}
-                rotation={angle}
-            >
-                <Image
-                    source={Images.CAR}
-                    style={{
-                        width: 40,
-                        height: 40
-                    }}
-                />
-            </Marker>
+            <>
+                {fromLocation !== null ?
+                    (
+                        <Marker
+                            coordinate={fromLocation}
+                            anchor={{ x: 0.5, y: 0.5 }}
+                            flat={true}
+                            rotation={angle}
+                        >
+                            <Image
+                                source={Images.CAR}
+                                style={{
+                                    width: 40,
+                                    height: 40
+                                }}
+                            />
+                        </Marker>
+                    ) : ''
+                }
+            </>
         )
 
         return (
@@ -282,19 +306,21 @@ const GoogleMapScreen = ({ navigation }) => {
                         backgroundColor: COLORS.white
                     }}
                 >
-                    <View style={{ flexDirection: 'column', alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        {/* Avatar */}
                         <Image
                             source={Images.BENXE}
-                            resizeMode="cover"
                             style={{
-                                width: "100%",
-                                height: 200,
-                                borderRadius: SIZES.radius,
-                                objectFit: 'cover',
+                                width: 50,
+                                height: 50,
+                                borderRadius: 25
                             }}
                         />
-                        <Text style={{ fontWeight: 600, marginTop: 10 }}>{streetName}</Text>
-                        <Text style={{ color: COLORS.darkgray }}>Tôn Đức Thắng, Hoà Minh, Liên Chiểu, Đà Nẵng</Text>
+
+                        <View style={{ flex: 1, marginLeft: 10 }}>
+                            <Text style={{ fontWeight: 600, marginTop: 10 }}>Bến Xe Trung Tâm TP Đà Nẵng</Text>
+                            <Text style={{ color: COLORS.darkgray }}>Tôn Đức Thắng, Hoà Minh, Liên Chiểu, Đà Nẵng</Text>
+                        </View>
                     </View>
 
                     {/* Buttons */}
@@ -306,33 +332,49 @@ const GoogleMapScreen = ({ navigation }) => {
                         }}
                     >
                         <TouchableOpacity
-                            onPress={() => navigation.navigate('Vehicle')}
                             style={{
                                 flex: 1,
                                 height: 50,
+                                borderRadius: 15,
                                 marginRight: 10,
-                                backgroundColor: Colors.DEFAULT_GREEN,
+                                backgroundColor: '#02aab0',
+                                shadowColor: '#000',
+                                shadowOffset: { width: 4, height: 5 },
+                                shadowOpacity: 0.27,
+                                elevation: 4,
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                borderRadius: 10
                             }}
+                            onPress={() => makePhoneCall()}
                         >
-                            <Text
-                            >Book Parking</Text>
+                            <Text style={{
+                                color: '#fcfcfc',
+                                fontSize: 18,
+                                lineHeight: 22
+                            }}>Call</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             style={{
                                 flex: 1,
                                 height: 50,
+                                borderRadius: 15,
+                                marginRight: 10,
                                 backgroundColor: Colors.DEFAULT_GREY,
+                                shadowColor: '#000',
+                                shadowOffset: { width: 4, height: 5 },
+                                shadowOpacity: 0.27,
+                                elevation: 4,
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                borderRadius: 10
                             }}
                             onPress={() => setIsReadB(true)}
                         >
-                            <Text style={{ color: COLORS.white }}>Cancel</Text>
+                            <Text style={{
+                                color: '#fcfcfc',
+                                fontSize: 18,
+                                lineHeight: 22
+                            }}>Cancel</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -389,10 +431,10 @@ const GoogleMapScreen = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            {/* {renderMap()}
+            {renderMap()}
             {renderDestinationHeader()}
             {renderDeliveryInfo()}
-            {renderButtons()} */}
+            {renderButtons()}
         </View>
     )
 }

@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal, Platform } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal, Platform} from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Images } from '../contants';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchVehicle } from '../store/vehicleSlice';
-import { ModalAddVehicle } from '../components';
+import { AnimatedIcon, ModalAddVehicle } from '../components';
 import ModalUpdateVehicle from '../components/Modal/ModalUpdateVehicle';
 
 const VehicleScreen = ({ navigation }) => {
@@ -40,12 +40,15 @@ const VehicleScreen = ({ navigation }) => {
     return (
         <>
             <View style={styles.container}>
-                <View style={styles.headerContainer}>
-                    <Ionicons
-                        name="arrow-back-outline" size={22}
-                        onPress={() => navigation.goBack()}
-                    />
-                    <Text style={styles.headerContainerText}>Chọn Xe</Text>
+                <View style={styles.containerTopHearder}>
+                    <View style={styles.headerContainer}>
+                        <Ionicons
+                            name="arrow-back-outline" size={22}
+                            onPress={() => navigation.goBack()}
+                        />
+                        <Text style={styles.headerContainerText}>Chọn xe</Text>
+                    </View>
+                    <AnimatedIcon />
                 </View>
                 <FlatList
                     data={listVehicle}
@@ -137,6 +140,10 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         paddingLeft: 20,
     },
+    containerTopHearder: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
     headerContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-start',
@@ -153,6 +160,7 @@ const styles = StyleSheet.create({
         marginTop: verticalScale(15)
     },
     containerCar: {
+        paddingTop: 2,
         paddingLeft: 2,
         paddingRight: 2
     },
@@ -168,10 +176,10 @@ const styles = StyleSheet.create({
         position: 'relative',
         ...Platform.select({
             ios: {
-                shadowColor: 'rgba(0, 0, 0, 0.75)',
+                shadowColor: 'rgba(0, 0, 0, 0.4)',
                 shadowOffset: { width: 0, height: 0 },
                 shadowOpacity: 1,
-                shadowRadius: 3,
+                shadowRadius: 2,
             },
             android: {
                 elevation: 4,
@@ -228,9 +236,8 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         backgroundColor: '#fcfcfc',
         shadowColor: '#000',
-        shadowOffset: { width: 4, height: 8 },
+        shadowOffset: { width: 4, height: 5 },
         shadowOpacity: 0.27,
-        shadowRadius: -3,
         elevation: 4,
         alignItems: 'center',
         justifyContent: 'center',
@@ -247,9 +254,8 @@ const styles = StyleSheet.create({
         marginRight: 10,
         backgroundColor: '#000',
         shadowColor: '#000',
-        shadowOffset: { width: 4, height: 8 },
+        shadowOffset: { width: 4, height: 5 },
         shadowOpacity: 0.27,
-        shadowRadius: -3,
         elevation: 4,
         alignItems: 'center',
         justifyContent: 'center',

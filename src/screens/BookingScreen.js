@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Ionicons from "react-native-vector-icons/Ionicons"
 import {
   Text,
-  SafeAreaView,
   StyleSheet,
   View,
   TouchableOpacity,
@@ -12,6 +11,7 @@ import {
 import { moderateScale, verticalScale, scale } from 'react-native-size-matters';
 import { Images, Colors } from '../contants';
 import { Display } from '../utils';
+import { AnimatedIcon } from '../components';
 
 const data = [
   { id: 1, isParked: true, slotName: 'A01' },
@@ -40,83 +40,87 @@ export default function BookingScreen({ navigation }) {
   const [objSelected, setobjSelected] = React.useState(null);
   return (
     <>
-      <View style={{ position: 'absolute', paddingTop: 55, flexDirection: 'row', alignItems: 'center', zIndex: 999 }}>
-        <Ionicons
-          name='arrow-back-outline'
-          size={30}
-          onPress={() => navigation.goBack()}
-        />
-        <Text style={{ paddingLeft: 10, fontSize: 20, fontWeight: 700 }}>
-          Chọn chỗ đỗ xe
-        </Text>
-      </View>
-      <View style={styles.wrapperParking}>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}>
-          <View style={styles.containerArea}>
-            <TouchableOpacity style={styles.AreaName}
-              >
-              <Text style={styles.TextAreaName}>
-                đường số 1
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.AreaName}>
-              <Text style={styles.TextAreaName}>
-                đường số 2
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.AreaName}>
-              <Text style={styles.TextAreaName}>
-                đường số 3
-              </Text>
-            </TouchableOpacity>
+      <View style={styles.container}>
+        <View style={styles.containerTopHearder}>
+          <View style={styles.headerContainer}>
+            <Ionicons
+              name="arrow-back-outline" size={22}
+              onPress={() => navigation.goBack()}
+            />
+            <Text style={styles.headerContainerText}>Chọn chỗ đỗ xe</Text>
           </View>
-        </ScrollView>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.viewAll}>
-            <View style={styles.viewLeft}>
-              {dataLeft.map((e, index) => (
-                <SlotParking
-                  slotName={e.slotName}
-                  index={index}
-                  key={e.id}
-                  item={e}
-                  itemSelect={objSelected}
-                  onPress={() => setobjSelected(e)}
-                />
-              ))}
+          <AnimatedIcon />
+        </View>
+        <View style={styles.wrapperParking}>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}>
+            <View style={styles.containerArea}>
+              <TouchableOpacity style={styles.AreaName}
+              >
+                <Text style={styles.TextAreaName}>
+                  đường số 1
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.AreaName}>
+                <Text style={styles.TextAreaName}>
+                  đường số 2
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.AreaName}>
+                <Text style={styles.TextAreaName}>
+                  đường số 3
+                </Text>
+              </TouchableOpacity>
             </View>
+          </ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.viewAll}>
+              <View style={styles.viewLeft}>
+                {dataLeft.map((e, index) => (
+                  <SlotParking
+                    slotName={e.slotName}
+                    index={index}
+                    key={e.id}
+                    item={e}
+                    itemSelect={objSelected}
+                    onPress={() => setobjSelected(e)}
+                  />
+                ))}
+              </View>
 
 
-            <View style={styles.viewCenter}>
-              <View style={styles.viewDirect}>
-                <Image
-                source={Images.ROAD1}
-                style={{ height: '101%', width: 86 }}
-                />
+              <View style={styles.viewCenter}>
+                <View style={styles.viewDirect}>
+                  <Image
+                    source={Images.ROAD1}
+                    style={{ height: '101%', width: 86 }}
+                  />
+                </View>
+              </View>
+              <View style={styles.viewRight}>
+                {dataRight.map((e, index) => (
+                  <SlotParking
+                    key={e.id}
+                    item={e}
+                    itemSelect={objSelected}
+                    onPress={() => setobjSelected(e)}
+                  />
+                ))}
               </View>
             </View>
-            <View style={styles.viewRight}>
-              {dataRight.map((e, index) => (
-                <SlotParking
-                  key={e.id}
-                  item={e}
-                  itemSelect={objSelected}
-                  onPress={() => setobjSelected(e)}
-                />
-              ))}
-            </View>
+          </ScrollView>
+          <View style={styles.viewCommonButton}>
+            <TouchableOpacity
+              style={styles.btnCommon1}
+              onPress={() => navigation.navigate('Payment')}
+            >
+              <Text style={styles.btnTextCommon1}>
+                Tiếp tục
+              </Text>
+            </TouchableOpacity>
           </View>
-        </ScrollView>
-        <TouchableOpacity 
-        style={styles.siginButton}
-        onPress={() => navigation.navigate('Payment')}
-        >
-          <Text style={styles.signinButtonText}>
-            Tiếp tục
-          </Text>
-        </TouchableOpacity>
+        </View>
       </View>
     </>
   )
@@ -137,7 +141,7 @@ function SlotParking({ item, onPress, itemSelect }) {
         <TouchableOpacity
           style={[
             styles.viewName,
-            { backgroundColor: itemSelect === item ? '#02aab0' : 'white' },
+            { backgroundColor: itemSelect === item ? '#000' : 'white' },
           ]}
           activeOpacity={1}
           onPress={onPress}
@@ -157,10 +161,31 @@ function SlotParking({ item, onPress, itemSelect }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fcfcfc',
+    paddingTop: 60,
+    paddingBottom: 20,
+  },
+  containerTopHearder: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 20,
+    paddingRight: 20
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  headerContainerText: {
+    fontSize: 21,
+    marginLeft: 10,
+    fontWeight: '700'
+  },
   wrapperParking: {
     flex: 1,
     flexDirection: 'column',
-    paddingTop: 50
   },
   containerArea: {
     flexDirection: 'row',
@@ -168,9 +193,7 @@ const styles = StyleSheet.create({
   AreaName: {
     justifyContent: "center",
     alignItems: "center",
-    height: 100,
-    marginBottom: 12,
-    marginTop: 20,
+    height: 80,
     paddingLeft: 20,
     paddingRight: 20
   },
@@ -181,9 +204,9 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "bold",
   },
-  viewAll: { 
-    flex: 1, 
-    flexDirection: "row", 
+  viewAll: {
+    flex: 1,
+    flexDirection: "row",
     marginTop: verticalScale(15),
   },
   viewLeft: { flex: 2, marginBottom: verticalScale(60) },
@@ -223,19 +246,26 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
   },
-  siginButton: {
-    backgroundColor: Colors.DEFAULT_GREEN,
-    marginHorizontal: 20,
-    borderRadius: 8,
-    height: Display.setHeight(6),
-    justifyContent: 'center',
+  viewCommonButton: {
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 20
+  },
+  btnCommon1: {
+    height: 50,
+    borderRadius: 15,
+    backgroundColor: '#000',
+    shadowColor: '#000',
+    shadowOffset: { width: 4, height: 5 },
+    shadowOpacity: 0.27,
+    shadowRadius: -3,
+    elevation: 4,
     alignItems: 'center',
-    marginBottom: 30
+    justifyContent: 'center',
   },
-  signinButtonText: {
-    fontSize: 18,
-    lineHeight: 18 * 1.4,
-    color: Colors.DEFAULT_WHITE,
-  },
-
+  btnTextCommon1: {
+    color: '#fcfcfc',
+    fontWeight: 'bold',
+    fontSize: 17,
+  }
 });

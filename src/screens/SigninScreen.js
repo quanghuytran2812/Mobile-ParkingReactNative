@@ -44,7 +44,7 @@ const SigninScreen = ({ navigation }) => {
             </View>
             <Text style={styles.title}>Chào Bạn.</Text>
             <Text style={styles.content}>
-                Vui lòng nhập tên người dùng và mật khẩu của bạn.
+                Vui lòng nhập số điện thoại và mật khẩu của bạn.
             </Text>
             <View style={styles.inputContainer}>
                 <View style={styles.inputSubContainer}>
@@ -54,7 +54,7 @@ const SigninScreen = ({ navigation }) => {
                         style={{ marginRight: 10 }}
                     />
                     <TextInput 
-                        placeholder="Tên đăng nhập"
+                        placeholder="Số điện thoại"
                         placeholderTextColor={Colors.DEFAULT_GREY}
                         selectionColor={Colors.DEFAULT_GREY}
                         style={styles.inputText}
@@ -94,11 +94,6 @@ const SigninScreen = ({ navigation }) => {
             <Text></Text>
             <View style={styles.forgotPasswordContainer}>
                 <View style={styles.toggleContainer}>
-                    {/* <ToggleButton size={0.6} />
-                    <Text
-                        style={styles.rememberMeText} >
-                        Nhớ Tài Khoản
-                    </Text> */}
                 </View>
                 <Text
                     style={styles.forgotPasswordText}

@@ -1,200 +1,177 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import React, { useMemo, useState } from 'react'
-import { ScrollView } from 'react-native-gesture-handler'
-import { Colors, Images } from '../contants';
-import RadioGroup from 'react-native-radio-buttons-group';
-import { Display } from '../utils';
+import { Images } from '../contants';
 import Ionicons from "react-native-vector-icons/Ionicons"
+import { AnimatedIcon } from '../components';
 
 export default function PaymentScreen({ navigation }) {
-    const radioButtons = useMemo(() => ([
-        {
-            id: '1',
-        },
-    ]), []);
-    const [selectedId, setSelectedId] = useState();
+
     return (
-        <View style={{ flex: 1 }}>
-            <View>
-                <View style={styles.headerContainer}>
-                    <Ionicons
-                        name="arrow-back-outline" size={30}
-                        onPress={() => navigation.goBack()}
-                    />
-                    <Text style={{ paddingLeft: 10, fontSize: 20, fontWeight: 700 }}>Thông tin Thanh Toán</Text>
-                </View>
-            </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.headerInfo}>
-                    <Text style={{
-                        fontSize: 24,
-                        fontWeight: 'bold',
-                    }}>Tóm tắt thông tin</Text>
+        <>
+            <View style={styles.container}>
+                <View style={styles.containerTopHearder}>
+                    <View style={styles.headerContainer}>
+                        <Ionicons
+                            name="arrow-back-outline" size={22}
+                            onPress={() => navigation.goBack()}
+                        />
+                        <Text style={styles.headerContainerText}>Tóm tắt thông tin</Text>
+                    </View>
+                    <AnimatedIcon />
                 </View>
                 <View style={styles.MainCont}>
-                    <View style={styles.durationBox}>
-                        <View style={styles.durationTextContainer}>
-                            <Text style={styles.durationText}>Thông Tin</Text>
-                            <Text style={styles.selectedDateTime}>
-                                Ngày giờ : Thứ 2, 14, 2023 : 8:00 am - Thứ 3, 25,2023 : 13:00 pm
-                            </Text>
-                            <Text style={styles.selectedDateTime}>
-                                Bãi đổ : Trung tâm bến xe Thành phố Đà Nẵng
-                            </Text>
-                            <Text style={styles.selectedDateTime}>
-                                Vị trí đổ : A05
-                            </Text>
-                            <Text style={styles.selectedDateTime}>
-                                Sđt : 0906037470
-                            </Text>
-                            <Text style={styles.selectedDateTime}>
-                                hotline : 02363767428
-                            </Text>
-                        </View>
+                    <View style={styles.MainContCard}>
+                        <Text style={styles.MainContTextL}>Khu vực đậu xe</Text>
+                        <Text style={styles.MainContTextR}>Trung tâm bến xe Thành phố Đà Nẵng</Text>
+                    </View>
+                    <View style={styles.MainContCard}>
+                        <Text style={styles.MainContTextL}>Địa chỉ</Text>
+                        <Text style={styles.MainContTextR}>Tôn Đức Thắng, Hoà Minh, Liên Chiểu, Đà Nẵng</Text>
+                    </View>
+                    <View style={styles.MainContCard}>
+                        <Text style={styles.MainContTextL}>Phương tiện cá nhân</Text>
+                        <Text style={styles.MainContTextR}>CAMRY 2.0G</Text>
+                    </View>
+                    <View style={styles.MainContCard}>
+                        <Text style={styles.MainContTextL}>Chỗ đậu xe</Text>
+                        <Text style={styles.MainContTextR}>Đường số 1 (101)</Text>
+                    </View>
+                    <View style={styles.MainContCard}>
+                        <Text style={styles.MainContTextL}>Ngày giờ</Text>
+                        <Text style={styles.MainContTextR}>Thứ 2, 14, 2023 : 8:00 am - Thứ 3, 25,2023 : 13:00 pm</Text>
                     </View>
                 </View>
                 <View style={styles.MainCont}>
-                    <View style={styles.durationBox}>
-                        <View style={styles.durationTextContainer}>
-                            <Text style={styles.durationText}>Thanh Toán</Text>
-                            <Text style={styles.selectedDateTime}>
-                                Gía Tiền : 17.000 VND
-                            </Text>
-                            <View style={styles.borderLine}></View>
-                            <Text style={styles.selectedDateTime}>
-                                Tổng cộng : 17.000 VND
-                            </Text>
-                        </View>
+                    <View style={styles.MainContCard}>
+                        <Text style={styles.MainContTextL}>Giá tiền</Text>
+                        <Text style={styles.MainContTextR}>17.000đ</Text>
+                    </View>
+                    <View style={styles.MainContHr}></View>
+                    <View style={styles.MainContCard}>
+                        <Text style={styles.MainContTextL}>Tổng cộng</Text>
+                        <Text style={styles.MainContTextR}>17.000đ</Text>
                     </View>
                 </View>
-                <View style={styles.MainCont}>
-                    <View style={styles.durationBox1} >
-                        <View style={{ flexDirection: 'row' }}>
+                <View style={styles.contentContainer}>
+                    <View style={styles.MainCont}>
+                        <View style={styles.MainContMethodPay}>
                             <Image
-                                style={{ width: 90, height: 60 }}
+                                style={{ width: 100, height: 50 }}
                                 source={Images.VNPAY}
                             />
-                            <Text style={styles.selectedDateTime1}>
+                            <Text style={styles.MainContMethodPayText}>
                                 VNPAY
                             </Text>
-                            <View style={{ paddingLeft: 185, paddingTop: 13 }}>
-                                <RadioGroup
-                                    radioButtons={radioButtons}
-                                    onPress={setSelectedId}
-                                    selectedId={selectedId}
-                                />
-                            </View>
                         </View>
                     </View>
+                    <View style={styles.viewCommonButton}>
+                        <TouchableOpacity
+                            style={styles.btnCommon1}
+                            onPress={() => navigation.navigate('Ticket')}
+                        >
+                            <Text style={styles.btnTextCommon1}>
+                                Xác nhận thanh toán
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <TouchableOpacity style={styles.siginButton}>
-                    <Text
-                        style={styles.signinButtonText}>
-                        Thanh Toán
-                    </Text>
-                </TouchableOpacity>
-            </ScrollView>
-        </View>
+            </View>
+        </>
     )
 }
 
 const styles = StyleSheet.create({
-    headerInfo: {
-        backgroundColor: 'white',
+    container: {
         flex: 1,
-        padding: 16,
+        backgroundColor: '#fcfcfc',
+        paddingTop: 60,
+        paddingRight: 20,
+        paddingBottom: 20,
+        paddingLeft: 20,
+    },
+    containerTopHearder: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     headerContainer: {
         flexDirection: 'row',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        paddingVertical: 50,
-        paddingHorizontal: 3,
     },
-    durationBox: {
-        flexDirection: 'row',
-        backgroundColor: Colors.DEFAULT_GREY,
-        justifyContent: 'space-between',
-        borderRadius: 10,
-        padding: 16,
-        marginBottom: 25,
-        elevation: 5,
-
-    },
-    paymentBox: {
-        backgroundColor: '#FFE5B4',
-        borderRadius: 10,
-        padding: 16,
-        marginBottom: 25,
-        elevation: 5,
-
-    },
-    paymentHead: {
-        fontSize: 19,
-        marginLeft: 8,
-        fontWeight: 'bold',
-        color: 'black',
+    headerContainerText: {
+        fontSize: 21,
+        marginLeft: 10,
+        fontWeight: '700'
     },
     MainCont: {
-        flex: 1,
-        backgroundColor: 'white',
-        padding: 16,
-
-    },
-    durationTextContainer: {
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-    },
-    optionsBox: {
-        backgroundColor: '#FFE5B4',
-        borderRadius: 10,
-        padding: 16,
-        marginBottom: 25,
-        elevation: 5,
-    },
-    durationText: {
-        fontSize: 19,
-        marginLeft: 8,
-        fontWeight: 'bold',
-        color: 'green',
-    },
-    selectedDateTime: {
-        fontSize: 14,
-        marginLeft: 8,
-        marginTop: 12,
-        fontWeight: 'bold',
-    },
-    borderLine: {
-        borderBottomWidth: 1,
-        borderBottomColor: 'gray',
-        marginVertical: 8,
-    },
-    durationBox1: {
-        backgroundColor: Colors.DEFAULT_GREY,
-        justifyContent: 'space-between',
-        borderRadius: 10,
-        padding: 5,
-        marginBottom: 25,
-        elevation: 5,
-    },
-    selectedDateTime1: {
-        fontSize: 14,
-        marginLeft: 8,
-        marginTop: 12,
-        fontWeight: 'bold',
-        paddingTop: 10
-    },
-    siginButton: {
-        backgroundColor: Colors.DEFAULT_GREEN,
-        marginHorizontal: 20,
-        borderRadius: 8,
-        height: Display.setHeight(6),
-        justifyContent: 'center',
-        alignItems: 'center',
         marginTop: 20,
+        marginBottom: 10,
+        padding: 15,
+        borderRadius: 15,
+        backgroundColor: '#ffffff',
+        ...Platform.select({
+            ios: {
+                shadowColor: 'rgba(0, 0, 0, 0.4)',
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 1,
+                shadowRadius: 2,
+            },
+            android: {
+                elevation: 4,
+            },
+        }),
+        marginLeft: 1,
+        marginRight: 1
     },
-    signinButtonText: {
-        fontSize: 18,
-        lineHeight: 18 * 1.4,
-        color: Colors.DEFAULT_WHITE,
+    MainContHr: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        borderStyle: 'solid',
+        marginBottom: 10
     },
+    MainContCard: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10
+    },
+    MainContTextL: {
+        flex: 1,
+        color: '#6e6e6e'
+    },
+    MainContTextR: {
+        flex: 1,
+        fontWeight: '600',
+    },
+    MainContMethodPay: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    MainContMethodPayText: {
+        fontWeight: '600',
+    },
+    contentContainer: {
+        flex: 1,
+        justifyContent: 'space-between'
+    },
+    viewCommonButton: {
+        paddingTop: 20,
+    },
+    btnCommon1: {
+        height: 50,
+        borderRadius: 15,
+        backgroundColor: '#000',
+        shadowColor: '#000',
+        shadowOffset: { width: 4, height: 5 },
+        shadowOpacity: 0.27,
+        shadowRadius: -3,
+        elevation: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    btnTextCommon1: {
+        color: '#fcfcfc',
+        fontWeight: 'bold',
+        fontSize: 17,
+    }
 })

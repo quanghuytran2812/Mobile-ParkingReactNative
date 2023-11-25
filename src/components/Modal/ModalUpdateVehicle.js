@@ -130,10 +130,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         borderRadius: 15,
         backgroundColor: 'white',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
-        shadowRadius: 30,
         elevation: 4,
     },
     closeBtn: {
@@ -156,7 +152,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#000',
         shadowColor: '#000',
-        shadowOffset: { width: 4, height: 8 },
+        shadowOffset: { width: 4, height: 5 },
         shadowOpacity: 0.27,
         shadowRadius: -3,
         elevation: 4,
@@ -176,13 +172,6 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#000',
         borderRadius: 5,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 4,
-            height: 4,
-        },
-        shadowOpacity: 1,
-        shadowRadius: 4,
     },
     modalGroupinput: {
         width: '100%',
