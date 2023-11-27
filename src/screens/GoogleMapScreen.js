@@ -96,7 +96,7 @@ const GoogleMapScreen = ({ navigation }) => {
     }
 
     function makePhoneCall() {
-        const url = 'tel://0906037470';
+        const url = 'tel://0915879171';
         Linking.openURL(url);
     }
 
@@ -289,7 +289,7 @@ const GoogleMapScreen = ({ navigation }) => {
             <View
                 style={{
                     position: 'absolute',
-                    bottom: 50,
+                    bottom: 20,
                     left: 0,
                     right: 0,
                     alignItems: 'center',
@@ -351,7 +351,7 @@ const GoogleMapScreen = ({ navigation }) => {
                                 color: '#fcfcfc',
                                 fontSize: 18,
                                 lineHeight: 22
-                            }}>Call</Text>
+                            }}>Gọi</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -374,7 +374,7 @@ const GoogleMapScreen = ({ navigation }) => {
                                 color: '#fcfcfc',
                                 fontSize: 18,
                                 lineHeight: 22
-                            }}>Cancel</Text>
+                            }}>Hủy</Text>
                         </TouchableOpacity>
                     </View>
 

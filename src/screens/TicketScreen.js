@@ -81,7 +81,7 @@ const TicketScreen = ({ navigation }) => {
           onPress={() => navigation.navigate('GoogleMap')}
         >
           <Text style={styles.btnTextCommon1}>
-            Chuyển đến Parking
+            Chuyển đến đặt chỗ
           </Text>
         </TouchableOpacity>
       </View>

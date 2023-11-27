@@ -18,7 +18,7 @@ export default () => (
                 )
             }}
         />
-        <BottomTabs.Screen name="Parking"
+        <BottomTabs.Screen name="Đặt chỗ"
             component={VehicleScreen}
             options={{
                 tabBarIcon: ({ focused }) => (

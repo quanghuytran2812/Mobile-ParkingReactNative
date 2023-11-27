@@ -1,13 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
 import vehicleSlice from './vehicleSlice';
-import categorySlide from './categorySlide';
+import categorySlice from './categorySlice';
+import reportSlice from './reportSlice';
+import userSlice from './userSlice';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     vehicle: vehicleSlice,
-    category: categorySlide
+    category: categorySlice,
+    report: reportSlice,
+    user: userSlice
   },
 });
 

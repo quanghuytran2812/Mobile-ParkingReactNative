@@ -1,45 +1,38 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, TextInput } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import SelectDropdown from 'react-native-select-dropdown';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategory } from '../../store/categorySlice';
-import { updateVehicle } from '../../store/vehicleSlice';
+import { useDispatch } from 'react-redux';
+import { createReport } from '../../store/reportSlice';
 
 
-const ModalUpdateVehicle = ({ open, onClose, dataUpdate, handleUpdateData }) => {
-    const listCategory = useSelector((state) => state.category.list);
+const ModalAddReport = ({ onClose, handleUpdateData }) => {
     const dispatch = useDispatch();
     const handleClick = (e) => {
         e.stopPropagation();
     };
 
     const [payload, setPayload] = useState({
-        plateNumber: '',
-        vehicleName: '',
-        categoryId: ''
+        content: '',
+        vehiclePlateNumber: ''
     })
 
-    useEffect(() => {
-        if (open) {
-            setPayload(dataUpdate);
-        }
-    }, [open, dataUpdate]);
-
-    useEffect(() => {
-        dispatch(fetchCategory())
-    }, [dispatch]);
-
-
-    const handleUpdateVehicle = () => {
-        dispatch(updateVehicle(payload))
-        .then((result) => {
-            onClose();
-            handleUpdateData();
+    const handleReset = () => {
+        setPayload({
+            content: '',
+            vehiclePlateNumber: ''
         })
-        .catch((error) => {
-            console.log(error)
-        });
+    }
+
+    const handleAddReport = () => {
+        dispatch(createReport(payload))
+            .then((result) => {
+                handleReset();
+                onClose();
+                handleUpdateData();
+            })
+            .catch((error) => {
+                console.log(error)
+            });
     }
 
     return (
@@ -52,16 +45,16 @@ const ModalUpdateVehicle = ({ open, onClose, dataUpdate, handleUpdateData }) => 
                         />
                     </TouchableOpacity>
                     <View>
-                        <Text style={styles.modalformHeading}>Cập nhập xe</Text>
+                        <Text style={styles.modalformHeading}>Tạo đánh giá</Text>
                         <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroup}>
+                            <View style={styles.inputGroupText}>
                                 <TextInput
-                                    style={styles.modalGroupinput}
-                                    value={payload.vehicleName}
+                                    style={styles.modalGroupinputText}
+                                    value={payload.content}
                                     onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, vehicleName: value }))
+                                        setPayload((prev) => ({ ...prev, content: value }))
                                     }
-                                    placeholder="Vehicle Name"
+                                    placeholder="Nội dung"
                                 />
                             </View>
                         </View>
@@ -69,34 +62,15 @@ const ModalUpdateVehicle = ({ open, onClose, dataUpdate, handleUpdateData }) => 
                             <View style={styles.inputGroup}>
                                 <TextInput
                                     style={styles.modalGroupinput}
-                                    value={payload.plateNumber}
+                                    value={payload.vehiclePlateNumber}
                                     onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, plateNumber: value }))
+                                        setPayload((prev) => ({ ...prev, vehiclePlateNumber: value }))
                                     }
-                                    placeholder="Number Plate"
+                                    placeholder="Nhập vào biển số xe nếu có"
                                 />
                             </View>
                         </View>
-                        <SelectDropdown
-                            data={listCategory}
-                            onSelect={(selectedItem, index) => {
-                                setPayload((prev) => ({ ...prev, categoryId: selectedItem.vehicleCategoryId }));
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem.vehicleCategoryName
-                            }}
-                            rowTextForSelection={(item, index) => {
-                                return item.vehicleCategoryName
-                            }}
-                            defaultButtonText={dataUpdate.vehicleCategory.vehicleCategoryName}
-                            renderDropdownIcon={isOpened => {
-                                return <Ionicons name={isOpened ? 'chevron-up' : 'chevron-down'} size={18} />;
-                            }}
-                            dropdownIconPosition={'right'}
-                            buttonStyle={styles.dropdownStyle}
-                            buttonTextStyle={styles.dropdownStyleText}
-                        />
-                        <TouchableOpacity style={styles.btnCommon1} onPress={handleUpdateVehicle}>
+                        <TouchableOpacity style={styles.btnCommon1} onPress={handleAddReport}>
                             <Text style={styles.btnTextCommon1}>Lưu thay đổi</Text>
                         </TouchableOpacity>
                     </View>
@@ -173,6 +147,24 @@ const styles = StyleSheet.create({
         borderColor: '#000',
         borderRadius: 5,
     },
+    inputGroupText: {
+        marginBottom: 5,
+        borderWidth: 2,
+        borderColor: '#000',
+        borderRadius: 5,
+    },
+    modalGroupinputText: {
+        borderWidth: 1,
+        borderColor: 'red',
+        width: '100%',
+        height: 90,
+        backgroundColor: 'transparent',
+        borderWidth: 0,
+        padding: 10,
+        fontSize: 15,
+        fontWeight: '600',
+        color: '#323232',
+    },
     modalGroupinput: {
         width: '100%',
         height: '100%',
@@ -183,24 +175,9 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#323232',
     },
-    dropdownStyle: {
-        width: '100%',
-        height: 40,
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: '#000',
-        backgroundColor: 'transparent',
-        marginBottom: 20
-    },
-    dropdownStyleText: {
-        textAlign: 'left',
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#323232'
-    },
     inputFieldDiv: {
         marginBottom: 20,
     },
 })
 
-export default memo(ModalUpdateVehicle)
+export default memo(ModalAddReport)

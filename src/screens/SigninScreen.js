@@ -48,12 +48,12 @@ const SigninScreen = ({ navigation }) => {
             </Text>
             <View style={styles.inputContainer}>
                 <View style={styles.inputSubContainer}>
-                    <Feather name="user"
+                    <Feather name="phone"
                         size={22}
                         color={Colors.DEFAULT_GREY}
                         style={{ marginRight: 10 }}
                     />
-                    <TextInput 
+                    <TextInput
                         placeholder="Số điện thoại"
                         placeholderTextColor={Colors.DEFAULT_GREY}
                         selectionColor={Colors.DEFAULT_GREY}
@@ -205,6 +205,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 20,
+        shadowColor: Colors.DEFAULT_GREEN,
+        shadowOffset: { width: 4, height: 8 },
+        shadowOpacity: 0.27,
+        elevation: 4,
     },
     signinButtonText: {
         fontSize: 18,

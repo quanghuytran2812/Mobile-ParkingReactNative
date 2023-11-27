@@ -1,44 +1,45 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, TextInput } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import SelectDropdown from 'react-native-select-dropdown';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategory } from '../../store/categorySlice';
-import { createVehicle } from '../../store/vehicleSlice';
+import { useDispatch } from 'react-redux';
+import Feather from "react-native-vector-icons/Feather"
+import { Colors } from '../../contants';
+import { changepassUser } from '../../store/userSlice';
 
 
-const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
+const ModalChangePass = ({ onClose }) => {
+    const dispatch = useDispatch();
+    const [isPasswordShow, setPasswordShow] = useState(false)
+    const [isPasswordShow1, setPasswordShow1] = useState(false)
+    const [isPasswordShow2, setPasswordShow2] = useState(false)
+
     const handleClick = (e) => {
         e.stopPropagation();
     };
 
     const [payload, setPayload] = useState({
-        plateNumber: '',
-        vehicleName: '',
-        categoryId: ''
+        oldPass: '',
+        password: '',
+        confirmPassword: ''
     })
 
     const handleReset = () => {
         setPayload({
-            plateNumber: '',
-            vehicleName: '',
-            categoryId: ''
+            oldPass: '',
+            password: '',
+            confirmPassword: ''
         })
     }
 
-    const listCategory = useSelector((state) => state.category.list);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(fetchCategory())
-    }, [dispatch]);
-
-
-    const handleAddVehicle = () => {
-        dispatch(createVehicle(payload))
+    const handleChangePass = () => {
+        const changePassNew = {
+            oldPass: payload.oldPass,
+            newPass: payload.password
+        }
+        dispatch(changepassUser(changePassNew))
             .then((result) => {
                 handleReset();
                 onClose();
-                handleUpdateData();
             })
             .catch((error) => {
                 console.log(error)
@@ -55,16 +56,24 @@ const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
                         />
                     </TouchableOpacity>
                     <View>
-                        <Text style={styles.modalformHeading}>Thêm xe</Text>
+                        <Text style={styles.modalformHeading}>Đổi mật khẩu</Text>
                         <View style={styles.inputFieldDiv}>
                             <View style={styles.inputGroup}>
                                 <TextInput
                                     style={styles.modalGroupinput}
-                                    value={payload.vehicleName}
+                                    secureTextEntry={isPasswordShow ? false : true}
+                                    placeholder='Mật khẩu cũ'
+                                    value={payload.oldPass}
                                     onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, vehicleName: value }))
+                                        setPayload((prev) => ({ ...prev, oldPass: value }))
                                     }
-                                    placeholder="Tên xe"
+                                />
+                                <Feather
+                                    name={isPasswordShow ? "eye" : 'eye-off'}
+                                    size={20}
+                                    color={Colors.DEFAULT_GREY}
+                                    style={{ marginRight: 10 }}
+                                    onPress={() => setPasswordShow(!isPasswordShow)}
                                 />
                             </View>
                         </View>
@@ -72,34 +81,43 @@ const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
                             <View style={styles.inputGroup}>
                                 <TextInput
                                     style={styles.modalGroupinput}
-                                    value={payload.plateNumber}
+                                    secureTextEntry={isPasswordShow1 ? false : true}
+                                    placeholder='Mật khẩu mới'
+                                    value={payload.password}
                                     onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, plateNumber: value }))
+                                        setPayload((prev) => ({ ...prev, password: value }))
                                     }
-                                    placeholder="Biển số xe"
+                                />
+                                <Feather
+                                    name={isPasswordShow1 ? "eye" : 'eye-off'}
+                                    size={20}
+                                    color={Colors.DEFAULT_GREY}
+                                    style={{ marginRight: 10 }}
+                                    onPress={() => setPasswordShow1(!isPasswordShow1)}
                                 />
                             </View>
                         </View>
-                        <SelectDropdown
-                            data={listCategory}
-                            onSelect={(selectedItem, index) => {
-                                setPayload((prev) => ({ ...prev, categoryId: selectedItem.vehicleCategoryId }));
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem.vehicleCategoryName
-                            }}
-                            rowTextForSelection={(item, index) => {
-                                return item.vehicleCategoryName
-                            }}
-                            defaultButtonText={'Chọn loại xe'}
-                            renderDropdownIcon={isOpened => {
-                                return <Ionicons name={isOpened ? 'chevron-up' : 'chevron-down'} size={18} />;
-                            }}
-                            dropdownIconPosition={'right'}
-                            buttonStyle={styles.dropdownStyle}
-                            buttonTextStyle={styles.dropdownStyleText}
-                        />
-                        <TouchableOpacity style={styles.btnCommon1} onPress={handleAddVehicle}>
+                        <View style={styles.inputFieldDiv}>
+                            <View style={styles.inputGroup}>
+                                <TextInput
+                                    style={styles.modalGroupinput}
+                                    secureTextEntry={isPasswordShow2 ? false : true}
+                                    placeholder='Xác nhận mật khẩu'
+                                    value={payload.confirmPassword}
+                                    onChangeText={(value) =>
+                                        setPayload((prev) => ({ ...prev, confirmPassword: value }))
+                                    }
+                                />
+                                <Feather
+                                    name={isPasswordShow2 ? "eye" : 'eye-off'}
+                                    size={20}
+                                    color={Colors.DEFAULT_GREY}
+                                    style={{ marginRight: 10 }}
+                                    onPress={() => setPasswordShow2(!isPasswordShow2)}
+                                />
+                            </View>
+                        </View>
+                        <TouchableOpacity style={styles.btnCommon1} onPress={handleChangePass}>
                             <Text style={styles.btnTextCommon1}>Lưu thay đổi</Text>
                         </TouchableOpacity>
                     </View>
@@ -168,42 +186,27 @@ const styles = StyleSheet.create({
         fontSize: 17,
     },
     inputGroup: {
+        flexDirection: 'row',
         marginBottom: 5,
         height: 40,
-        justifyContent: 'center',
         alignItems: 'center',
+        justifyContent: 'space-around',
         borderWidth: 2,
         borderColor: '#000',
         borderRadius: 5,
     },
     modalGroupinput: {
-        width: '100%',
+        width: '90%',
         height: '100%',
         backgroundColor: 'transparent',
-        borderWidth: 0,
         padding: 10,
         fontSize: 15,
         fontWeight: '600',
         color: '#323232',
-    },
-    dropdownStyle: {
-        width: '100%',
-        height: 40,
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: '#000',
-        backgroundColor: 'transparent',
-        marginBottom: 20
-    },
-    dropdownStyleText: {
-        textAlign: 'left',
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#323232'
     },
     inputFieldDiv: {
         marginBottom: 20,
     },
 })
 
-export default memo(ModalAddVehicle)
+export default memo(ModalChangePass)
