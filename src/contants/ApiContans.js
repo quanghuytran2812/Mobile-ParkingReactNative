@@ -1,3 +1,4 @@
+import { Text } from 'react-native';
 const config = require('../../package.json').projectConfig;
 const BACKEND_BASE_URL = config.backendApiBaseUrl;
 
@@ -17,5 +18,13 @@ const statusBookingData = [
     { code: 'Canceled', value: 'ĐÃ HỦY' }
 ]
 
+function CurrencyFormat({ num }) {
+    const formattedNum = num
+        .toFixed(2)
+        .replace('.', ',')
+        .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
 
-export default { COUNTRY_FLAG, BACKEND_API, statusBookingData };
+    return <Text>{`${formattedNum}₫`}</Text>;
+}
+
+export default { COUNTRY_FLAG, BACKEND_API, statusBookingData, CurrencyFormat };

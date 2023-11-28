@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import CalendarPicker from 'react-native-calendar-picker'
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { IconButton } from "react-native-paper";
@@ -8,11 +8,12 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { AnimatedIcon } from '../components';
 
 
-const DateTimeScreen = ({ navigation }) => {
+const DateTimeScreen = ({ route, navigation }) => {
     const [visible, setVisible] = React.useState(false);
     const [visible2, setVisible2] = React.useState(false);
     const [selectedTime, setSelectedTime] = React.useState({ hours: 12, minutes: 14 });
     const [selectedTime2, setSelectedTime2] = React.useState({ hours: 12, minutes: 14 });
+    const { vehicleId } = route.params;
 
     const onDismiss = React.useCallback(() => {
         setVisible(false);
@@ -39,7 +40,6 @@ const DateTimeScreen = ({ navigation }) => {
     const [selectedStartDate, setSelectedStartDate] = useState('DD/MM/YYYY')
     const [selectedEndtDate, setSelectedEndDate] = useState('DD/MM/YYYY')
     const onDateChange = (date, type) => {
-        // console.log(JSON.stringify(date))
         const newDate = JSON.stringify(date);
         const newDate1 = newDate.substring(1, newDate.length - 1)
         const dates = newDate1.split("T")
@@ -59,20 +59,37 @@ const DateTimeScreen = ({ navigation }) => {
             setSelectedEndDate('DD/MM/YYYY')
         }
     }
+
+    const handleOnBook = useCallback(async () => {
+        if (selectedRadio || selectedRadio.length !== 0) {
+            navigation.navigate('Booking',
+                {
+                    vehicleId: vehicleId,
+                    arrive_at: '',
+                    leave_at: ''
+                }); // Pass data as route parameter
+        } else {
+            Toast.show({
+                type: 'info',
+                text1: 'ParkingHT',
+                text2: `Bạn chưa chọn xe mà mình sẽ đỗ`,
+            });
+        }
+    }, [selectedRadio]);
     return (
         <>
             <View style={styles.container}>
-            <View style={styles.containerTopHearder}>
-            <View style={styles.headerContainer}>
-                    <Ionicons
-                        name="arrow-back-outline" size={22}
-                        onPress={() => navigation.goBack()}
-                    />
-                    <Text style={styles.headerContainerText}>Chọn ngày và thời gian</Text>
-                </View>
+                <View style={styles.containerTopHearder}>
+                    <View style={styles.headerContainer}>
+                        <Ionicons
+                            name="arrow-back-outline" size={22}
+                            onPress={() => navigation.goBack()}
+                        />
+                        <Text style={styles.headerContainerText}>Chọn ngày và thời gian</Text>
+                    </View>
                     <AnimatedIcon />
                 </View>
-                
+
                 <View style={{ marginTop: 20 }}>
                     <Text style={styles.selectDayTitle}>Chọn ngày </Text>
                 </View>
@@ -83,7 +100,7 @@ const DateTimeScreen = ({ navigation }) => {
                         allowRangeSelection={true}
                         previousTitle="<"
                         nextTitle=">"
-                        headerWrapperStyle={{width: '100%'}}
+                        headerWrapperStyle={{ width: '100%' }}
                         minDate={minDate}
                         maxDate={maxDate}
                         width={370}
@@ -92,8 +109,8 @@ const DateTimeScreen = ({ navigation }) => {
                         selectedDayTextColor="#FFFFFF"
                         onDateChange={onDateChange}
                     />
-                    {/* <Text>{"Ngày bắt đầu :" + selectedStartDate}</Text>
-                    <Text>{"Ngày kết thúc :" + selectedEndtDate}</Text> */}
+                    <Text>{"Ngày bắt đầu :" + selectedStartDate}</Text>
+                    <Text>{"Ngày kết thúc :" + selectedEndtDate}</Text>
                 </View>
 
                 <Text style={styles.selectTimeTitle}>Chọn thời gian</Text>
@@ -141,7 +158,7 @@ const DateTimeScreen = ({ navigation }) => {
                 <View>
                     <TouchableOpacity
                         style={styles.btnCommon1}
-                        onPress={() => navigation.navigate('Booking')}
+                        onPress={() => handleOnBook()}
                     >
                         <Text style={styles.btnTextCommon1}>
                             Tiếp tục

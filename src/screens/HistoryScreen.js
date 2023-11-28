@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { Images } from "../contants";
@@ -12,9 +12,14 @@ const HistoryScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const handleStatus = (dataStatus) => {
-    console.log(dataStatus)
     dispatch(fetchBookingByStatus(dataStatus));
   }
+
+  useEffect(() => {
+    if (listBookingStatus.length === 0) {
+      dispatch(fetchBookingByStatus("Completed"));
+    }
+  }, [])
 
   return (
     <>
@@ -64,28 +69,30 @@ const HistoryScreen = ({ navigation }) => {
                   <Text style={styles.detaildes}>{item.area} ({item.areaName})</Text>
                   <View style={styles.desparking}>
                     <View style={styles.moneyParking}>
-                      <Text style={{ color: '#02aab0', fontWeight: '700', fontSize: 16 }}>${item.amount}</Text>
-                      <Text style={{ color: '#6e6e6e', fontSize: 12 }}>/ {item.duration_hours} hour</Text>
+                      <Text style={{ color: '#02aab0', fontWeight: '700', fontSize: 16 }}>{item.amount}₫</Text>
+                      <Text style={{ color: '#6e6e6e', fontSize: 14 }}> / {item.duration_hours} hour</Text>
                     </View>
-                    <Text style={styles.statusBooking}>
-                      {item.status === "ONGOING" ? 'ĐANG ĐẶT CHỖ' :
-                        item.status === "COMPLETED" ? 'HOÀN THÀNH' :
-                          item.status === "CANCELED" ? 'ĐÃ HỦY' : ''
-                      }
-                    </Text>
+                    {item.status === "ONGOING" ? (<Text style={styles.statusBooking}>ĐANG ĐẶT CHỖ</Text>) :
+                      item.status === "COMPLETED" ? (<Text style={styles.statusBookingCompleted}>HOÀN THÀNH</Text>) :
+                        item.status === "CANCELED" ? (<Text style={styles.statusBookingCanceled}>ĐÃ HỦY</Text>) : ''
+                    }
                   </View>
                 </View>
               </View>
 
-              <View style={styles.containerButton}>
-                <TouchableOpacity
-                  style={styles.btnCommon1}
-                >
-                  <Text style={styles.btnTextCommon1}>
-                    Xem Vé
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              {item.status !== "CANCELED" ?
+                (
+                  <View style={styles.containerButton}>
+                    <TouchableOpacity
+                      style={styles.btnCommon1}
+                    >
+                      <Text style={styles.btnTextCommon1}>
+                        {item.status === "ONGOING" ? 'Tiếp tục đặt chỗ' : 'Xem Vé'}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : ''}
+
             </View>
           )}
         />
@@ -157,6 +164,7 @@ const styles = StyleSheet.create({
   },
   containerInfoB: {
     flexDirection: 'row',
+    width: '100%',
   },
   imageMyParking: {
     marginRight: 20
@@ -167,7 +175,8 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   detailMyParking: {
-    justifyContent: 'center'
+    justifyContent: 'center',
+    width: 235,
   },
   detailTitle: {
     fontSize: 16,
@@ -189,9 +198,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statusBooking: {
-    borderWidth: 1,
     padding: 5,
-    borderRadius: 5
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#02aab0',
+    backgroundColor: '#02aab0',
+    color: '#fff',
+    fontWeight: '600',
+    overflow: 'hidden'
+  },
+  statusBookingCompleted: {
+    padding: 5,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#2dce89',
+    color: '#2dce89',
+  },
+  statusBookingCanceled: {
+    padding: 5,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#DB3445',
+    color: '#DB3445',
   },
   containerButton: {
     marginTop: 20,
@@ -202,7 +230,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: '#fff',
     shadowColor: '#02aab0',
-    shadowOffset: { width: 4, height: 5 },
+    shadowOffset: { width: 1, height: 2 },
     shadowOpacity: 0.27,
     elevation: 4,
     borderColor: '#02aab0',

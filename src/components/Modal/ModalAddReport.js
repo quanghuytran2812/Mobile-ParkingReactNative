@@ -55,6 +55,8 @@ const ModalAddReport = ({ onClose, handleUpdateData }) => {
                                         setPayload((prev) => ({ ...prev, content: value }))
                                     }
                                     placeholder="Nội dung"
+                                    multiline
+                                    numberOfLines={4}
                                 />
                             </View>
                         </View>

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchVehicle } from '../store/vehicleSlice';
 import { AnimatedIcon, ModalAddVehicle } from '../components';
 import ModalUpdateVehicle from '../components/Modal/ModalUpdateVehicle';
+import Toast from 'react-native-toast-message';
 
 const VehicleScreen = ({ navigation }) => {
     const [selectedRadio, setSelectedRadio] = useState("")
@@ -36,6 +37,18 @@ const VehicleScreen = ({ navigation }) => {
     const handleUpdateData = () => {
         fetchData();
     };
+
+    const handleOnBook = useCallback(async () => {
+        if (selectedRadio || selectedRadio.length !== 0) {
+          navigation.navigate('DateTime', { vehicleId: selectedRadio }); // Pass data as route parameter
+        } else {
+          Toast.show({
+            type: 'info',
+            text1: 'ParkingHT',
+            text2: `Bạn chưa chọn xe mà mình sẽ đỗ`,
+          });
+        }
+      }, [selectedRadio]);
 
     return (
         <>
@@ -98,6 +111,7 @@ const VehicleScreen = ({ navigation }) => {
                     <TouchableOpacity
                         style={styles.btnCommon}
                         // onPress={() => navigation.navigate('DateTime')}
+                        onPress={() => handleOnBook()}
                     >
                         <Text style={styles.btnTextCommon}>
                             Tiếp tục
