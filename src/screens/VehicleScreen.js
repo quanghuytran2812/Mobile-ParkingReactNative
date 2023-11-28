@@ -97,7 +97,7 @@ const VehicleScreen = ({ navigation }) => {
 
                     <TouchableOpacity
                         style={styles.btnCommon}
-                        onPress={() => navigation.navigate('DateTime')}
+                        // onPress={() => navigation.navigate('DateTime')}
                     >
                         <Text style={styles.btnTextCommon}>
                             Tiếp tục

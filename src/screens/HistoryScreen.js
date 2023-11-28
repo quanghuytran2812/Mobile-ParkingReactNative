@@ -1,176 +1,219 @@
-// ParkingHistoryPage.js
 import React from 'react';
 import { View, Text, FlatList, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { Display } from '../utils';
 import Ionicons from "react-native-vector-icons/Ionicons"
-import { Colors, Images } from "../contants";
+import { Images } from "../contants";
+import { AnimatedIcon } from '../components';
+import { ApiContans } from '../contants'
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchBookingByStatus } from '../store/bookingSlice';
 
-const HistoryScreen = ({navigation}) => {
+const HistoryScreen = ({ navigation }) => {
+  const listBookingStatus = useSelector((state) => state.booking.list);
+  const dispatch = useDispatch();
+
+  const handleStatus = (dataStatus) => {
+    console.log(dataStatus)
+    dispatch(fetchBookingByStatus(dataStatus));
+  }
+
   return (
     <>
-      <View style={{ position: 'absolute', paddingTop: 55, flexDirection: 'row', alignItems: 'center', zIndex: 999 }}>
-        <Ionicons
-          name="arrow-back-outline" size={30}
-          onPress={() => navigation.goBack()}
+      <View style={styles.container}>
+        <View style={styles.containerTopHearder}>
+          <View style={styles.headerContainer}>
+            <Ionicons
+              name="arrow-back-outline" size={22}
+              onPress={() => navigation.goBack()}
+            />
+            <Text style={styles.headerContainerText}>Bãi đậu xe của tôi</Text>
+          </View>
+          <AnimatedIcon />
+        </View>
+        <View style={styles.containerWrapperStatus}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <View style={styles.wrapperStatusB}>
+              {ApiContans.statusBookingData.map((item) => (
+                <TouchableOpacity
+                  key={item.code}
+                  onPress={() => handleStatus(item.code)}
+                  style={styles.nameStatusB}
+                >
+                  <Text style={styles.textStatusB}>{item.value}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+        </View>
+        <FlatList
+          data={listBookingStatus}
+          style={styles.containerListCar}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.containerMyParking}>
+              <View style={styles.containerInfoB}>
+
+                <View style={styles.imageMyParking}>
+                  <Image
+                    style={styles.imageParking}
+                    source={Images.BENXE1}
+                  />
+                </View>
+
+                <View style={styles.detailMyParking}>
+                  <Text style={styles.detailTitle}>Trung tâm bến xe Đà Nẵng</Text>
+                  <Text style={styles.detaildes}>{item.area} ({item.areaName})</Text>
+                  <View style={styles.desparking}>
+                    <View style={styles.moneyParking}>
+                      <Text style={{ color: '#02aab0', fontWeight: '700', fontSize: 16 }}>${item.amount}</Text>
+                      <Text style={{ color: '#6e6e6e', fontSize: 12 }}>/ {item.duration_hours} hour</Text>
+                    </View>
+                    <Text style={styles.statusBooking}>
+                      {item.status === "ONGOING" ? 'ĐANG ĐẶT CHỖ' :
+                        item.status === "COMPLETED" ? 'HOÀN THÀNH' :
+                          item.status === "CANCELED" ? 'ĐÃ HỦY' : ''
+                      }
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.containerButton}>
+                <TouchableOpacity
+                  style={styles.btnCommon1}
+                >
+                  <Text style={styles.btnTextCommon1}>
+                    Xem Vé
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         />
-        <Text style={{ paddingLeft: 10, fontSize: 20, fontWeight: 700 }}>Lịch sử thanh toán</Text>
       </View>
-      <View style={styles.wrapperParking}>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}>
-          <View style={styles.containerArea}>
-            <TouchableOpacity style={styles.AreaName}>
-              <Text style={styles.TextAreaName}>
-                đang diễn ra
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-            onPress={() => navigation.navigate('Completed')}
-            style={styles.AreaName}>
-              <Text style={styles.TextAreaName}>
-                hoàn thành
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-            onPress={() => navigation.navigate('Canceled')}
-            style={styles.AreaName}>
-              <Text style={styles.TextAreaName}>
-                đã hủy bỏ
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </View>
-      <ScrollView>
-        <View style={styles.MainCont}>
-          <View style={styles.durationBox}>
-            <View style={styles.durationTextContainer}>
-              <View>
-                <Image
-                style={{borderRadius:10}}
-                source={Images.BENXE1}
-                />
-              </View>
-
-              <View style={{ paddingLeft: 15 }}>
-                <Text style={styles.selectedDateTime}>
-                  Bến xe Trung Tâm Đà Nẵng
-                </Text>
-
-                <View style={{ marginTop: 10 }}>
-                  <Text style={styles.selectedDateTime}>
-                    Vị trí đổ : A09
-                  </Text>
-                </View>
-
-                <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={styles.selectedDateTime}>
-                    34.000 VND / 2 hour
-                  </Text>
-                  <View>
-                    <Text style={{ color: 'blue', paddingLeft: 20 }}>
-                     đang hoạt động
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles.MainCont}>
-          <View style={styles.durationBox}>
-            <View style={styles.durationTextContainer}>
-              <View>
-              <Image
-                style={{borderRadius:10}}
-                source={Images.BENXE1}
-                />
-              </View>
-
-              <View style={{ paddingLeft: 15 }}>
-                <Text style={styles.selectedDateTime}>
-                  Bến xe Trung Tâm Đà Nẵng
-                </Text>
-                <View style={{ marginTop: 10 }}>
-                  <Text style={styles.selectedDateTime}>
-                    Vị trí đổ : A07
-                  </Text>
-                </View>
-
-                <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={styles.selectedDateTime}>
-                    17.000 VND / 1 hour
-                  </Text>
-                  <View>
-                    <Text style={{ color: Colors.DEFAULT_GREEN, paddingLeft: 50 }}>
-                      đã trả xe
-                    </Text>
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.DEFAULT_WHITE,
     flex: 1,
+    backgroundColor: '#fcfcfc',
+    paddingTop: 60,
+    paddingRight: 20,
+    paddingBottom: 20,
+    paddingLeft: 20,
+  },
+  containerTopHearder: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   headerContainer: {
     flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingVertical: 40,
   },
-  headerTitle: {
-    fontSize: 20,
-    lineHeight: 20 * 1.4,
-    width: Display.setWidth(80),
-    textAlign: 'center',
-    paddingLeft: 15
+  headerContainerText: {
+    fontSize: 21,
+    marginLeft: 10,
+    fontWeight: '700'
   },
-  containerArea: {
+  containerWrapperStatus: {
+    paddingVertical: 20,
+  },
+  wrapperStatusB: {
+    width: 350,
     flexDirection: 'row',
+    justifyContent: 'space-between'
   },
-  AreaName: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: 100,
-    marginBottom: 12,
-    paddingLeft: 20,
-    paddingRight: 20
-  },
-  TextAreaName: {
-    borderRadius: 8,
-    borderWidth: 2,
-    padding: 10,
-    color: "#000",
-    fontWeight: "bold",
-  },
-  MainCont: {
-    flex: 1,
+  nameStatusB: {
+    borderWidth: 1.5,
+    borderColor: '#02aab0',
+    borderRadius: 15,
     padding: 8,
   },
-  durationBox: {
+  textStatusB: {
+    color: '#02aab0'
+  },
+  containerMyParking: {
+    borderRadius: 15,
+    padding: 15,
+    backgroundColor: '#ffffff',
+    marginBottom: 10,
+    alignItems: 'center',
+    position: 'relative',
+    marginRight: 1,
+    marginLeft: 1,
+    ...Platform.select({
+      ios: {
+        shadowColor: 'rgba(0, 0, 0, 0.4)',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 1,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
+  },
+  containerInfoB: {
     flexDirection: 'row',
-    backgroundColor: Colors.DEFAULT_GREY,
+  },
+  imageMyParking: {
+    marginRight: 20
+  },
+  imageParking: {
+    width: 85,
+    height: 85,
+    borderRadius: 20
+  },
+  detailMyParking: {
+    justifyContent: 'center'
+  },
+  detailTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 4
+  },
+  detaildes: {
+    color: '#6e6e6e',
+    marginBottom: 4,
+    fontSize: 14,
+  },
+  desparking: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  moneyParking: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    borderRadius: 20,
-    padding: 16,
-    marginBottom: 25,
-    elevation: 5,
+    alignItems: 'center',
   },
-  durationTextContainer: {
-    flexDirection: 'row',
+  statusBooking: {
+    borderWidth: 1,
+    padding: 5,
+    borderRadius: 5
   },
-  wrapperParking:{
-    marginTop:80
+  containerButton: {
+    marginTop: 20,
+    width: '100%'
+  },
+  btnCommon1: {
+    height: 40,
+    borderRadius: 15,
+    backgroundColor: '#fff',
+    shadowColor: '#02aab0',
+    shadowOffset: { width: 4, height: 5 },
+    shadowOpacity: 0.27,
+    elevation: 4,
+    borderColor: '#02aab0',
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  btnTextCommon1: {
+    color: '#02aab0',
+    fontWeight: 'bold',
+    fontSize: 17,
   }
 });
 

@@ -4,6 +4,7 @@ import vehicleSlice from './vehicleSlice';
 import categorySlice from './categorySlice';
 import reportSlice from './reportSlice';
 import userSlice from './userSlice';
+import bookingSlice from './bookingSlice';
 
 const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ const store = configureStore({
     vehicle: vehicleSlice,
     category: categorySlice,
     report: reportSlice,
-    user: userSlice
+    user: userSlice,
+    booking: bookingSlice
   },
 });
 

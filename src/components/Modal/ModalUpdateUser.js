@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     },
     inputGroup: {
         marginBottom: 5,
-        height: 40,
+        height: 45,
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 2,

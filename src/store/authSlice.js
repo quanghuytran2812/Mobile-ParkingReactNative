@@ -39,7 +39,7 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         if (action.payload?.statusCode === 200) {
-          if (action.payload.data.role === "Driver") {
+          if (action.payload.data.role === "DRIVER") {
             state.isAuthenticated = true;
             state.currentData = action.payload.data
             StorageService.setToken(action.payload.data.token)

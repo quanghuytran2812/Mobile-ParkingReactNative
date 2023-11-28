@@ -11,5 +11,11 @@ const BACKEND_API = {
     BASE_API_URL: `${BACKEND_BASE_URL}`
 };
 
+const statusBookingData = [
+    { code: 'OnGoing', value: 'ĐANG ĐẶT CHỖ' },
+    { code: 'Completed', value: 'HOÀN THÀNH' },
+    { code: 'Canceled', value: 'ĐÃ HỦY' }
+]
 
-export default { COUNTRY_FLAG, BACKEND_API };
+
+export default { COUNTRY_FLAG, BACKEND_API, statusBookingData };

@@ -1,16 +1,19 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Modal } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Modal } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
 import { AnimatedIcon, ModalAddReport, ModalFeedback } from '../components';
 import { fetchReport } from '../store/reportSlice';
-import { Table, Row } from 'react-native-table-component';
 import moment from 'moment';
 import { Dimensions } from 'react-native';
+import { Provider as PaperProvider, DataTable } from 'react-native-paper';
+import ModalDetailReport from '../components/Modal/ModalDetailReport';
 
 const ReportScreen = ({ navigation }) => {
     const [openModal, setOpenModal] = useState(false);
+    const [openModalR, setOpenModalR] = useState(false);
     const [openModalF, setOpenModalF] = useState(false);
+    const [getdata, setGetData] = useState({});
     const listReport = useSelector((state) => state.report.list);
     const dispatch = useDispatch();
 
@@ -26,101 +29,140 @@ const ReportScreen = ({ navigation }) => {
         fetchData()
     }, [fetchData]);
 
-    const handleUpdateData = () => {
+    const handleUpdateData = useCallback(() => {
         fetchData();
+    }, [fetchData]);
+
+    const handleFeedback = (data) => {
+        setOpenModalF(true)
+        setGetData(data)
     };
 
-    const handleFeedback = () => {
-        setOpenModalF(true)
+    const handleDetailReport = (data) => {
+        setOpenModalR(true)
+        setGetData(data)
     }
 
-    const tableHead = [
-        'PURPOSE', 'CREATEDATE', 'STATUS', 'PROCESSDATE', 'Feedback'
-    ]
-
-    const renderButton = () => {
+    const renderButton = (data) => {
         return (
-            <TouchableOpacity
-                style={styles.btnCommon}
-                onPress={handleFeedback}
-            >
-                <Ionicons
-                    name="send-outline" size={22}
-                />
-            </TouchableOpacity>
-        )
-    }
-
-    const renderItem = ({ item }) => {
-        // Assuming each item in the listReport has reportId, name, and age properties
-        return (
-            <Table borderStyle={{ borderWidth: 1 }}>
-                <Row
-                    data={[
-                        item.content,
-                        moment(item.createDate).format("DD/MM/YYYY"),
-                        item.processingStatus === 1 ? 'completed' : 'processing',
-                        item.processingDate !== null ? moment(item.processingDate).format("DD/MM/YYYY, h:mm:ss A") : '',
-                        renderButton()
-                    ]}
-                    style={styles.tableRowBody}
-                    textStyle={styles.tableRowBodyText}
-                />
-            </Table>
+            <>
+                <TouchableOpacity
+                    style={{...styles.btnCommon, marginRight: 10}}
+                    onPress={() => handleDetailReport(data)}
+                >
+                    <Ionicons
+                        name="reader-outline" size={18}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.btnCommon}
+                    onPress={() => handleFeedback(data)}
+                >
+                    <Ionicons
+                        name="send-outline" size={18}
+                    />
+                </TouchableOpacity>
+            </>
         );
     };
 
+    const [page, setPage] = React.useState(0);
+    const [numberOfItemsPerPageList] = React.useState([4, 8, 12]);
+    const [itemsPerPage, onItemsPerPageChange] = React.useState(
+        numberOfItemsPerPageList[0]
+    );
+
+    const from = page * itemsPerPage;
+    const to = Math.min((page + 1) * itemsPerPage, listReport.length);
+
+    React.useEffect(() => {
+        setPage(0);
+    }, [itemsPerPage]);
     return (
         <>
-            <View style={styles.container}>
-                <View style={styles.containerTopHearder}>
-                    <View style={styles.headerContainer}>
-                        <Ionicons
-                            name="arrow-back-outline" size={22}
-                            onPress={() => navigation.goBack()}
-                        />
-                        <Text style={styles.headerContainerText}>Thông tin xử lý đánh giá</Text>
+            <PaperProvider>
+                <View style={styles.container}>
+                    <View style={styles.containerTopHearder}>
+                        <View style={styles.headerContainer}>
+                            <Ionicons
+                                name="arrow-back-outline" size={22}
+                                onPress={() => navigation.goBack()}
+                            />
+                            <Text style={styles.headerContainerText}>Thông tin xử lý đánh giá</Text>
+                        </View>
+                        <AnimatedIcon />
                     </View>
-                    <AnimatedIcon />
-                </View>
-                <View style={styles.contanierTable}>
-                    <Table style={styles.tableHeader}>
-                        <Row data={tableHead} style={styles.tableRowHeader} textStyle={styles.tableRowHeaderText} />
-                    </Table>
-                    <FlatList
-                        data={listReport}
-                        keyExtractor={item => item.reportId}
-                        renderItem={renderItem}
-                    />
-                </View>
-                <View
-                    style={styles.containerBtn}
-                >
-                    <TouchableOpacity
-                        style={styles.btnCommon1}
-                        onPress={() => setOpenModal(true)}
+                    <View style={styles.contanierTable}>
+                        <DataTable>
+                            <DataTable.Header style={styles.tableHeader}>
+                                <DataTable.Title textStyle={styles.tableRowHeaderText}>PURPOSE</DataTable.Title>
+                                <DataTable.Title textStyle={styles.tableRowHeaderText}>CREATEDATE</DataTable.Title>
+                                <DataTable.Title textStyle={styles.tableRowHeaderText}>STATUS</DataTable.Title>
+                                <DataTable.Title textStyle={styles.tableRowHeaderText}>ACTION</DataTable.Title>
+                            </DataTable.Header>
+
+                            {listReport.slice(from, to).map((item) => (
+                                <DataTable.Row key={item.reportId}>
+                                    <DataTable.Cell style={{ ...styles.tableCell }}>{item.content}</DataTable.Cell>
+                                    <DataTable.Cell style={{ ...styles.tableCell }}>{moment(item.createDate).format("DD/MM/YYYY")}</DataTable.Cell>
+                                    <DataTable.Cell style={{ ...styles.tableCell }}>{item.processingStatus === 1 ? 'đã xử lý' : 'đang xử lý'}</DataTable.Cell>
+                                    <DataTable.Cell style={{ ...styles.tableCell, justifyContent: 'center' }}>{renderButton(item)}</DataTable.Cell>
+                                </DataTable.Row>
+                            ))}
+
+                            <DataTable.Pagination
+                                page={page}
+                                numberOfPages={Math.ceil(listReport.length / itemsPerPage)}
+                                onPageChange={(page) => setPage(page)}
+                                label={`${from + 1}-${to} of ${listReport.length}`}
+                                numberOfItemsPerPageList={numberOfItemsPerPageList}
+                                numberOfItemsPerPage={itemsPerPage}
+                                onItemsPerPageChange={onItemsPerPageChange}
+                                showFastPaginationControls                             
+                                selectPageDropdownLabel={'Rows per page'}
+                            />
+                        </DataTable>
+                    </View>
+                    <View
+                        style={styles.containerBtn}
                     >
-                        <Text style={styles.btnTextCommon1}>
-                            Thêm đánh giá
-                        </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.btnCommon1}
+                            onPress={() => setOpenModal(true)}
+                        >
+                            <Text style={styles.btnTextCommon1}>
+                                Thêm đánh giá
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            </View>
-            <Modal
-                transparent={true}
-                animationType='fade'
-                visible={openModal}>
-                <ModalAddReport
-                    onClose={() => setOpenModal(false)}
-                    handleUpdateData={handleUpdateData} />
-            </Modal>
-            <Modal
-                transparent={true}
-                animationType='fade'
-                visible={openModalF}>
-                <ModalFeedback
-                    onClose={() => setOpenModalF(false)}/>
-            </Modal>
+                <Modal
+                    transparent={true}
+                    animationType='fade'
+                    visible={openModal}>
+                    <ModalAddReport
+                        onClose={() => setOpenModal(false)}
+                        handleUpdateData={handleUpdateData} />
+                </Modal>
+                <Modal
+                    transparent={true}
+                    animationType='fade'
+                    visible={openModalF}>
+                    <ModalFeedback
+                        onClose={() => setOpenModalF(false)}
+                        dataF={getdata}
+                    />
+                </Modal>
+                <Modal
+                    transparent={true}
+                    animationType='fade'
+                    visible={openModalR}>
+                    <ModalDetailReport
+                        onClose={() => setOpenModalR(false)}
+                        dataF={getdata}
+                    />
+                </Modal>
+            </PaperProvider>
         </>
     )
 }
@@ -156,24 +198,21 @@ const styles = StyleSheet.create({
     contanierTable: {
         flex: 1,
         padding: 10,
-        marginTop: 10,
+        marginTop: 20,
         maxHeight: (screenHeight * 0.89) - 12,
         backgroundColor: '#fcfcfc',
     },
     tableHeader: {
         backgroundColor: '#000',
-        padding: 5,
-    },
-    tableRowHeader: {
-        height: 30
     },
     tableRowHeaderText: {
         color: '#fff',
         textAlign: 'center',
-        fontSize: 13
+        justifyContent: 'center'
     },
-    tableRowBodyText: {
-        textAlign: 'center',
+    tableCell: {
+        flex: 1,
+        paddingHorizontal: 5,
     },
     //================================
     containerBtn: {

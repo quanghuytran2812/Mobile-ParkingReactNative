@@ -23,7 +23,7 @@ const SigninScreen = ({ navigation }) => {
 
     useEffect(() => {
         if (isAuthenticate || currentData) {
-            if (currentData.role === "Driver") {
+            if (currentData.role === "DRIVER") {
                 navigation.navigate('GoogleMap');
             }
         }

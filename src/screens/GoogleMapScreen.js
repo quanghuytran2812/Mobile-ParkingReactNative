@@ -35,7 +35,7 @@ const GoogleMapScreen = ({ navigation }) => {
         if (isFocused) {
             getLocaltionPermisson();
         }
-    }, [isFocused]);
+    }, [isFocused,origin]);
 
     async function getLocaltionPermisson() {
         let { status } = await Location.requestForegroundPermissionsAsync();

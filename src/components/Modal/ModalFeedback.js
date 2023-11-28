@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { createReport } from '../../store/reportSlice';
 
 
-const ModalFeedback = ({ onClose }) => {
+const ModalFeedback = ({ onClose, dataF }) => {
     const dispatch = useDispatch();
     const handleClick = (e) => {
         e.stopPropagation();
@@ -38,6 +38,9 @@ const ModalFeedback = ({ onClose }) => {
                     <View>
                         <Text style={styles.modalformHeading}>Phản hồi</Text>
                         <View style={styles.inputFieldDiv}>
+                            
+                        </View>
+                        <View style={styles.inputFieldDiv}>
                             <View style={styles.inputGroupText}>
                                 <TextInput
                                     style={styles.modalGroupinputText}
@@ -48,18 +51,7 @@ const ModalFeedback = ({ onClose }) => {
                                     placeholder="Nội dung"
                                 />
                             </View>
-                        </View>
-                        <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroup}>
-                                <TextInput
-                                    style={styles.modalGroupinput}
-                                    value={payload.vehiclePlateNumber}
-                                    onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, vehiclePlateNumber: value }))
-                                    }
-                                    placeholder="Number Plate"
-                                />
-                            </View>
+                            <Text>{dataF.reportId}</Text>
                         </View>
                         <TouchableOpacity style={styles.btnCommon1} onPress={handleAddReport}>
                             <Text style={styles.btnTextCommon1}>Save Changes</Text>
