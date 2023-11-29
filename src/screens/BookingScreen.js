@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Ionicons from "react-native-vector-icons/Ionicons"
 import {
   Text,
@@ -46,7 +46,14 @@ export default function BookingScreen({ route, navigation }) {
         parking_Slot_Id: objSelected.parkingSlotId,
       };
       dispatch(createBooking(bookingDetailData))
-      navigation.navigate('Payment');
+        .then((result) => {
+          if(result.payload.statusCode === 200){
+            navigation.navigate('Payment', result.payload.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        });     
     } else {
       Toast.show({
         type: 'info',

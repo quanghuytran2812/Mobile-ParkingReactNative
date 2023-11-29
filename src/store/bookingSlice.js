@@ -42,7 +42,6 @@ const bookingSlice = createSlice({
   initialState: {
     list: [],
     loading: false,
-    listBookingConfirm: []
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -64,7 +63,6 @@ const bookingSlice = createSlice({
       })
       .addCase(createBooking.fulfilled, (state,action) => {
         state.loading = false;
-        state.listBookingConfirm = action.payload.data
         Toast.show({
           type: 'success',
           text1: 'ParkingHT',
