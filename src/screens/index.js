@@ -16,6 +16,7 @@ import CompletedScreen from "./CompletedScreen";
 import CanceledScreen from "./CanceledScreen";
 import ReportScreen from "./ReportScreen";
 import TicketScreen from "./TicketScreen";
+import VnPayScreen from "./VnPayScreen";
 
 export {
     PirstScreen,
@@ -35,5 +36,6 @@ export {
     CompletedScreen,
     CanceledScreen,
     ReportScreen,
-    TicketScreen
+    TicketScreen,
+    VnPayScreen
 };

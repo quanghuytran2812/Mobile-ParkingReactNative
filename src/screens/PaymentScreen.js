@@ -1,20 +1,21 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Images } from '../contants';
-import Ionicons from "react-native-vector-icons/Ionicons"
 import { AnimatedIcon } from '../components';
+import { useSelector } from 'react-redux';
+import { ApiContans } from '../contants';
 
 export default function PaymentScreen({ navigation }) {
-
+    const { listBookingConfirm } = useSelector((state) => state.booking);
+    useEffect(() => {
+        if (listBookingConfirm.length === 0) { }
+    }, [listBookingConfirm]);
+    console.log(listBookingConfirm)
     return (
         <>
             <View style={styles.container}>
                 <View style={styles.containerTopHearder}>
                     <View style={styles.headerContainer}>
-                        <Ionicons
-                            name="arrow-back-outline" size={22}
-                            onPress={() => navigation.goBack()}
-                        />
                         <Text style={styles.headerContainerText}>Tóm tắt thông tin</Text>
                     </View>
                     <AnimatedIcon />
@@ -30,26 +31,36 @@ export default function PaymentScreen({ navigation }) {
                     </View>
                     <View style={styles.MainContCard}>
                         <Text style={styles.MainContTextL}>Phương tiện cá nhân</Text>
-                        <Text style={styles.MainContTextR}>CAMRY 2.0G</Text>
+                        <Text style={styles.MainContTextR}>{listBookingConfirm?.vehicle?.vehicleName}</Text>
                     </View>
                     <View style={styles.MainContCard}>
                         <Text style={styles.MainContTextL}>Chỗ đậu xe</Text>
-                        <Text style={styles.MainContTextR}>Đường số 1 (101)</Text>
+                        <Text style={styles.MainContTextR}>
+                            {`${listBookingConfirm?.parkingSlot?.area} (${listBookingConfirm?.parkingSlot?.name})`}
+                        </Text>
                     </View>
                     <View style={styles.MainContCard}>
-                        <Text style={styles.MainContTextL}>Ngày giờ</Text>
-                        <Text style={styles.MainContTextR}>Thứ 2, 14, 2023 : 8:00 am - Thứ 3, 25,2023 : 13:00 pm</Text>
+                        <Text style={styles.MainContTextL}>Ngày</Text>
+                        <Text style={styles.MainContTextR}>{`${ApiContans?.splitAndFormatDate(listBookingConfirm?.start_Date)} - ${ApiContans?.splitAndFormatDate(listBookingConfirm?.end_Date)}`}</Text>
+                    </View>
+                    <View style={styles.MainContCard}>
+                        <Text style={styles.MainContTextL}>Thời hạn</Text>
+                        <Text style={styles.MainContTextR}>{`${ApiContans?.calculateDuration(listBookingConfirm?.start_Date, listBookingConfirm?.end_Date)} giờ`}</Text>
+                    </View>
+                    <View style={styles.MainContCard}>
+                        <Text style={styles.MainContTextL}>Thời gian</Text>
+                        <Text style={styles.MainContTextR}>{`${ApiContans?.splitAndFormatTime(listBookingConfirm?.start_Date)} - ${ApiContans?.splitAndFormatTime(listBookingConfirm?.end_Date)}`}</Text>
                     </View>
                 </View>
                 <View style={styles.MainCont}>
                     <View style={styles.MainContCard}>
                         <Text style={styles.MainContTextL}>Giá tiền</Text>
-                        <Text style={styles.MainContTextR}>17.000đ</Text>
+                        <Text style={styles.MainContTextR}>{`${ApiContans.CurrencyFormat(listBookingConfirm?.booking_Total)}`}</Text>
                     </View>
                     <View style={styles.MainContHr}></View>
                     <View style={styles.MainContCard}>
                         <Text style={styles.MainContTextL}>Tổng cộng</Text>
-                        <Text style={styles.MainContTextR}>17.000đ</Text>
+                        <Text style={styles.MainContTextR}>{`${ApiContans.CurrencyFormat(listBookingConfirm?.booking_Total)}`}</Text>
                     </View>
                 </View>
                 <View style={styles.contentContainer}>
@@ -67,7 +78,7 @@ export default function PaymentScreen({ navigation }) {
                     <View style={styles.viewCommonButton}>
                         <TouchableOpacity
                             style={styles.btnCommon1}
-                            onPress={() => navigation.navigate('Ticket')}
+                            onPress={() => navigation.navigate('VnPay')}
                         >
                             <Text style={styles.btnTextCommon1}>
                                 Xác nhận thanh toán

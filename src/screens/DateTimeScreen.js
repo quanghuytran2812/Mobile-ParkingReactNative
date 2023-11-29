@@ -1,34 +1,36 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import CalendarPicker from 'react-native-calendar-picker'
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { IconButton } from "react-native-paper";
 import { TimePickerModal } from "react-native-paper-dates";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { AnimatedIcon } from '../components';
+import moment from 'moment';
+import Toast from 'react-native-toast-message';
 
 
 const DateTimeScreen = ({ route, navigation }) => {
     const [visible, setVisible] = React.useState(false);
     const [visible2, setVisible2] = React.useState(false);
-    const [selectedTime, setSelectedTime] = React.useState({ hours: 12, minutes: 14 });
-    const [selectedTime2, setSelectedTime2] = React.useState({ hours: 12, minutes: 14 });
-    const { vehicleId } = route.params;
+    const [selectedTime, setSelectedTime] = React.useState({ hours: 0, minutes: 0 });
+    const [selectedTime2, setSelectedTime2] = React.useState({ hours: 0, minutes: 0 });
+    const { vehicleId, categoryId } = route.params;
 
-    const onDismiss = React.useCallback(() => {
+    const onDismiss = useCallback(() => {
         setVisible(false);
     }, [setVisible]);
-    const onConfirm = React.useCallback(
+    const onConfirm = useCallback(
         ({ hours, minutes }) => {
             setVisible(false);
             setSelectedTime({ hours, minutes });
         },
         [setVisible, setSelectedTime]
     );
-    const onDismiss2 = React.useCallback(() => {
+    const onDismiss2 = useCallback(() => {
         setVisible2(false);
     }, [setVisible2]);
-    const onConfirm2 = React.useCallback(
+    const onConfirm2 = useCallback(
         ({ hours, minutes }) => {
             setVisible2(false);
             setSelectedTime2({ hours, minutes });
@@ -37,8 +39,8 @@ const DateTimeScreen = ({ route, navigation }) => {
     );
     const minDate = new Date(); // Today
     const maxDate = new Date(2026, 6, 3);
-    const [selectedStartDate, setSelectedStartDate] = useState('DD/MM/YYYY')
-    const [selectedEndtDate, setSelectedEndDate] = useState('DD/MM/YYYY')
+    const [selectedStartDate, setSelectedStartDate] = useState('')
+    const [selectedEndDate, setSelectedEndDate] = useState('')
     const onDateChange = (date, type) => {
         const newDate = JSON.stringify(date);
         const newDate1 = newDate.substring(1, newDate.length - 1)
@@ -50,32 +52,53 @@ const DateTimeScreen = ({ route, navigation }) => {
 
         if (type == 'END_DATE') {
             if (day == undefined) {
-                setSelectedEndDate('DD/MM/YYYY')
+                setSelectedEndDate('')
             } else {
                 setSelectedEndDate(day + "/" + month + "/" + year)
             }
         } else {
             setSelectedStartDate(day + "/" + month + "/" + year)
-            setSelectedEndDate('DD/MM/YYYY')
+            setSelectedEndDate('')
         }
     }
 
     const handleOnBook = useCallback(async () => {
-        if (selectedRadio || selectedRadio.length !== 0) {
-            navigation.navigate('Booking',
-                {
-                    vehicleId: vehicleId,
-                    arrive_at: '',
-                    leave_at: ''
-                }); // Pass data as route parameter
-        } else {
-            Toast.show({
-                type: 'info',
-                text1: 'ParkingHT',
-                text2: `Bạn chưa chọn xe mà mình sẽ đỗ`,
+        if (selectedStartDate && selectedEndDate && selectedTime && selectedTime2) {
+          const formattedArriveAt = moment(
+            `${selectedStartDate}T${selectedTime.hours}:${selectedTime.minutes}`,
+            'DD/MM/YYYYTHH:mm'
+          ).format('YYYY-MM-DDTHH:mm:ss');
+      
+          const formattedLeaveAt = moment(
+            `${selectedEndDate}T${selectedTime2.hours}:${selectedTime2.minutes}`,
+            'DD/MM/YYYYTHH:mm'
+          ).format('YYYY-MM-DDTHH:mm:ss');
+      
+          const startTime = moment(`${selectedTime.hours}:${selectedTime.minutes}`, 'HH:mm');
+          const endTime = moment(`${selectedTime2.hours}:${selectedTime2.minutes}`, 'HH:mm');
+      
+          if (endTime.isAfter(startTime)) {
+            navigation.navigate('Booking', {
+              vehicleId: vehicleId,
+              categoryId: categoryId,
+              arrive_at: formattedArriveAt,
+              leave_at: formattedLeaveAt,
             });
+          } else {
+            Toast.show({
+              type: 'error',
+              text1: 'ParkingHT',
+              text2: 'Thời gian rời đi phải sau thời gian đến',
+            });
+          }
+        } else {
+          Toast.show({
+            type: 'info',
+            text1: 'ParkingHT',
+            text2: 'Bạn chưa chọn thời gian mà mình sẽ đỗ',
+          });
         }
-    }, [selectedRadio]);
+      }, [selectedStartDate, selectedEndDate, selectedTime, selectedTime2]);
     return (
         <>
             <View style={styles.container}>
@@ -109,8 +132,6 @@ const DateTimeScreen = ({ route, navigation }) => {
                         selectedDayTextColor="#FFFFFF"
                         onDateChange={onDateChange}
                     />
-                    <Text>{"Ngày bắt đầu :" + selectedStartDate}</Text>
-                    <Text>{"Ngày kết thúc :" + selectedEndtDate}</Text>
                 </View>
 
                 <Text style={styles.selectTimeTitle}>Chọn thời gian</Text>
@@ -120,7 +141,7 @@ const DateTimeScreen = ({ route, navigation }) => {
                         <Text style={styles.timeSelectTitle}>Thời gian bắt đầu</Text>
                         <View style={styles.selectTimeData}>
                             <IconButton
-                                icon={() => <Ionicons name="time-outline" size={25} color="#000" />} // Use the calendar icon
+                                icon={() => <Ionicons name="time-outline" size={25} color="#02aab0" />} // Use the calendar icon
                                 onPress={() => setVisible(true)}
                             />
                             <Text style={styles.showTimeSelected}>{selectedTime.hours}:{selectedTime.minutes}</Text>
@@ -141,7 +162,7 @@ const DateTimeScreen = ({ route, navigation }) => {
                         <Text style={styles.timeSelectTitle}>Thời gian kết thúc</Text>
                         <View style={styles.selectTimeData}>
                             <IconButton
-                                icon={() => <Ionicons name="time-outline" size={25} color="#000" />} // Use the calendar icon
+                                icon={() => <Ionicons name="time-outline" size={25} color="#02aab0" />} // Use the calendar icon
                                 onPress={() => setVisible2(true)}
                             />
                             <Text style={styles.showTimeSelected}>{selectedTime2.hours}:{selectedTime2.minutes}</Text>

@@ -9,35 +9,59 @@ import {
   ScrollView,
 } from 'react-native';
 import { moderateScale, verticalScale, scale } from 'react-native-size-matters';
-import { Images, Colors } from '../contants';
-import { Display } from '../utils';
+import { Images } from '../contants';
 import { AnimatedIcon } from '../components';
+import { fetchParkingslotAreaByCategory, fetchParkingslotByArea } from '../store/parkingslotSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { isEqual } from 'lodash';
+import { createBooking } from '../store/bookingSlice';
+import { useCallback } from 'react';
 
-const data = [
-  { id: 1, isParked: true, slotName: 'A01' },
-  { id: 2, isParked: false, slotName: 'A02' },
-  { id: 3, isParked: false, slotName: 'A03' },
-  { id: 4, isParked: true, slotName: 'A04' },
-  { id: 5, isParked: false, slotName: 'A05' },
-  { id: 6, isParked: false, slotName: 'A06' },
-  { id: 7, isParked: false, slotName: 'A07' },
-  { id: 8, isParked: false, slotName: 'A08' },
-  { id: 9, isParked: false, slotName: 'A09' },
-  { id: 10, isParked: true, slotName: 'A10' },
-  { id: 11, isParked: true, slotName: 'A11' },
-  { id: 12, isParked: false, slotName: 'A12' },
-  { id: 13, isParked: false, slotName: 'A13' },
-  { id: 14, isParked: true, slotName: 'A14' },
-  { id: 15, isParked: false, slotName: 'A15' },
-  { id: 16, isParked: false, slotName: 'A16' },
-];
+export default function BookingScreen({ route, navigation }) {
+  const { vehicleId, categoryId, arrive_at, leave_at } = route.params;
+  const dispatch = useDispatch();
+  const { listAreaByCategory, listPSbyArea } = useSelector((state) => state.parkingslot);
+  const [objSelected, setobjSelected] = React.useState(null);
 
-export default function BookingScreen({ navigation }) {
+  useEffect(() => {
+    dispatch(fetchParkingslotAreaByCategory(categoryId));
+  }, [categoryId, dispatch]);
+
+  useEffect(() => {
+    if (listAreaByCategory.length > 0) {
+      dispatch(fetchParkingslotByArea(listAreaByCategory[0].parking_Area));
+    }
+  }, [listAreaByCategory, dispatch])
+
+  const handleAreaClick = (selectedArea) => {
+    dispatch(fetchParkingslotByArea(selectedArea));
+  }
+
+  const handleOnBook = useCallback(async () => {
+    if (objSelected) {
+      const bookingDetailData = {
+        vehicle_Id: vehicleId,
+        start_Date: arrive_at,
+        end_Date: leave_at,
+        parking_Slot_Id: objSelected.parkingSlotId,
+      };
+      dispatch(createBooking(bookingDetailData))
+      navigation.navigate('Payment');
+    } else {
+      Toast.show({
+        type: 'info',
+        text1: 'ParkingHT',
+        text2: 'Bạn chưa chọn chỗ mà mình sẽ đỗ',
+      });
+    }
+  }, [objSelected]);
+
+  const data = listPSbyArea.map((item, index) => ({ ...item, id: index + 1 })).sort((a, b) => a.name - b.name);
   const dataLeft =
     data !== undefined && data.filter((item) => item.id % 2 !== 0);
   const dataRight =
     data !== undefined && data.filter((item) => item.id % 2 === 0);
-  const [objSelected, setobjSelected] = React.useState(null);
+
   return (
     <>
       <View style={styles.container}>
@@ -52,35 +76,25 @@ export default function BookingScreen({ navigation }) {
           <AnimatedIcon />
         </View>
         <View style={styles.wrapperParking}>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.containerArea}>
-              <TouchableOpacity style={styles.AreaName}
-              >
-                <Text style={styles.TextAreaName}>
-                  đường số 1
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.AreaName}>
-                <Text style={styles.TextAreaName}>
-                  đường số 2
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.AreaName}>
-                <Text style={styles.TextAreaName}>
-                  đường số 3
-                </Text>
-              </TouchableOpacity>
+              {listAreaByCategory.map((area, index) => (
+                <TouchableOpacity
+                  style={styles.AreaName}
+                  key={index}
+                  onPress={() => handleAreaClick(area.parking_Area)}>
+                  <Text style={styles.TextAreaName}>
+                    {area.parking_Area}
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
           </ScrollView>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.viewAll}>
               <View style={styles.viewLeft}>
-                {dataLeft.map((e, index) => (
+                {dataLeft.map((e) => (
                   <SlotParking
-                    slotName={e.slotName}
-                    index={index}
                     key={e.id}
                     item={e}
                     itemSelect={objSelected}
@@ -99,7 +113,7 @@ export default function BookingScreen({ navigation }) {
                 </View>
               </View>
               <View style={styles.viewRight}>
-                {dataRight.map((e, index) => (
+                {dataRight.map((e) => (
                   <SlotParking
                     key={e.id}
                     item={e}
@@ -113,7 +127,7 @@ export default function BookingScreen({ navigation }) {
           <View style={styles.viewCommonButton}>
             <TouchableOpacity
               style={styles.btnCommon1}
-              onPress={() => navigation.navigate('Payment')}
+              onPress={() => handleOnBook()}
             >
               <Text style={styles.btnTextCommon1}>
                 Tiếp tục
@@ -127,13 +141,14 @@ export default function BookingScreen({ navigation }) {
 }
 
 function SlotParking({ item, onPress, itemSelect }) {
+
   return (
     <View style={styles.viewParking}>
-      {item.isParked ? (
+      {item.parking_Slot_Status === 'BUSY' ? (
         <View style={styles.imageAuto}>
           <Image
             source={Images.CARUP}
-            resizeMode={"contain"}
+            resizeMode="contain"
             style={{ width: scale(84), height: verticalScale(40) }}
           />
         </View>
@@ -141,7 +156,9 @@ function SlotParking({ item, onPress, itemSelect }) {
         <TouchableOpacity
           style={[
             styles.viewName,
-            { backgroundColor: itemSelect === item ? '#000' : 'white' },
+            isEqual(itemSelect, item) ?
+              { backgroundColor: '#02aab0', borderColor: '#02aab0', borderWidth: 2 }
+              : { backgroundColor: '#02aab040', borderColor: '#02aab0', borderWidth: 2 },
           ]}
           activeOpacity={1}
           onPress={onPress}
@@ -149,10 +166,11 @@ function SlotParking({ item, onPress, itemSelect }) {
           <Text
             style={[
               styles.slotName,
-              { color: itemSelect === item ? 'white' : 'black' },
+              isEqual(itemSelect, item) ? { color: 'white' }
+                : { color: '#02aab0' },
             ]}
           >
-            {item.slotName}
+            {item.name}
           </Text>
         </TouchableOpacity>
       )}
@@ -236,9 +254,7 @@ const styles = StyleSheet.create({
     paddingVertical: verticalScale(6)
   },
   viewName: {
-    borderColor: 'black',
     borderRadius: 8,
-    borderWidth: 2
   },
   viewDirect: {
     alignItems: "center",

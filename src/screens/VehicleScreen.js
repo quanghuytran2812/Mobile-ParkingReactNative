@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal, Platform} from 'react-native'
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal, Platform } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Images } from '../contants';
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -10,7 +10,7 @@ import ModalUpdateVehicle from '../components/Modal/ModalUpdateVehicle';
 import Toast from 'react-native-toast-message';
 
 const VehicleScreen = ({ navigation }) => {
-    const [selectedRadio, setSelectedRadio] = useState("")
+    const [selectedRadio, setSelectedRadio] = useState({ vehicleId: '', categoryId: '' })
     const [openModal, setOpenModal] = useState(false);
     const [openUpdateModal, setOpenUpdateModal] = useState(false);
     const [dataEdit, setDataEdit] = useState({});
@@ -30,7 +30,10 @@ const VehicleScreen = ({ navigation }) => {
     }, [fetchData]);
 
     const handleGetData = (data) => {
-        setSelectedRadio(data.vehicleId)
+        setSelectedRadio({
+            vehicleId: data.vehicleId,
+            categoryId: data.vehicleCategory.vehicleCategoryId
+        })
         setDataEdit(data)
     }
 
@@ -39,16 +42,19 @@ const VehicleScreen = ({ navigation }) => {
     };
 
     const handleOnBook = useCallback(async () => {
-        if (selectedRadio || selectedRadio.length !== 0) {
-          navigation.navigate('DateTime', { vehicleId: selectedRadio }); // Pass data as route parameter
+        if (selectedRadio && selectedRadio.vehicleId && selectedRadio.categoryId) {
+            navigation.navigate('DateTime', {
+                vehicleId: selectedRadio.vehicleId,
+                categoryId: selectedRadio.categoryId,
+            });
         } else {
-          Toast.show({
-            type: 'info',
-            text1: 'ParkingHT',
-            text2: `Bạn chưa chọn xe mà mình sẽ đỗ`,
-          });
+            Toast.show({
+                type: 'info',
+                text1: 'ParkingHT',
+                text2: 'Bạn chưa chọn xe mà mình sẽ đỗ',
+            });
         }
-      }, [selectedRadio]);
+    }, [selectedRadio]);
 
     return (
         <>
@@ -78,7 +84,7 @@ const VehicleScreen = ({ navigation }) => {
                                 </View>
                                 <View style={styles.vehicleContent}>
                                     <View style={styles.vehicleRadioButton}>
-                                        {selectedRadio === item.vehicleId ? <View style={styles.radioBg}></View> : null}
+                                        {selectedRadio.vehicleId === item.vehicleId ? <View style={styles.radioBg}></View> : null}
                                     </View>
                                     <Text style={styles.vehicleName}>{item.vehicleCategory.vehicleCategoryName}</Text>
                                     <Text style={styles.vehicleLicensePlate}>{item.plateNumber}</Text>

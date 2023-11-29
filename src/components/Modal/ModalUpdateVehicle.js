@@ -32,14 +32,22 @@ const ModalUpdateVehicle = ({ open, onClose, dataUpdate, handleUpdateData }) => 
 
 
     const handleUpdateVehicle = () => {
-        dispatch(updateVehicle(payload))
-        .then((result) => {
-            onClose();
-            handleUpdateData();
-        })
-        .catch((error) => {
-            console.log(error)
-        });
+        const updatedV = {
+            vehicleId: dataUpdate.vehicleId,
+            plateNumber: payload.plateNumber,
+            vehicleName: payload.vehicleName,
+            numberOfFouls: dataUpdate.numberOfFouls,
+            categoryId: payload.categoryId !== undefined ? payload.categoryId : dataUpdate.vehicleCategory.vehicleCategoryId
+        };
+
+        dispatch(updateVehicle(updatedV))
+            .then((result) => {
+                onClose();
+                handleUpdateData();
+            })
+            .catch((error) => {
+                console.log(error)
+            });
     }
 
     return (
