@@ -16,8 +16,6 @@ import {
     PaymentScreen,
     EditProfileScreen,
     HistoryScreen,
-    CompletedScreen,
-    CanceledScreen,
     ReportScreen,
     TicketScreen,
     VnPayScreen,
@@ -43,8 +41,6 @@ const Navigators = () => {
                 <Stack.Screen name="Payment" component={PaymentScreen} />
                 <Stack.Screen name="EditProfile" component={EditProfileScreen} />
                 <Stack.Screen name="History" component={HistoryScreen} />
-                <Stack.Screen name="Completed" component={CompletedScreen} />
-                <Stack.Screen name="Canceled" component={CanceledScreen} />
                 <Stack.Screen name="Report" component={ReportScreen} />
                 <Stack.Screen name="Ticket" component={TicketScreen} />
                 <Stack.Screen name="VnPay" component={VnPayScreen} />

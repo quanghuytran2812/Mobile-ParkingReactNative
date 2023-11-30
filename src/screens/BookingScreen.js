@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { isEqual } from 'lodash';
 import { createBooking } from '../store/bookingSlice';
 import { useCallback } from 'react';
+import Toast from 'react-native-toast-message';
 
 export default function BookingScreen({ route, navigation }) {
   const { vehicleId, categoryId, arrive_at, leave_at } = route.params;
