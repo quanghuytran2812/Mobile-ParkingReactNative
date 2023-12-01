@@ -13,7 +13,6 @@ export const login = createAsyncThunk('auth/login', async (credentials) => {
     const response = await AuthRequest.post('/auth/generateToken', credentials);
     return response.data;
   } catch (error) {
-    console.log(error)
     throw error.response.data;
   }
 });
@@ -21,7 +20,6 @@ const initialState = {
   isAuthenticated: false,
   loading: false,
   currentData: null,
-  error: null,
 };
 
 const authSlice = createSlice({
@@ -34,7 +32,6 @@ const authSlice = createSlice({
     builder
       .addCase(login.pending, (state) => {
         state.loading = true;
-        state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
@@ -66,7 +63,11 @@ const authSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.isAuthenticated = false;
-        state.error = action.error.message;
+        Toast.show({
+          type: 'error',
+          text1: 'ParkingHT',
+          text2: `${action.error.message}`
+        });
       });
   },
 });

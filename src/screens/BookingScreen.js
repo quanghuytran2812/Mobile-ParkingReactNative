@@ -165,8 +165,8 @@ function SlotParking({ item, onPress, itemSelect }) {
           style={[
             styles.viewName,
             isEqual(itemSelect, item) ?
-              { backgroundColor: '#02aab0', borderColor: '#02aab0', borderWidth: 2 }
-              : { backgroundColor: '#02aab040', borderColor: '#02aab0', borderWidth: 2 },
+              { backgroundColor: '#000', borderColor: '#000', borderWidth: 2 }
+              : { backgroundColor: '#fff', borderColor: '#000', borderWidth: 2 },
           ]}
           activeOpacity={1}
           onPress={onPress}
@@ -175,7 +175,7 @@ function SlotParking({ item, onPress, itemSelect }) {
             style={[
               styles.slotName,
               isEqual(itemSelect, item) ? { color: 'white' }
-                : { color: '#02aab0' },
+                : { color: '#000' },
             ]}
           >
             {item.name}
