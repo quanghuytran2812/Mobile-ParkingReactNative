@@ -50,7 +50,9 @@ const HistoryScreen = ({ navigation }) => {
           </ScrollView>
         </View>
         <FlatList
-          data={listBookingStatus.sort((a, b) => new Date(b.createDate) - new Date(a.createDate))}
+          data={[...listBookingStatus].sort(
+            (a, b) => new Date(b.createDate) - new Date(a.createDate)
+          )}
           style={styles.containerListCar}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
