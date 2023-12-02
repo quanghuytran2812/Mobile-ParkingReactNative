@@ -32,7 +32,7 @@ const VehicleScreen = ({ navigation }) => {
     const handleGetData = (data) => {
         setSelectedRadio({
             vehicleId: data.vehicleId,
-            categoryId: data.vehicleCategory.vehicleCategoryId
+            categoryId: data.vehicleCategory?.vehicleCategoryId
         })
         setDataEdit(data)
     }

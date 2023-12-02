@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, TextInput } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import SelectDropdown from 'react-native-select-dropdown';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,10 @@ const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
         e.stopPropagation();
     };
 
+    useEffect(() => {
+        dispatch(fetchCategory())
+    }, [dispatch]);
+
     const [payload, setPayload] = useState({
         plateNumber: '',
         vehicleName: '',
@@ -31,15 +35,10 @@ const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
         })
     }
 
-    useEffect(() => {
-        dispatch(fetchCategory())
-    }, [dispatch]);
-
-    if (payload.categoryId === "" || !payload.categoryId.length > 0) {
-        setPayload(prev => ({ ...prev, categoryId: listCategory[0].vehicleCategoryId }))
-    }
-
     const handleAddVehicle = () => {
+        if (payload.categoryId === "" || !payload.categoryId.length > 0) {
+            setPayload(prev => ({ ...prev, categoryId: listCategory[0]?.vehicleCategoryId }))
+        }
         const invalids = validate(payload, setInvalidFields)
         if (invalids === 0) {
             dispatch(createVehicle(payload))

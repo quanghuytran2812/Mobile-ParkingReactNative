@@ -7,7 +7,7 @@ const VnPayScreen = ({ route, navigation }) => {
     const payment_url = route.params;
 
     const onUrlChange = (webViewState) => {
-        if(webViewState.url.includes("https://adjoining-fog-production.up.railway.app/parkinght/api/create-payment")){
+        if(webViewState.url.includes("http://10.12.0.74:8090/parkinght/api/create-payment")){
           paymentResponse(webViewState.url)
         }  
         //   navigation.navigate('Ticket');
