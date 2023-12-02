@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity } from "react-native";
 import Separator from "../components/Separator";
-import Feather from "react-native-vector-icons/Feather";
 import { Colors } from "../contants";
 import { Display } from "../utils";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/authSlice";
+import InputField from "../components/input/InputField";
+import { validate } from "../utils/helpers";
+import InputFieldPass from "../components/input/InputFieldPass";
 
 const SigninScreen = ({ navigation }) => {
     const [isPasswordShow, setPasswordShow] = useState(false)
+    const [invalidFields, setInvalidFields] = useState([]);
     const dispatch = useDispatch();
     const { isAuthenticate, currentData } = useSelector(
         (state) => state.auth
@@ -18,7 +21,10 @@ const SigninScreen = ({ navigation }) => {
         password: ''
     })
     const handleLogin = () => {
-        dispatch(login(payload));
+        const invalids = validate(payload, setInvalidFields)
+        if (invalids === 0) {
+            dispatch(login(payload));
+        }
     };
 
     useEffect(() => {
@@ -46,52 +52,39 @@ const SigninScreen = ({ navigation }) => {
             <Text style={styles.content}>
                 Vui lòng nhập số điện thoại và mật khẩu của bạn.
             </Text>
-            <View style={styles.inputContainer}>
-                <View style={styles.inputSubContainer}>
-                    <Feather name="phone"
-                        size={22}
-                        color={Colors.DEFAULT_GREY}
-                        style={{ marginRight: 10 }}
-                    />
-                    <TextInput
-                        placeholder="Số điện thoại"
-                        placeholderTextColor={Colors.DEFAULT_GREY}
-                        selectionColor={Colors.DEFAULT_GREY}
-                        style={styles.inputText}
-                        keyboardType="number-pad"
-                        value={payload.phoneNumber}
-                        onChangeText={(text) => setPayload(prev => ({ ...prev, phoneNumber: text }))}
-                    />
-                </View>
-            </View>
+            <InputField
+                nameKey='phoneNumber'
+                classNameContainer={styles.inputContainer}
+                className={styles.inputSubContainer}
+                nameFeather="phone"
+                placeholder="Số điện thoại"
+                placeholderTextColor={Colors.DEFAULT_GREY}
+                selectionColor={Colors.DEFAULT_GREY}
+                classNameInput={styles.inputText}
+                keyboardType="number-pad"
+                value={payload.phoneNumber}
+                onChangeText={(text) => setPayload(prev => ({ ...prev, phoneNumber: text }))}
+                invalidFields={invalidFields}
+                setInvalidFields={setInvalidFields}
+            />
             <Separator height={15} />
-            <View style={styles.inputContainer}>
-                <View style={styles.inputSubContainer}>
-                    <Feather
-                        name="lock"
-                        size={22}
-                        color={Colors.DEFAULT_GREY}
-                        style={{ marginRight: 10 }}
-                    />
-                    <TextInput
-                        secureTextEntry={isPasswordShow ? false : true}
-                        placeholder="Mật khẩu"
-                        placeholderTextColor={Colors.DEFAULT_GREY}
-                        selectionColor={Colors.DEFAULT_GREY}
-                        style={styles.inputText}
-                        value={payload.password}
-                        onChangeText={(text) => setPayload(prev => ({ ...prev, password: text }))}
-                    />
-                    <Feather
-                        name={isPasswordShow ? "eye" : 'eye-off'}
-                        size={22}
-                        color={Colors.DEFAULT_GREY}
-                        style={{ marginRight: 10 }}
-                        onPress={() => setPasswordShow(!isPasswordShow)}
-                    />
-                </View>
-            </View>
-            <Text></Text>
+            <InputFieldPass
+                nameKey='password'
+                classNameContainer={styles.inputContainer}
+                className={styles.inputSubContainer}
+                nameFeather="lock"
+                placeholder="Mật khẩu"
+                placeholderTextColor={Colors.DEFAULT_GREY}
+                selectionColor={Colors.DEFAULT_GREY}
+                classNameInput={styles.inputText}
+                value={payload.password}
+                onChangeText={(text) => setPayload(prev => ({ ...prev, password: text }))}
+                invalidFields={invalidFields}
+                setInvalidFields={setInvalidFields}
+                secureTextEntry={isPasswordShow ? false : true}
+                nameFeatherPass={isPasswordShow ? "eye" : 'eye-off'}
+                onPress={() => setPasswordShow(!isPasswordShow)}
+            />
             <View style={styles.forgotPasswordContainer}>
                 <View style={styles.toggleContainer}>
                 </View>
@@ -180,6 +173,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     forgotPasswordContainer: {
+        marginTop: 15,
         marginHorizontal: 20,
         flexDirection: 'row',
         alignItems: 'center',

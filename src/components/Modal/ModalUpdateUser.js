@@ -1,13 +1,16 @@
 import React, { memo, useEffect, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, TextInput, Modal } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Modal } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGetUserById, updateUser } from '../../store/userSlice';
 import DatePicker from "react-native-modern-datepicker"
 import moment from 'moment';
+import { validate } from '../../utils/helpers';
+import InputForm from '../input/InputForm';
 
 const ModalUpdateUser = ({ onClose, handleUpdateData }) => {
     const [openDatePicker, setOpenDatePicker] = useState(false);
+    const [invalidFields, setInvalidFields] = useState([]);
     const handleOnPressStartDate = () => {
         setOpenDatePicker(!openDatePicker);
     };
@@ -38,29 +41,31 @@ const ModalUpdateUser = ({ onClose, handleUpdateData }) => {
     }
 
     const handleUpdateUser = () => {
+        const invalids = validate(payload, setInvalidFields)
+        if (invalids === 0) {
+            const formattedBirthday = moment(selectedStartDate, "YYYY/MM/DD").format("YYYY-MM-DD");
 
-        const formattedBirthday = moment(selectedStartDate, "YYYY/MM/DD").format("YYYY-MM-DD");
+            if (!moment(formattedBirthday, "YYYY-MM-DD", true).isValid()) {
+                toast.error("Định dạng ngày sinh nhật không hợp lệ");
+                return;
+            }
 
-        if (!moment(formattedBirthday, "YYYY-MM-DD", true).isValid()) {
-            toast.error("Định dạng ngày sinh nhật không hợp lệ");
-            return;
+            const updatedUser = {
+                userId: current.userId,
+                fullName: payload.fullName,
+                birthday: formattedBirthday,
+                email: payload.email,
+            };
+
+            dispatch(updateUser(updatedUser))
+                .then((result) => {
+                    onClose();
+                    handleUpdateData();
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
         }
-
-        const updatedUser = {
-            userId: current.userId,
-            fullName: payload.fullName,
-            birthday: formattedBirthday,
-            email: payload.email,
-        };
-
-        dispatch(updateUser(updatedUser))
-            .then((result) => {
-                onClose();
-                handleUpdateData();
-            })
-            .catch((error) => {
-                console.log(error)
-            });
     }
 
     return (
@@ -75,17 +80,20 @@ const ModalUpdateUser = ({ onClose, handleUpdateData }) => {
                     <View>
                         <Text style={styles.modalformHeading}>Cập nhập người dùng</Text>
                         <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroup}>
-                                <TextInput
-                                    style={styles.modalGroupinput}
-                                    value={payload.fullName}
-                                    onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, fullName: value }))
-                                    }
-                                    placeholder="Tên"
-                                />
-                            </View>
+                            <InputForm
+                                className={styles.inputGroup}
+                                nameKey="fullName"
+                                classNameInput={styles.modalGroupinput}
+                                value={payload.fullName}
+                                onChangeText={(value) =>
+                                    setPayload((prev) => ({ ...prev, fullName: value }))
+                                }
+                                placeholder="Tên"
+                                invalidFields={invalidFields}
+                                setInvalidFields={setInvalidFields}
+                            />
                         </View>
+
                         <View style={styles.inputFieldDiv}>
                             <View style={styles.inputGroup}>
                                 <TouchableOpacity
@@ -97,16 +105,18 @@ const ModalUpdateUser = ({ onClose, handleUpdateData }) => {
                             </View>
                         </View>
                         <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroup}>
-                                <TextInput
-                                    style={styles.modalGroupinput}
-                                    value={payload.email}
-                                    onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, email: value }))
-                                    }
-                                    placeholder="E-mail"
-                                />
-                            </View>
+                            <InputForm
+                                className={styles.inputGroup}
+                                nameKey="email"
+                                classNameInput={styles.modalGroupinput}
+                                value={payload.email}
+                                onChangeText={(value) =>
+                                    setPayload((prev) => ({ ...prev, email: value }))
+                                }
+                                placeholder="E-mail"
+                                invalidFields={invalidFields}
+                                setInvalidFields={setInvalidFields}
+                            />
                         </View>
                         <TouchableOpacity style={styles.btnCommon1} onPress={handleUpdateUser}>
                             <Text style={styles.btnTextCommon1}>Lưu thay đổi</Text>

@@ -5,9 +5,14 @@ import SelectDropdown from 'react-native-select-dropdown';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategory } from '../../store/categorySlice';
 import { createVehicle } from '../../store/vehicleSlice';
+import InputForm from '../input/InputForm';
+import { validate } from '../../utils/helpers';
 
 
 const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
+    const [invalidFields, setInvalidFields] = useState([]);
+    const listCategory = useSelector((state) => state.category.list);
+    const dispatch = useDispatch();
     const handleClick = (e) => {
         e.stopPropagation();
     };
@@ -26,23 +31,27 @@ const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
         })
     }
 
-    const listCategory = useSelector((state) => state.category.list);
-    const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchCategory())
     }, [dispatch]);
 
+    if (payload.categoryId === "" || !payload.categoryId.length > 0) {
+        setPayload(prev => ({ ...prev, categoryId: listCategory[0].vehicleCategoryId }))
+    }
 
     const handleAddVehicle = () => {
-        dispatch(createVehicle(payload))
-            .then((result) => {
-                handleReset();
-                onClose();
-                handleUpdateData();
-            })
-            .catch((error) => {
-                console.log(error)
-            });
+        const invalids = validate(payload, setInvalidFields)
+        if (invalids === 0) {
+            dispatch(createVehicle(payload))
+                .then((result) => {
+                    handleReset();
+                    onClose();
+                    handleUpdateData();
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+        }
     }
 
     return (
@@ -57,28 +66,33 @@ const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
                     <View>
                         <Text style={styles.modalformHeading}>Thêm xe</Text>
                         <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroup}>
-                                <TextInput
-                                    style={styles.modalGroupinput}
-                                    value={payload.vehicleName}
-                                    onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, vehicleName: value }))
-                                    }
-                                    placeholder="Tên xe"
-                                />
-                            </View>
+                            <InputForm
+                                className={styles.inputGroup}
+                                nameKey="vehicleName"
+                                classNameInput={styles.modalGroupinput}
+                                value={payload.vehicleName}
+                                onChangeText={(value) =>
+                                    setPayload((prev) => ({ ...prev, vehicleName: value }))
+                                }
+                                placeholder="Tên xe"
+                                invalidFields={invalidFields}
+                                setInvalidFields={setInvalidFields}
+                            />
                         </View>
+
                         <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroup}>
-                                <TextInput
-                                    style={styles.modalGroupinput}
-                                    value={payload.plateNumber}
-                                    onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, plateNumber: value }))
-                                    }
-                                    placeholder="Biển số xe"
-                                />
-                            </View>
+                            <InputForm
+                                className={styles.inputGroup}
+                                nameKey="vehicleName"
+                                classNameInput={styles.modalGroupinput}
+                                value={payload.plateNumber}
+                                onChangeText={(value) =>
+                                    setPayload((prev) => ({ ...prev, plateNumber: value }))
+                                }
+                                placeholder="Biển số xe"
+                                invalidFields={invalidFields}
+                                setInvalidFields={setInvalidFields}
+                            />
                         </View>
                         <SelectDropdown
                             data={listCategory}

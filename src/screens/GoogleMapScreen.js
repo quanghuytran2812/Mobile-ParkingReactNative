@@ -13,10 +13,8 @@ import { COLORS, SIZES, GOOGLE_API_KEY, Images } from "../contants";
 import * as Location from 'expo-location';
 import { useState } from "react";
 import { Colors } from "../contants";
-import { useIsFocused } from "@react-navigation/native";
 
 const GoogleMapScreen = ({ navigation }) => {
-    const isFocused = useIsFocused();
     const mapView = React.useRef()
     const [streetName, setStreetName] = React.useState("")
     const [fromLocation, setFromLocation] = React.useState(null)
@@ -32,10 +30,8 @@ const GoogleMapScreen = ({ navigation }) => {
         longitude: 108.2605568
     });
     React.useEffect(() => {
-        if (isFocused) {
-            getLocaltionPermisson();
-        }
-    }, [isFocused,origin]);
+        getLocaltionPermisson();
+    }, [origin]);
 
     async function getLocaltionPermisson() {
         let { status } = await Location.requestForegroundPermissionsAsync();

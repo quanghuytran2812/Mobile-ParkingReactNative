@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: '600',
         color: '#323232',
+        textAlignVertical: 'top'
     },
     modalGroupinput: {
         width: '100%',

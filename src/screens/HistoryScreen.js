@@ -50,7 +50,7 @@ const HistoryScreen = ({ navigation }) => {
           </ScrollView>
         </View>
         <FlatList
-          data={listBookingStatus}
+          data={listBookingStatus.sort((a, b) => new Date(b.createDate) - new Date(a.createDate))}
           style={styles.containerListCar}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
@@ -60,7 +60,7 @@ const HistoryScreen = ({ navigation }) => {
                 <View style={styles.imageMyParking}>
                   <Image
                     style={styles.imageParking}
-                    source={Images.BENXE1}
+                    source={Images.BENXE}
                   />
                 </View>
 
@@ -69,8 +69,8 @@ const HistoryScreen = ({ navigation }) => {
                   <Text style={styles.detaildes}>{item.area} ({item.areaName})</Text>
                   <View style={styles.desparking}>
                     <View style={styles.moneyParking}>
-                      <Text style={{ color: '#02aab0', fontWeight: '700', fontSize: 16 }}>{item.amount}₫</Text>
-                      <Text style={{ color: '#6e6e6e', fontSize: 14 }}> / {item.duration_hours} hour</Text>
+                      <Text style={{ color: '#02aab0', fontWeight: '700', fontSize: 14 }}>{item.amount}₫</Text>
+                      <Text style={{ color: '#6e6e6e', fontSize: 12 }}> / {item.duration_hours} hour</Text>
                     </View>
                     {item.status === "ONGOING" ? (<Text style={styles.statusBooking}>ĐANG ĐẶT CHỖ</Text>) :
                       item.status === "COMPLETED" ? (<Text style={styles.statusBookingCompleted}>HOÀN THÀNH</Text>) :
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   },
   detailMyParking: {
     justifyContent: 'center',
-    width: 235,
+    width: 210,
   },
   detailTitle: {
     fontSize: 16,
@@ -198,7 +198,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statusBooking: {
-    padding: 5,
+    fontSize: 12,
+    padding: 4,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#02aab0',
@@ -208,14 +209,16 @@ const styles = StyleSheet.create({
     overflow: 'hidden'
   },
   statusBookingCompleted: {
-    padding: 5,
+    fontSize: 12,
+    padding: 4,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#2dce89',
     color: '#2dce89',
   },
   statusBookingCanceled: {
-    padding: 5,
+    fontSize: 12,
+    padding: 4,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#DB3445',

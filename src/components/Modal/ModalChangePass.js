@@ -1,13 +1,14 @@
 import React, { memo, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, TextInput } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch } from 'react-redux';
-import Feather from "react-native-vector-icons/Feather"
-import { Colors } from '../../contants';
 import { changepassUser } from '../../store/userSlice';
+import { validate } from '../../utils/helpers';
+import InputFormPass from '../input/InputFormPass';
 
 
 const ModalChangePass = ({ onClose }) => {
+    const [invalidFields, setInvalidFields] = useState([]);
     const dispatch = useDispatch();
     const [isPasswordShow, setPasswordShow] = useState(false)
     const [isPasswordShow1, setPasswordShow1] = useState(false)
@@ -32,18 +33,21 @@ const ModalChangePass = ({ onClose }) => {
     }
 
     const handleChangePass = () => {
-        const changePassNew = {
-            oldPass: payload.oldPass,
-            newPass: payload.password
+        const invalids = validate(payload, setInvalidFields)
+        if (invalids === 0) {
+            const changePassNew = {
+                oldPass: payload.oldPass,
+                newPass: payload.password
+            }
+            dispatch(changepassUser(changePassNew))
+                .then((result) => {
+                    handleReset();
+                    onClose();
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
         }
-        dispatch(changepassUser(changePassNew))
-            .then((result) => {
-                handleReset();
-                onClose();
-            })
-            .catch((error) => {
-                console.log(error)
-            });
     }
 
     return (
@@ -57,66 +61,54 @@ const ModalChangePass = ({ onClose }) => {
                     </TouchableOpacity>
                     <View>
                         <Text style={styles.modalformHeading}>Đổi mật khẩu</Text>
-                        <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroup}>
-                                <TextInput
-                                    style={styles.modalGroupinput}
-                                    secureTextEntry={isPasswordShow ? false : true}
-                                    placeholder='Mật khẩu cũ'
-                                    value={payload.oldPass}
-                                    onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, oldPass: value }))
-                                    }
-                                />
-                                <Feather
-                                    name={isPasswordShow ? "eye" : 'eye-off'}
-                                    size={20}
-                                    color={Colors.DEFAULT_GREY}
-                                    style={{ marginRight: 10 }}
-                                    onPress={() => setPasswordShow(!isPasswordShow)}
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroup}>
-                                <TextInput
-                                    style={styles.modalGroupinput}
-                                    secureTextEntry={isPasswordShow1 ? false : true}
-                                    placeholder='Mật khẩu mới'
-                                    value={payload.password}
-                                    onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, password: value }))
-                                    }
-                                />
-                                <Feather
-                                    name={isPasswordShow1 ? "eye" : 'eye-off'}
-                                    size={20}
-                                    color={Colors.DEFAULT_GREY}
-                                    style={{ marginRight: 10 }}
-                                    onPress={() => setPasswordShow1(!isPasswordShow1)}
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroup}>
-                                <TextInput
-                                    style={styles.modalGroupinput}
-                                    secureTextEntry={isPasswordShow2 ? false : true}
-                                    placeholder='Xác nhận mật khẩu'
-                                    value={payload.confirmPassword}
-                                    onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, confirmPassword: value }))
-                                    }
-                                />
-                                <Feather
-                                    name={isPasswordShow2 ? "eye" : 'eye-off'}
-                                    size={20}
-                                    color={Colors.DEFAULT_GREY}
-                                    style={{ marginRight: 10 }}
-                                    onPress={() => setPasswordShow2(!isPasswordShow2)}
-                                />
-                            </View>
-                        </View>
+                        <InputFormPass
+                            nameKey="oldPass"
+                            classNameContainer={styles.inputFieldDiv}
+                            className={styles.inputGroup}
+                            classNameInput={styles.modalGroupinput}
+                            secureTextEntry={isPasswordShow ? false : true}
+                            placeholder="Mật khẩu cũ"
+                            value={payload.oldPass}
+                            onChangeText={(value) =>
+                                setPayload((prev) => ({ ...prev, oldPass: value }))
+                            }
+                            nameFeatherPass={isPasswordShow ? "eye" : 'eye-off'}
+                            onPress={() => setPasswordShow(!isPasswordShow)}
+                            invalidFields={invalidFields}
+                            setInvalidFields={setInvalidFields}
+                        />
+                        <InputFormPass
+                            nameKey="password"
+                            classNameContainer={styles.inputFieldDiv}
+                            className={styles.inputGroup}
+                            classNameInput={styles.modalGroupinput}
+                            secureTextEntry={isPasswordShow1 ? false : true}
+                            placeholder="Mật khẩu mới"
+                            value={payload.password}
+                            onChangeText={(value) =>
+                                setPayload((prev) => ({ ...prev, password: value }))
+                            }
+                            nameFeatherPass={isPasswordShow1 ? "eye" : 'eye-off'}
+                            onPress={() => setPasswordShow1(!isPasswordShow1)}
+                            invalidFields={invalidFields}
+                            setInvalidFields={setInvalidFields}
+                        />
+                        <InputFormPass
+                            nameKey="confirmPassword"
+                            classNameContainer={styles.inputFieldDiv}
+                            className={styles.inputGroup}
+                            classNameInput={styles.modalGroupinput}
+                            secureTextEntry={isPasswordShow2 ? false : true}
+                            placeholder="Xác nhận mật khẩu"
+                            value={payload.confirmPassword}
+                            onChangeText={(value) =>
+                                setPayload((prev) => ({ ...prev, confirmPassword: value }))
+                            }
+                            nameFeatherPass={isPasswordShow2 ? "eye" : 'eye-off'}
+                            onPress={() => setPasswordShow2(!isPasswordShow2)}
+                            invalidFields={invalidFields}
+                            setInvalidFields={setInvalidFields}
+                        />
                         <TouchableOpacity style={styles.btnCommon1} onPress={handleChangePass}>
                             <Text style={styles.btnTextCommon1}>Lưu thay đổi</Text>
                         </TouchableOpacity>
