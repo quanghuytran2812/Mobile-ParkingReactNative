@@ -57,6 +57,6 @@
   },
   "private": true,
   "projectConfig": {
-    "backendApiBaseUrl": "http://192.168.1.108:8090/parkinght"
+    "backendApiBaseUrl": "https://adjoining-fog-production.up.railway.app/parkinght"
   }
 }
