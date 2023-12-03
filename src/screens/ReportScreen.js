@@ -47,7 +47,7 @@ const ReportScreen = ({ navigation }) => {
         return (
             <>
                 <TouchableOpacity
-                    style={{...styles.btnCommon, marginRight: 10}}
+                    style={{ ...styles.btnCommon, marginRight: 10 }}
                     onPress={() => handleDetailReport(data)}
                 >
                     <Ionicons
@@ -118,7 +118,7 @@ const ReportScreen = ({ navigation }) => {
                                 numberOfItemsPerPageList={numberOfItemsPerPageList}
                                 numberOfItemsPerPage={itemsPerPage}
                                 onItemsPerPageChange={onItemsPerPageChange}
-                                showFastPaginationControls                             
+                                showFastPaginationControls
                                 selectPageDropdownLabel={'Rows per page'}
                             />
                         </DataTable>
@@ -149,6 +149,7 @@ const ReportScreen = ({ navigation }) => {
                     animationType='fade'
                     visible={openModalF}>
                     <ModalFeedback
+                        open={openModalF}
                         onClose={() => setOpenModalF(false)}
                         dataF={getdata}
                     />

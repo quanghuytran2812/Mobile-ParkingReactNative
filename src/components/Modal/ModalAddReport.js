@@ -3,36 +3,46 @@ import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, TextInput } fro
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch } from 'react-redux';
 import { createReport } from '../../store/reportSlice';
+import { validate } from '../../utils/helpers';
+import InputForm from '../input/InputForm';
 
 
 const ModalAddReport = ({ onClose, handleUpdateData }) => {
+    const [invalidFields, setInvalidFields] = useState([]);
     const dispatch = useDispatch();
     const handleClick = (e) => {
         e.stopPropagation();
     };
 
     const [payload, setPayload] = useState({
-        content: '',
-        vehiclePlateNumber: ''
+        content: ''
     })
 
+    const [vehiclePlateNumber, setVehiclePlateNumber] = useState("")
     const handleReset = () => {
         setPayload({
-            content: '',
-            vehiclePlateNumber: ''
+            content: ''
         })
+        setVehiclePlateNumber('')
     }
 
     const handleAddReport = () => {
-        dispatch(createReport(payload))
-            .then((result) => {
-                handleReset();
-                onClose();
-                handleUpdateData();
-            })
-            .catch((error) => {
-                console.log(error)
-            });
+        const invalids = validate(payload, setInvalidFields)
+        if (invalids === 0) {
+            const reportCreate = {
+                content: payload.content,
+                vehiclePlateNumber: vehiclePlateNumber
+            }
+            dispatch(createReport(reportCreate))
+                .then((result) => {
+                    handleReset();
+                    onClose();
+                    handleUpdateData();
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+        }
     }
 
     return (
@@ -47,26 +57,28 @@ const ModalAddReport = ({ onClose, handleUpdateData }) => {
                     <View>
                         <Text style={styles.modalformHeading}>Tạo đánh giá</Text>
                         <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroupText}>
-                                <TextInput
-                                    style={styles.modalGroupinputText}
-                                    value={payload.content}
-                                    onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, content: value }))
-                                    }
-                                    placeholder="Nội dung"
-                                    multiline
-                                    numberOfLines={4}
-                                />
-                            </View>
+                            <InputForm
+                                className={styles.inputGroupText}
+                                nameKey="content"
+                                classNameInput={styles.modalGroupinputText}
+                                value={payload.content}
+                                onChangeText={(value) =>
+                                    setPayload((prev) => ({ ...prev, content: value }))
+                                }
+                                placeholder="Nội dung"
+                                multiline={true}
+                                numberOfLines={4}
+                                invalidFields={invalidFields}
+                                setInvalidFields={setInvalidFields}
+                            />
                         </View>
                         <View style={styles.inputFieldDiv}>
                             <View style={styles.inputGroup}>
                                 <TextInput
                                     style={styles.modalGroupinput}
-                                    value={payload.vehiclePlateNumber}
+                                    value={vehiclePlateNumber}
                                     onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, vehiclePlateNumber: value }))
+                                        setVehiclePlateNumber(value)
                                     }
                                     placeholder="Nhập vào biển số xe nếu có"
                                 />

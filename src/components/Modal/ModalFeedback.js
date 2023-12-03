@@ -1,67 +1,104 @@
 import React, { memo, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, TextInput } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Pressable, Keyboard } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useDispatch } from 'react-redux';
-import { createReport } from '../../store/reportSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import InputForm from '../input/InputForm';
+import { fetchFeedback, updateFeedback } from '../../store/feedbackSlice';
+import { validate } from '../../utils/helpers';
+import { AirbnbRating } from 'react-native-ratings';
+import { ScrollView } from 'react-native-gesture-handler';
 
-
-const ModalFeedback = ({ onClose, dataF }) => {
+const ModalFeedback = ({ open, onClose, dataF }) => {
+    const [invalidFields, setInvalidFields] = useState([]);
+    const [payload, setPayload] = useState({
+        content: ''
+    })
+    const [rankStar, setRankStar] = useState(0);
     const dispatch = useDispatch();
+    const getFeedbackbyId = useSelector((state) => state.feedback.list);
     const handleClick = (e) => {
         e.stopPropagation();
     };
 
-    const [payload, setPayload] = useState({
-        content: '',
-        vehiclePlateNumber: ''
-    })
+    useEffect(() => {
+        dispatch(fetchFeedback(dataF.reportId));
+    }, [dispatch, dataF]);
 
-    const handleAddReport = () => {
-        dispatch(createReport(payload))
-            .then((result) => {
-                onClose();
-            })
-            .catch((error) => {
-                console.log(error)
-            });
-    }
+    useEffect(() => {
+        if (open) {
+            setPayload({ content: getFeedbackbyId !== null ? getFeedbackbyId[0].content : ""});
+            setRankStar(getFeedbackbyId !== null ? getFeedbackbyId[0].rankStar : 0)
+        }
+    }, [open, getFeedbackbyId]);
+
+    const handleFeedback = () => {
+        const invalids = validate(payload, setInvalidFields);
+
+        if (invalids === 0) {
+            const feedbackUpdate = {
+                feedBackId: dataF.reportId,
+                content: payload.content,
+                rankStar: rankStar,
+            };
+            dispatch(updateFeedback(feedbackUpdate))
+                .then((result) => {
+                    onClose();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    };
 
     return (
         <SafeAreaView style={styles.ModalCommonoverlay}>
-            <View onTouchStart={handleClick} style={styles.ModalCommonmodalContainer}>
-                <View style={styles.ModalCommonForm}>
-                    <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-                        <Ionicons
-                            name="close-outline" size={22}
-                        />
-                    </TouchableOpacity>
-                    <View>
-                        <Text style={styles.modalformHeading}>Phản hồi</Text>
-                        <View style={styles.inputFieldDiv}>
-                            
-                        </View>
-                        <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroupText}>
-                                <TextInput
-                                    style={styles.modalGroupinputText}
+            <Pressable
+                style={{ height: '100%' }}
+                onPress={Keyboard.dismiss}
+            >
+                <View onTouchStart={handleClick} style={styles.ModalCommonmodalContainer}>
+                    <View style={styles.ModalCommonForm}>
+                        <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
+                            <Ionicons name="close-outline" size={22} />
+                        </TouchableOpacity>
+                        <ScrollView pagingEnabled>
+                            <Text style={styles.modalformHeading}>Phản hồi</Text>
+                            <View style={styles.inputFieldDiv}>
+                                <AirbnbRating
+                                    count={5}
+                                    reviews={["Very Bad", "Bad", "Good", "Very Good", "Excellent"]}
+                                    defaultRating={rankStar}
+                                    size={30}
+                                    onFinishRating={(rating) => setRankStar(rating)}
+                                />
+                            </View>
+                            <View style={styles.inputFieldDiv}>
+                                <InputForm
+                                    className={styles.inputGroupText}
+                                    nameKey="content"
+                                    classNameInput={styles.modalGroupinputText}
                                     value={payload.content}
                                     onChangeText={(value) =>
                                         setPayload((prev) => ({ ...prev, content: value }))
                                     }
                                     placeholder="Nội dung"
+                                    multiline={true}
+                                    numberOfLines={4}
+                                    invalidFields={invalidFields}
+                                    setInvalidFields={setInvalidFields}
                                 />
                             </View>
-                            <Text>{dataF.reportId}</Text>
-                        </View>
-                        <TouchableOpacity style={styles.btnCommon1} onPress={handleAddReport}>
-                            <Text style={styles.btnTextCommon1}>Save Changes</Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity style={styles.btnCommon1} onPress={handleFeedback}>
+                                <Text style={styles.btnTextCommon1}>Lưu thay đổi</Text>
+                            </TouchableOpacity>
+                        </ScrollView>
                     </View>
                 </View>
-            </View>
+            </Pressable>
         </SafeAreaView>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     ModalCommonoverlay: {
@@ -147,6 +184,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: '600',
         color: '#323232',
+        textAlignVertical: 'top'
     },
     modalGroupinput: {
         width: '100%',

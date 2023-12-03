@@ -1,7 +1,7 @@
 import { Text, TextInput, View, StyleSheet } from "react-native"
 
 const InputForm = ({ value, className, classNameInput, nameKey, placeholder,
-    invalidFields, setInvalidFields, onChangeText, keyboardType }) => {
+    invalidFields, setInvalidFields, onChangeText, keyboardType,multiline, numberOfLines }) => {
     return (
         <>
             <View style={className}>
@@ -12,6 +12,8 @@ const InputForm = ({ value, className, classNameInput, nameKey, placeholder,
                     value={value}
                     onChangeText={onChangeText}
                     onFocus={() => setInvalidFields([])}
+                    multiline={multiline}
+                    numberOfLines={numberOfLines}
                 />
             </View>
             {invalidFields?.some(el => el.name === nameKey) && (
