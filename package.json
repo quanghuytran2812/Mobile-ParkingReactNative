@@ -58,6 +58,6 @@
   },
   "private": true,
   "projectConfig": {
-    "backendApiBaseUrl": "https://adjoining-fog-production.up.railway.app/parkinght"
+    "backendApiBaseUrl": "https://parkinght-production.up.railway.app/parkinght"
   }
 }

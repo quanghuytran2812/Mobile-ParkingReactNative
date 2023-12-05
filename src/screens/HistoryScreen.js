@@ -82,7 +82,7 @@ const HistoryScreen = ({ navigation }) => {
                 </View>
               </View>
 
-              {item.status !== "CANCELED" ?
+              {item.status !== "CANCELED" || item.duration_hours >= 1 ?
                 (
                   <View style={styles.containerButton}>
                     <TouchableOpacity
