@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, FlatList, StyleSheet, ScrollView, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { Images } from "../contants";
 import { AnimatedIcon } from '../components';
@@ -23,7 +23,7 @@ const HistoryScreen = ({ navigation }) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.containerTopHearder}>
           <View style={styles.headerContainer}>
             <Ionicons
@@ -98,7 +98,7 @@ const HistoryScreen = ({ navigation }) => {
             </View>
           )}
         />
-      </View>
+      </SafeAreaView>
     </>
   );
 };

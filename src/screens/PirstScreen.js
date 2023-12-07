@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, StatusBar, Image } from 'react-native'
+import { StyleSheet, Text, View, StatusBar, Image, SafeAreaView } from 'react-native'
 import React, { useEffect } from 'react'
 import { Colors, Images } from '../contants'
 import { Display } from '../utils'
@@ -10,7 +10,7 @@ const PirstScreen = ({ navigation }) => {
         }, 2000);
     }, []);
     return (
-        <View style={styles.container} >
+        <SafeAreaView style={styles.container} >
             <StatusBar barStyle="light-content" backgroundColor={Colors.DEFAULT_GREEN} translucent />
             <Image
                 source={Images.PLATE1}
@@ -18,7 +18,7 @@ const PirstScreen = ({ navigation }) => {
                 style={styles.Image}
             />
             <Text>DN Bus Station</Text>
-        </View>
+        </SafeAreaView>
     )
 }
 

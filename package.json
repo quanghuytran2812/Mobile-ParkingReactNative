@@ -24,6 +24,7 @@
     "google-maps": "^4.3.3",
     "googlemaps": "^1.12.0",
     "moment": "^2.29.4",
+    "query-string": "^8.1.0",
     "react": "18.2.0",
     "react-native": "0.72.6",
     "react-native-calendar-picker": "^7.1.4",

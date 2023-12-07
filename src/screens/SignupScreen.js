@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity, SafeAreaView } from "react-native";
 import { Colors } from "../contants";
 import Ionicons from "react-native-vector-icons/Ionicons"
 import Separator from "../components/Separator";
@@ -12,7 +12,7 @@ const SignupScreen = ({ navigation }) => {
     const [isPasswordShow, setPasswordShow] = useState(false)
     const [isPasswordShow1, setPasswordShow1] = useState(false)
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <StatusBar
                 barStyle="dark-content"
                 backgroundColor={Colors.DEFAULT_WHITE}
@@ -116,7 +116,7 @@ const SignupScreen = ({ navigation }) => {
                     Đăng Kí Tài Khoản
                 </Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     );
 };
 

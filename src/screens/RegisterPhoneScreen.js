@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, StatusBar, Image, TouchableOpacity, TextInput, FlatList } from "react-native";
+import { View, Text, StyleSheet, StatusBar, Image, TouchableOpacity, TextInput, FlatList, SafeAreaView } from "react-native";
 import { Colors, CountryCode, Images } from "../contants";
 import Ionicons from "react-native-vector-icons/Ionicons"
 import Separator from "../components/Separator";
@@ -32,7 +32,7 @@ const RegisterPhoneScreen = ({ navigation }) => {
         }
     };
     return (
-        <View style={styles.container}
+        <SafeAreaView style={styles.container}
             onStartShouldSetResponder={({ nativeEvent: { pageX, pageY } }) => closeDropdown(pageX, pageY)}
         >
             <StatusBar
@@ -106,7 +106,7 @@ const RegisterPhoneScreen = ({ navigation }) => {
                     />
                 </View>
             )}
-        </View>
+        </SafeAreaView>
     );
 };
 

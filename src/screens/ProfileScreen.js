@@ -6,6 +6,7 @@ import {
     StatusBar,
     TouchableOpacity,
     Image,
+    SafeAreaView,
 } from 'react-native'
 import { Colors } from '../contants';
 import { Separator } from '../components';
@@ -27,7 +28,7 @@ const ProfileScreen = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <StatusBar
                 barStyle="light-content"
                 backgroundColor={Colors.DEFAULT_GREEN}
@@ -139,7 +140,7 @@ const ProfileScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+        </SafeAreaView>
     );
 };
 

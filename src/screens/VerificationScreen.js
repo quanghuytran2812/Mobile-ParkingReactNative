@@ -4,20 +4,45 @@ import Ionicons from "react-native-vector-icons/Ionicons"
 import { Colors } from "../contants";
 import { Display } from "../utils";
 import { Separator } from "../components";
+import { apivalidateOtpResetP } from "../store/otpSlice";
+import { useDispatch } from "react-redux";
+import { SafeAreaView } from "react-native";
 
-const VerificationScreen = ({navigation,
-    route: {
-        params: { phoneNumber },
-    },
-}) => {
+const VerificationScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
     const firstInput = useRef();
     const secondInput = useRef();
     const thirdInput = useRef();
     const fourthInput = useRef();
-    const [otp, setOtp] = useState({ 1: '', 2: '', 3: '', 4: '' });
+    const fivethInput = useRef();
+    const sixthInput = useRef();
+    const [otp, setOtp] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '', 6: '' });
 
+    const onOTPVerify = () => {
+        const concatenatedOtp = Object.values(otp).join('');
+        console.log(concatenatedOtp);
+
+        // Check if the OTP is not null or empty
+        if (concatenatedOtp.trim() !== '') {
+            dispatch(apivalidateOtpResetP(concatenatedOtp))
+                .then((result) => {
+                    if (result.payload?.statusCode === 200) {
+                        navigation.navigate('ResetPassword');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else {
+            Toast.show({
+                type: 'error',
+                text1: 'ParkingHT',
+                text2: `OTP is empty`
+            });
+        }
+    };
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <StatusBar
                 barStyle="dark-content"
                 backgroundColor={Colors.DEFAULT_WHITE}
@@ -32,10 +57,6 @@ const VerificationScreen = ({navigation,
                 <Text style={styles.headerTitle}>Xác minh OTP</Text>
             </View>
             <Text style={styles.title}>Xác minh OTP</Text>
-            <Text style={styles.content}>
-                Nhập số OTP vừa gửi qua số điện thoại {' '}
-                <Text style={styles.phoneNumberText}>{phoneNumber}</Text>
-            </Text>
             <View style={styles.otpContainer}>
                 <View style={styles.otpBox}>
                     <TextInput
@@ -81,17 +102,41 @@ const VerificationScreen = ({navigation,
                         ref={fourthInput}
                         onChangeText={text => {
                             setOtp({ ...otp, 4: text });
-                            !text && thirdInput.current.focus();
+                            !text && fivethInput.current.focus();
+                        }}
+                    />
+                </View>
+                <View style={styles.otpBox}>
+                    <TextInput
+                        style={styles.otpText}
+                        keyboardType="number-pad"
+                        maxLength={1}
+                        ref={fivethInput}
+                        onChangeText={text => {
+                            setOtp({ ...otp, 5: text });
+                            !text && sixthInput.current.focus();
+                        }}
+                    />
+                </View>
+                <View style={styles.otpBox}>
+                    <TextInput
+                        style={styles.otpText}
+                        keyboardType="number-pad"
+                        maxLength={1}
+                        ref={sixthInput}
+                        onChangeText={text => {
+                            setOtp({ ...otp, 6: text });
+                            !text && firstInput.current.focus();
                         }}
                     />
                 </View>
             </View>
             <TouchableOpacity
                 style={styles.signinButton}
-                onPress={() => console.log(otp)}>
+                onPress={onOTPVerify}>
                 <Text style={styles.signinButtonText}>Xác minh</Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -147,7 +192,7 @@ const styles = StyleSheet.create({
         color: Colors.DEFAULT_BLACK,
         padding: 0,
         textAlign: 'center',
-        paddingHorizontal: 18,
+        paddingHorizontal: 15,
         paddingVertical: 10,
     },
     signinButton: {

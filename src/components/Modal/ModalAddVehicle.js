@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Pressable, Keyboard } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import SelectDropdown from 'react-native-select-dropdown';
 import { useDispatch, useSelector } from 'react-redux';
@@ -55,69 +55,74 @@ const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
 
     return (
         <SafeAreaView style={styles.ModalCommonoverlay}>
-            <View onTouchStart={handleClick} style={styles.ModalCommonmodalContainer}>
-                <View style={styles.ModalCommonForm}>
-                    <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-                        <Ionicons
-                            name="close-outline" size={22}
-                        />
-                    </TouchableOpacity>
-                    <View>
-                        <Text style={styles.modalformHeading}>Thêm xe</Text>
-                        <View style={styles.inputFieldDiv}>
-                            <InputForm
-                                className={styles.inputGroup}
-                                nameKey="vehicleName"
-                                classNameInput={styles.modalGroupinput}
-                                value={payload.vehicleName}
-                                onChangeText={(value) =>
-                                    setPayload((prev) => ({ ...prev, vehicleName: value }))
-                                }
-                                placeholder="Tên xe"
-                                invalidFields={invalidFields}
-                                setInvalidFields={setInvalidFields}
+            <Pressable
+                style={{ height: '100%' }}
+                onPress={Keyboard.dismiss}
+            >
+                <View onTouchStart={handleClick} style={styles.ModalCommonmodalContainer}>
+                    <View style={styles.ModalCommonForm}>
+                        <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
+                            <Ionicons
+                                name="close-outline" size={22}
                             />
-                        </View>
-
-                        <View style={styles.inputFieldDiv}>
-                            <InputForm
-                                className={styles.inputGroup}
-                                nameKey="vehicleName"
-                                classNameInput={styles.modalGroupinput}
-                                value={payload.plateNumber}
-                                onChangeText={(value) =>
-                                    setPayload((prev) => ({ ...prev, plateNumber: value }))
-                                }
-                                placeholder="Biển số xe"
-                                invalidFields={invalidFields}
-                                setInvalidFields={setInvalidFields}
-                            />
-                        </View>
-                        <SelectDropdown
-                            data={listCategory}
-                            onSelect={(selectedItem, index) => {
-                                setPayload((prev) => ({ ...prev, categoryId: selectedItem.vehicleCategoryId }));
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                return selectedItem.vehicleCategoryName
-                            }}
-                            rowTextForSelection={(item, index) => {
-                                return item.vehicleCategoryName
-                            }}
-                            defaultButtonText={'Chọn loại xe'}
-                            renderDropdownIcon={isOpened => {
-                                return <Ionicons name={isOpened ? 'chevron-up' : 'chevron-down'} size={18} />;
-                            }}
-                            dropdownIconPosition={'right'}
-                            buttonStyle={styles.dropdownStyle}
-                            buttonTextStyle={styles.dropdownStyleText}
-                        />
-                        <TouchableOpacity style={styles.btnCommon1} onPress={handleAddVehicle}>
-                            <Text style={styles.btnTextCommon1}>Lưu thay đổi</Text>
                         </TouchableOpacity>
+                        <View>
+                            <Text style={styles.modalformHeading}>Thêm xe</Text>
+                            <View style={styles.inputFieldDiv}>
+                                <InputForm
+                                    className={styles.inputGroup}
+                                    nameKey="vehicleName"
+                                    classNameInput={styles.modalGroupinput}
+                                    value={payload.vehicleName}
+                                    onChangeText={(value) =>
+                                        setPayload((prev) => ({ ...prev, vehicleName: value }))
+                                    }
+                                    placeholder="Tên xe"
+                                    invalidFields={invalidFields}
+                                    setInvalidFields={setInvalidFields}
+                                />
+                            </View>
+
+                            <View style={styles.inputFieldDiv}>
+                                <InputForm
+                                    className={styles.inputGroup}
+                                    nameKey="plateNumber"
+                                    classNameInput={styles.modalGroupinput}
+                                    value={payload.plateNumber}
+                                    onChangeText={(value) =>
+                                        setPayload((prev) => ({ ...prev, plateNumber: value }))
+                                    }
+                                    placeholder="Biển số xe"
+                                    invalidFields={invalidFields}
+                                    setInvalidFields={setInvalidFields}
+                                />
+                            </View>
+                            <SelectDropdown
+                                data={listCategory}
+                                onSelect={(selectedItem, index) => {
+                                    setPayload((prev) => ({ ...prev, categoryId: selectedItem.vehicleCategoryId }));
+                                }}
+                                buttonTextAfterSelection={(selectedItem, index) => {
+                                    return selectedItem.vehicleCategoryName
+                                }}
+                                rowTextForSelection={(item, index) => {
+                                    return item.vehicleCategoryName
+                                }}
+                                defaultButtonText={'Chọn loại xe'}
+                                renderDropdownIcon={isOpened => {
+                                    return <Ionicons name={isOpened ? 'chevron-up' : 'chevron-down'} size={18} />;
+                                }}
+                                dropdownIconPosition={'right'}
+                                buttonStyle={styles.dropdownStyle}
+                                buttonTextStyle={styles.dropdownStyleText}
+                            />
+                            <TouchableOpacity style={styles.btnCommon1} onPress={handleAddVehicle}>
+                                <Text style={styles.btnTextCommon1}>Lưu thay đổi</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
-            </View>
+            </Pressable>
         </SafeAreaView>
     )
 }

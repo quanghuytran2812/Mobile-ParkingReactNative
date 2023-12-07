@@ -9,11 +9,27 @@ export const fetchBookingByStatus = createAsyncThunk('booking/fetchBookingByStat
   const token = await StorageService.getToken(); // Await the token value
   try {
     const response = await axios.get(
-      `${ApiContans.BACKEND_API.BASE_API_URL}/user/getBooking/status?status=`+statusB,
+      `${ApiContans.BACKEND_API.BASE_API_URL}/user/getBooking/status?status=` + statusB,
       {
         headers: authHeader(token), // Pass the token value to the headers
       },
     );
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+});
+
+export const fetchBookingById = createAsyncThunk('booking/fetchBookingById', async (bookingid) => {
+  const token = await StorageService.getToken(); // Await the token value
+  try {
+    const response = await axios.get(
+      `${ApiContans.BACKEND_API.BASE_API_URL}/api/getBookingForUser/` + bookingid,
+      {
+        headers: authHeader(token), // Pass the token value to the headers
+      },
+    );
+    console.log(response.data)
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -41,6 +57,7 @@ const bookingSlice = createSlice({
   name: 'booking',
   initialState: {
     list: [],
+    listByBookingId: null,
     loading: false,
   },
   reducers: {},
@@ -57,11 +74,22 @@ const bookingSlice = createSlice({
       .addCase(fetchBookingByStatus.rejected, (state) => {
         state.loading = false;
       })
+      // Fetch booking by bookingId
+      .addCase(fetchBookingById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchBookingById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.listByBookingId = action.payload.data;
+      })
+      .addCase(fetchBookingById.rejected, (state) => {
+        state.loading = false;
+      })
       //Create booking
       .addCase(createBooking.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createBooking.fulfilled, (state,action) => {
+      .addCase(createBooking.fulfilled, (state, action) => {
         state.loading = false;
         Toast.show({
           type: 'success',

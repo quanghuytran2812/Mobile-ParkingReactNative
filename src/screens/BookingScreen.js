@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import { moderateScale, verticalScale, scale } from 'react-native-size-matters';
 import { Images } from '../contants';
@@ -25,17 +26,29 @@ export default function BookingScreen({ route, navigation }) {
   const [objSelected, setobjSelected] = React.useState(null);
 
   useEffect(() => {
-    dispatch(fetchParkingslotAreaByCategory(categoryId));
+    dispatch(fetchParkingslotAreaByCategory({
+      vehicleCategoryId: categoryId,
+      start_Date: arrive_at,
+      end_Date: leave_at
+    }));
   }, [categoryId, dispatch]);
 
   useEffect(() => {
     if (listAreaByCategory.length > 0) {
-      dispatch(fetchParkingslotByArea(listAreaByCategory[0].parking_Area));
+      dispatch(fetchParkingslotByArea({
+        area: listAreaByCategory[0].parking_Area,
+        start_Date: arrive_at,
+        end_Date: leave_at
+      }));
     }
   }, [listAreaByCategory, dispatch])
 
   const handleAreaClick = (selectedArea) => {
-    dispatch(fetchParkingslotByArea(selectedArea));
+    dispatch(fetchParkingslotByArea({
+      area: selectedArea,
+      start_Date: arrive_at,
+      end_Date: leave_at
+    }));
   }
 
   const handleOnBook = useCallback(async () => {
@@ -44,17 +57,17 @@ export default function BookingScreen({ route, navigation }) {
         vehicle_Id: vehicleId,
         start_Date: arrive_at,
         end_Date: leave_at,
-        parking_Slot_Id: objSelected.parkingSlotId,
+        parking_Slot_Id: objSelected.parking_slot_id,
       };
       dispatch(createBooking(bookingDetailData))
         .then((result) => {
-          if(result.payload.statusCode === 200){
+          if (result.payload.statusCode === 200) {
             navigation.navigate('Payment', result.payload.data);
           }
         })
         .catch((error) => {
           console.log(error)
-        });     
+        });
     } else {
       Toast.show({
         type: 'info',
@@ -64,7 +77,7 @@ export default function BookingScreen({ route, navigation }) {
     }
   }, [objSelected]);
 
-  const data = listPSbyArea.map((item, index) => ({ ...item, id: index + 1 })).sort((a, b) => a.name - b.name);
+  const data = listPSbyArea.map((item, index) => ({ ...item, id: index + 1 })).sort((a, b) => a.parking_slot_name - b.parking_slot_name);
   const dataLeft =
     data !== undefined && data.filter((item) => item.id % 2 !== 0);
   const dataRight =
@@ -72,7 +85,7 @@ export default function BookingScreen({ route, navigation }) {
 
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.containerTopHearder}>
           <View style={styles.headerContainer}>
             <Ionicons
@@ -143,7 +156,7 @@ export default function BookingScreen({ route, navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     </>
   )
 }
@@ -152,7 +165,7 @@ function SlotParking({ item, onPress, itemSelect }) {
 
   return (
     <View style={styles.viewParking}>
-      {item.parking_Slot_Status === 'BUSY' ? (
+      {item.booking_Status === 'COMPLETED' ? (
         <View style={styles.imageAuto}>
           <Image
             source={Images.CARUP}
@@ -178,7 +191,7 @@ function SlotParking({ item, onPress, itemSelect }) {
                 : { color: '#000' },
             ]}
           >
-            {item.name}
+            {item.parking_slot_name}
           </Text>
         </TouchableOpacity>
       )}

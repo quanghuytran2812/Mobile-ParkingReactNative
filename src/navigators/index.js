@@ -19,6 +19,7 @@ import {
     ReportScreen,
     TicketScreen,
     VnPayScreen,
+    ResetPasswordScreen
 } from "../screens";
 import GoogleMap from "./BottomTabs"
 // import FlashMessage from "react-native-flash-message";
@@ -44,6 +45,7 @@ const Navigators = () => {
                 <Stack.Screen name="Report" component={ReportScreen} />
                 <Stack.Screen name="Ticket" component={TicketScreen} />
                 <Stack.Screen name="VnPay" component={VnPayScreen} />
+                <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )

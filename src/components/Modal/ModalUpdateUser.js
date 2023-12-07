@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Modal } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Modal, Pressable, Keyboard } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGetUserById, updateUser } from '../../store/userSlice';
@@ -70,90 +70,95 @@ const ModalUpdateUser = ({ onClose, handleUpdateData }) => {
 
     return (
         <SafeAreaView style={styles.ModalCommonoverlay}>
-            <View onTouchStart={handleClick} style={styles.ModalCommonmodalContainer}>
-                <View style={styles.ModalCommonForm}>
-                    <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-                        <Ionicons
-                            name="close-outline" size={22}
-                        />
-                    </TouchableOpacity>
-                    <View>
-                        <Text style={styles.modalformHeading}>Cập nhập người dùng</Text>
-                        <View style={styles.inputFieldDiv}>
-                            <InputForm
-                                className={styles.inputGroup}
-                                nameKey="fullName"
-                                classNameInput={styles.modalGroupinput}
-                                value={payload.fullName}
-                                onChangeText={(value) =>
-                                    setPayload((prev) => ({ ...prev, fullName: value }))
-                                }
-                                placeholder="Tên"
-                                invalidFields={invalidFields}
-                                setInvalidFields={setInvalidFields}
-                            />
-                        </View>
-
-                        <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroup}>
-                                <TouchableOpacity
-                                    style={styles.modalGroupinput}
-                                    onPress={handleOnPressStartDate}
-                                >
-                                    <Text style={styles.textDate}>{selectedStartDate}</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        <View style={styles.inputFieldDiv}>
-                            <InputForm
-                                className={styles.inputGroup}
-                                nameKey="email"
-                                classNameInput={styles.modalGroupinput}
-                                value={payload.email}
-                                onChangeText={(value) =>
-                                    setPayload((prev) => ({ ...prev, email: value }))
-                                }
-                                placeholder="E-mail"
-                                invalidFields={invalidFields}
-                                setInvalidFields={setInvalidFields}
-                            />
-                        </View>
-                        <TouchableOpacity style={styles.btnCommon1} onPress={handleUpdateUser}>
-                            <Text style={styles.btnTextCommon1}>Lưu thay đổi</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={openDatePicker}
+            <Pressable
+                style={{ height: '100%' }}
+                onPress={Keyboard.dismiss}
             >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <DatePicker
-                            mode="calendar"
-                            selected={startedDate}
-                            onDateChanged={handleChangeStartDate}
-                            onSelectedChange={(date) => setSelectedStartDate(date)}
-                            options={{
-                                backgroundColor: "#080516",
-                                textHeaderColor: "#469ab6",
-                                textDefaultColor: "#FFFFFF",
-                                selectedTextColor: "#FFF",
-                                mainColor: "#469ab6",
-                                textSecondaryColor: "#FFFFFF",
-                                borderColor: "rgba(122, 146, 165, 0.1)",
-                            }}
-                        />
-
-                        <TouchableOpacity onPress={handleOnPressStartDate}>
-                            <Text style={{ color: "white" }}>Close</Text>
+                <View onTouchStart={handleClick} style={styles.ModalCommonmodalContainer}>
+                    <View style={styles.ModalCommonForm}>
+                        <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
+                            <Ionicons
+                                name="close-outline" size={22}
+                            />
                         </TouchableOpacity>
+                        <View>
+                            <Text style={styles.modalformHeading}>Cập nhập người dùng</Text>
+                            <View style={styles.inputFieldDiv}>
+                                <InputForm
+                                    className={styles.inputGroup}
+                                    nameKey="fullName"
+                                    classNameInput={styles.modalGroupinput}
+                                    value={payload.fullName}
+                                    onChangeText={(value) =>
+                                        setPayload((prev) => ({ ...prev, fullName: value }))
+                                    }
+                                    placeholder="Tên"
+                                    invalidFields={invalidFields}
+                                    setInvalidFields={setInvalidFields}
+                                />
+                            </View>
+
+                            <View style={styles.inputFieldDiv}>
+                                <View style={styles.inputGroup}>
+                                    <TouchableOpacity
+                                        style={styles.modalGroupinput}
+                                        onPress={handleOnPressStartDate}
+                                    >
+                                        <Text style={styles.textDate}>{selectedStartDate}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            <View style={styles.inputFieldDiv}>
+                                <InputForm
+                                    className={styles.inputGroup}
+                                    nameKey="email"
+                                    classNameInput={styles.modalGroupinput}
+                                    value={payload.email}
+                                    onChangeText={(value) =>
+                                        setPayload((prev) => ({ ...prev, email: value }))
+                                    }
+                                    placeholder="E-mail"
+                                    invalidFields={invalidFields}
+                                    setInvalidFields={setInvalidFields}
+                                />
+                            </View>
+                            <TouchableOpacity style={styles.btnCommon1} onPress={handleUpdateUser}>
+                                <Text style={styles.btnTextCommon1}>Lưu thay đổi</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
-            </Modal>
+
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={openDatePicker}
+                >
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <DatePicker
+                                mode="calendar"
+                                selected={startedDate}
+                                onDateChanged={handleChangeStartDate}
+                                onSelectedChange={(date) => setSelectedStartDate(date)}
+                                options={{
+                                    backgroundColor: "#080516",
+                                    textHeaderColor: "#469ab6",
+                                    textDefaultColor: "#FFFFFF",
+                                    selectedTextColor: "#FFF",
+                                    mainColor: "#469ab6",
+                                    textSecondaryColor: "#FFFFFF",
+                                    borderColor: "rgba(122, 146, 165, 0.1)",
+                                }}
+                            />
+
+                            <TouchableOpacity onPress={handleOnPressStartDate}>
+                                <Text style={{ color: "white" }}>Close</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+            </Pressable>
         </SafeAreaView>
     )
 }

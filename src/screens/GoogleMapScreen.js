@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     Alert,
     Linking,
+    SafeAreaView,
 } from "react-native";
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import MapViewDirections from "react-native-maps-directions";
@@ -426,12 +427,12 @@ const GoogleMapScreen = ({ navigation }) => {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1 }}>
             {renderMap()}
             {renderDestinationHeader()}
             {renderDeliveryInfo()}
             {renderButtons()}
-        </View>
+        </SafeAreaView>
     )
 }
 

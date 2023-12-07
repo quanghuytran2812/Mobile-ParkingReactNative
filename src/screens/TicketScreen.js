@@ -1,20 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import Ionicons from "react-native-vector-icons/Ionicons"
 import { AnimatedIcon } from '../components';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { useEffect } from 'react';
+// import { fetchBookingById } from '../store/bookingSlice';
 
 
-const TicketScreen = ({ navigation }) => {
+const TicketScreen = ({ route, navigation }) => {
   const dataToEncode = 'Your Data Here';
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.containerTopHearder}>
         <View style={styles.headerContainer}>
-          <Ionicons
-            name="arrow-back-outline" size={22}
-            onPress={() => navigation.goBack()}
-          />
           <Text style={styles.headerContainerText}>Vé đậu xe</Text>
         </View>
         <AnimatedIcon />
@@ -85,7 +84,7 @@ const TicketScreen = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

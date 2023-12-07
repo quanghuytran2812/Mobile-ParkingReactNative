@@ -15,6 +15,7 @@ import HistoryScreen from "./HistoryScreen";
 import ReportScreen from "./ReportScreen";
 import TicketScreen from "./TicketScreen";
 import VnPayScreen from "./VnPayScreen";
+import ResetPasswordScreen from "./ResetPasswordScreen";
 
 export {
     PirstScreen,
@@ -33,5 +34,6 @@ export {
     HistoryScreen,
     ReportScreen,
     TicketScreen,
-    VnPayScreen
+    VnPayScreen,
+    ResetPasswordScreen
 };

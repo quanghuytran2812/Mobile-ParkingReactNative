@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, StatusBar, TouchableOpacity, Modal } from 'react-native'
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, Modal, SafeAreaView } from 'react-native'
 import React, { useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import Ionicons from "react-native-vector-icons/Ionicons"
@@ -27,7 +27,7 @@ export default function EditProfileScreen() {
     
     return (
         <>
-            <View style={styles.container} >
+            <SafeAreaView style={styles.container} >
                 <StatusBar
                     barStyle="light-content"
                     backgroundColor={Colors.DEFAULT_GREEN}
@@ -117,7 +117,7 @@ export default function EditProfileScreen() {
                         </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </SafeAreaView>
             <Modal
                 transparent={true}
                 animationType='fade'

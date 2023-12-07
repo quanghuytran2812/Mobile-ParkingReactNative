@@ -5,6 +5,7 @@ import Toast from 'react-native-toast-message';
 import StorageService from '../services/StorageService';
 
 const AuthRequest = axios.create({
+  withCredentials: true,
   baseURL: ApiContans.BACKEND_API.BASE_API_URL,
 });
 

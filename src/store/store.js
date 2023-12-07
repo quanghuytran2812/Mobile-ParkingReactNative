@@ -8,6 +8,7 @@ import bookingSlice from './bookingSlice';
 import parkingslotSlice from './parkingslotSlice';
 import paymentSlice from './paymentSlice';
 import feedbackSlice from './feedbackSlice';
+import otpSlice from './otpSlice';
 
 const store = configureStore({
   reducer: {
@@ -19,7 +20,8 @@ const store = configureStore({
     booking: bookingSlice,
     parkingslot: parkingslotSlice,
     payment: paymentSlice,
-    feedback: feedbackSlice
+    feedback: feedbackSlice,
+    otp: otpSlice
   },
 });
 

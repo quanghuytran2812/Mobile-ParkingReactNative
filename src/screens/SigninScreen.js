@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, StatusBar, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, SafeAreaView } from "react-native";
 import Separator from "../components/Separator";
 import { Colors } from "../contants";
 import { Display } from "../utils";
@@ -36,7 +36,7 @@ const SigninScreen = ({ navigation }) => {
     }, [isAuthenticate, currentData]);
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <StatusBar
                 barStyle="dark-content"
                 backgroundColor={Colors.DEFAULT_WHITE}
@@ -96,7 +96,6 @@ const SigninScreen = ({ navigation }) => {
             </View>
             <TouchableOpacity
                 style={styles.siginButton}
-                // onPress={() => navigation.navigate('GoogleMap')}
                 onPress={handleLogin}
             >
                 <Text
@@ -116,7 +115,7 @@ const SigninScreen = ({ navigation }) => {
                     Đăng Kí
                 </Text>
             </View>
-        </View>
+        </SafeAreaView>
     );
 };
 

@@ -8,6 +8,7 @@ import { fetchVehicle } from '../store/vehicleSlice';
 import { AnimatedIcon, ModalAddVehicle } from '../components';
 import ModalUpdateVehicle from '../components/Modal/ModalUpdateVehicle';
 import Toast from 'react-native-toast-message';
+import { SafeAreaView } from 'react-native';
 
 const VehicleScreen = ({ navigation }) => {
     const [selectedRadio, setSelectedRadio] = useState({ vehicleId: '', categoryId: '' })
@@ -58,7 +59,7 @@ const VehicleScreen = ({ navigation }) => {
 
     return (
         <>
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 <View style={styles.containerTopHearder}>
                     <View style={styles.headerContainer}>
                         <Ionicons
@@ -124,7 +125,7 @@ const VehicleScreen = ({ navigation }) => {
                         </Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </SafeAreaView>
             <Modal
                 transparent={true}
                 animationType='fade'

@@ -1,5 +1,5 @@
 import React, { memo, useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, TextInput } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, TextInput, Pressable, Keyboard } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch } from 'react-redux';
 import { createReport } from '../../store/reportSlice';
@@ -47,49 +47,54 @@ const ModalAddReport = ({ onClose, handleUpdateData }) => {
 
     return (
         <SafeAreaView style={styles.ModalCommonoverlay}>
-            <View onTouchStart={handleClick} style={styles.ModalCommonmodalContainer}>
-                <View style={styles.ModalCommonForm}>
-                    <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
-                        <Ionicons
-                            name="close-outline" size={22}
-                        />
-                    </TouchableOpacity>
-                    <View>
-                        <Text style={styles.modalformHeading}>Tạo đánh giá</Text>
-                        <View style={styles.inputFieldDiv}>
-                            <InputForm
-                                className={styles.inputGroupText}
-                                nameKey="content"
-                                classNameInput={styles.modalGroupinputText}
-                                value={payload.content}
-                                onChangeText={(value) =>
-                                    setPayload((prev) => ({ ...prev, content: value }))
-                                }
-                                placeholder="Nội dung"
-                                multiline={true}
-                                numberOfLines={4}
-                                invalidFields={invalidFields}
-                                setInvalidFields={setInvalidFields}
+            <Pressable
+                style={{ height: '100%' }}
+                onPress={Keyboard.dismiss}
+            >
+                <View onTouchStart={handleClick} style={styles.ModalCommonmodalContainer}>
+                    <View style={styles.ModalCommonForm}>
+                        <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
+                            <Ionicons
+                                name="close-outline" size={22}
                             />
-                        </View>
-                        <View style={styles.inputFieldDiv}>
-                            <View style={styles.inputGroup}>
-                                <TextInput
-                                    style={styles.modalGroupinput}
-                                    value={vehiclePlateNumber}
+                        </TouchableOpacity>
+                        <View>
+                            <Text style={styles.modalformHeading}>Tạo đánh giá</Text>
+                            <View style={styles.inputFieldDiv}>
+                                <InputForm
+                                    className={styles.inputGroupText}
+                                    nameKey="content"
+                                    classNameInput={styles.modalGroupinputText}
+                                    value={payload.content}
                                     onChangeText={(value) =>
-                                        setVehiclePlateNumber(value)
+                                        setPayload((prev) => ({ ...prev, content: value }))
                                     }
-                                    placeholder="Nhập vào biển số xe nếu có"
+                                    placeholder="Nội dung"
+                                    multiline={true}
+                                    numberOfLines={4}
+                                    invalidFields={invalidFields}
+                                    setInvalidFields={setInvalidFields}
                                 />
                             </View>
+                            <View style={styles.inputFieldDiv}>
+                                <View style={styles.inputGroup}>
+                                    <TextInput
+                                        style={styles.modalGroupinput}
+                                        value={vehiclePlateNumber}
+                                        onChangeText={(value) =>
+                                            setVehiclePlateNumber(value)
+                                        }
+                                        placeholder="Nhập vào biển số xe nếu có"
+                                    />
+                                </View>
+                            </View>
+                            <TouchableOpacity style={styles.btnCommon1} onPress={handleAddReport}>
+                                <Text style={styles.btnTextCommon1}>Lưu thay đổi</Text>
+                            </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.btnCommon1} onPress={handleAddReport}>
-                            <Text style={styles.btnTextCommon1}>Lưu thay đổi</Text>
-                        </TouchableOpacity>
                     </View>
                 </View>
-            </View>
+            </Pressable>
         </SafeAreaView>
     )
 }

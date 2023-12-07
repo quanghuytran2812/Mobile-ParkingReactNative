@@ -1,15 +1,40 @@
-import React from "react";
-import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, SafeAreaView } from "react-native";
 import { Colors } from "../contants";
-import { Separator } from "../components";
+import { InputField, Separator } from "../components";
 import Ionicons from "react-native-vector-icons/Ionicons"
-import Feather from "react-native-vector-icons/Feather"
 import { Display } from "../utils";
+import { validate } from "../utils/helpers";
+import { useDispatch } from "react-redux";
+import { apiSendOtpByPh } from "../store/otpSlice";
 
 
 const ForgotPasswordScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
+    const [invalidFields, setInvalidFields] = useState([]);
+    const [payload, setPayload] = useState({
+        phoneNumber: ''
+    })
+
+    
+    const sendOTPSMS = async () => {
+        const invalids = validate(payload, setInvalidFields)
+        if (invalids === 0) {
+            const destPhoneNumber = payload.phoneNumber
+            dispatch(apiSendOtpByPh(destPhoneNumber))
+                .then((result) => {
+                    if (result.payload?.status === "DELIVERED") {
+                        navigation.navigate('Verification');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+        }
+    }
+
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <StatusBar
                 barStyle="dark-content"
                 backgroundColor={Colors.DEFAULT_WHITE}
@@ -25,26 +50,28 @@ const ForgotPasswordScreen = ({ navigation }) => {
             </View>
             <Text style={styles.title}>Chào Bạn.</Text>
             <Text style={styles.content}>
-                nhập email của bạn để chúng tôi có thể giúp bạn khôi phục mật khẩu.
+                Nhập số điện thoại của bạn để chúng tôi có thể giúp bạn khôi phục mật khẩu.
             </Text>
-            <View style={styles.inputContainer}>
-                <View style={styles.inputSubContainer}>
-                    <Feather name="mail"
-                        size={22}
-                        color={Colors.DEFAULT_GREY}
-                        style={{ marginRight: 10 }}
-                    />
-                    <TextInput placeholder="Email"
-                        placeholderTextColor={Colors.DEFAULT_GREY}
-                        selectionColor={Colors.DEFAULT_GREY}
-                        style={styles.inputText}
-                    />
-                </View>
-            </View>
-            <TouchableOpacity style={styles.siginButton}>
-                <Text style={styles.signinButtonText}>Đặt lại mật khẩu</Text>
+            <InputField
+                nameKey='phoneNumber'
+                classNameContainer={styles.inputContainer}
+                className={styles.inputSubContainer}
+                nameFeather="phone"
+                placeholder="Số điện thoại"
+                placeholderTextColor={Colors.DEFAULT_GREY}
+                selectionColor={Colors.DEFAULT_GREY}
+                classNameInput={styles.inputText}
+                keyboardType="number-pad"
+                value={payload.phoneNumber}
+                onChangeText={(text) => setPayload(prev => ({ ...prev, phoneNumber: text }))}
+                invalidFields={invalidFields}
+                setInvalidFields={setInvalidFields}
+            />
+            <TouchableOpacity style={styles.siginButton}
+                onPress={sendOTPSMS}>
+                <Text style={styles.signinButtonText}>Gửi mã qua SMS</Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     );
 };
 

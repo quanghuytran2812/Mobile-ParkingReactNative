@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView } from 'react-native'
 import React, { useCallback, useState } from 'react'
 import CalendarPicker from 'react-native-calendar-picker'
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -102,7 +102,7 @@ const DateTimeScreen = ({ route, navigation }) => {
       }, [selectedStartDate, selectedEndDate, selectedTime, selectedTime2]);
     return (
         <>
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 <View style={styles.containerTopHearder}>
                     <View style={styles.headerContainer}>
                         <Ionicons
@@ -187,7 +187,7 @@ const DateTimeScreen = ({ route, navigation }) => {
                         </Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </SafeAreaView>
         </>
     )
 }
