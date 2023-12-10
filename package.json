@@ -51,6 +51,6 @@
   },
   "private": true,
   "projectConfig": {
-    "backendApiBaseUrl": "https://parkinght-production.up.railway.app/parkinght"
+    "backendApiBaseUrl": "http://192.168.1.102:8090/parkinght"
   }
 }
