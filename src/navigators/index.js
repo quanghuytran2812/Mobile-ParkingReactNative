@@ -8,7 +8,6 @@ import {
     ForgotPasswordScreen,
     RegisterPhoneScreen,
     VerificationScreen,
-    GoogleMapScreen,
     VehicleScreen,
     ProfileScreen,
     DateTimeScreen,
@@ -19,9 +18,11 @@ import {
     ReportScreen,
     TicketScreen,
     VnPayScreen,
-    ResetPasswordScreen
+    ResetPasswordScreen,
+    HomeScreen,
+    DiagramParkingHome
 } from "../screens";
-import GoogleMap from "./BottomTabs"
+import Vehicle from "./BottomTabs"
 // import FlashMessage from "react-native-flash-message";
 const Stack = createStackNavigator();
 const Navigators = () => {
@@ -29,13 +30,13 @@ const Navigators = () => {
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Pirst" component={PirstScreen} />
-                <Stack.Screen name="GoogleMap" component={GoogleMap} />
+                <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="Signin" component={SigninScreen} />
                 <Stack.Screen name="Signup" component={SignupScreen} />
                 <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
                 <Stack.Screen name="RegisterPhone" component={RegisterPhoneScreen} />
                 <Stack.Screen name="Verification" component={VerificationScreen} />
-                <Stack.Screen name="Vehicle" component={VehicleScreen} />
+                <Stack.Screen name="Vehicle" component={Vehicle} />
                 <Stack.Screen name="Profile" component={ProfileScreen} />
                 <Stack.Screen name="DateTime" component={DateTimeScreen} />
                 <Stack.Screen name="Booking" component={BookingScreen} />
@@ -46,6 +47,7 @@ const Navigators = () => {
                 <Stack.Screen name="Ticket" component={TicketScreen} />
                 <Stack.Screen name="VnPay" component={VnPayScreen} />
                 <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+                <Stack.Screen name="DiagramParkingHome" component={DiagramParkingHome} />
             </Stack.Navigator>
         </NavigationContainer>
     )

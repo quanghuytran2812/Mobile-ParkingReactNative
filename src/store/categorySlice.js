@@ -19,11 +19,22 @@ export const fetchCategory = createAsyncThunk('category/fetchCategory', async ()
   }
 });
 
+export const fetchCategoryGuest = createAsyncThunk('category/fetchCategoryGuest', async () => {
+  try {
+    const response = await axios.get(
+      `${ApiContans.BACKEND_API.BASE_API_URL}/vehicle-category/getAllCategoryGuest`);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+});
+
 
 const categorySlice = createSlice({
   name: 'category',
   initialState: {
     list: [],
+    listGuest: [],
     loading: false,
   },
   reducers: {},
@@ -38,6 +49,17 @@ const categorySlice = createSlice({
         state.list = action.payload.data;
       })
       .addCase(fetchCategory.rejected, (state) => {
+        state.loading = false;
+      })
+      // Fetch category by Guest
+      .addCase(fetchCategoryGuest.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchCategoryGuest.fulfilled, (state, action) => {
+        state.loading = false;
+        state.listGuest = action.payload.data;
+      })
+      .addCase(fetchCategoryGuest.rejected, (state) => {
         state.loading = false;
       })
   },

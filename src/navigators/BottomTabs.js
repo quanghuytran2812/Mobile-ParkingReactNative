@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { GoogleMapScreen, VehicleScreen, ProfileScreen } from "../screens";
+import { VehicleScreen, ProfileScreen } from "../screens";
 import { FontAwesome5 } from '@expo/vector-icons'
 
 
@@ -10,14 +10,6 @@ const BottomTabs = createBottomTabNavigator()
 export default () => (
     <BottomTabs.Navigator
         screenOptions={{ headerShown: false }}>
-        <BottomTabs.Screen name="Home"
-            component={GoogleMapScreen}
-            options={{
-                tabBarIcon: ({ focused }) => (
-                    <FontAwesome5 name="home" size={23} color={focused ? '#02aab0' : '#000'} />
-                )
-            }}
-        />
         <BottomTabs.Screen name="Đặt chỗ"
             component={VehicleScreen}
             options={{

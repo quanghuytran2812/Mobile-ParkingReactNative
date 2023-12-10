@@ -120,8 +120,6 @@ const ProfileScreen = ({ navigation }) => {
                         onPress={() => navigation.navigate("Report")}
                     />
                 </TouchableOpacity>
-
-                <Text style={styles.sectionHeaderText}>đăng nhập</Text>
                 <View style={styles.sectionContainer}>
                     <TouchableOpacity
                         style={styles.sectionTextContainer}

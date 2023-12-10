@@ -6,7 +6,7 @@ import { Display } from '../utils'
 const PirstScreen = ({ navigation }) => {
     useEffect(() => {
         setTimeout(() => {
-            navigation.navigate('Signin');
+            navigation.navigate('Home');
         }, 2000);
     }, []);
     return (

@@ -4,7 +4,6 @@ import SignupScreen from "./SignupScreen";
 import ForgotPasswordScreen from "./ForgotPasswordScreen";
 import RegisterPhoneScreen from "./RegisterPhoneScreen";
 import VerificationScreen from "./VerificationScreen";
-import GoogleMapScreen from "./GoogleMapScreen";
 import ProfileScreen from "./ProfileScreen";
 import VehicleScreen from "./VehicleScreen";
 import DateTimeScreen from "./DateTimeScreen";
@@ -16,6 +15,8 @@ import ReportScreen from "./ReportScreen";
 import TicketScreen from "./TicketScreen";
 import VnPayScreen from "./VnPayScreen";
 import ResetPasswordScreen from "./ResetPasswordScreen";
+import HomeScreen from "./HomeScreen";
+import DiagramParkingHome from "./DiagramParkingHome";
 
 export {
     PirstScreen,
@@ -24,7 +25,6 @@ export {
     ForgotPasswordScreen,
     RegisterPhoneScreen,
     VerificationScreen,
-    GoogleMapScreen,
     ProfileScreen,
     VehicleScreen,
     DateTimeScreen,
@@ -35,5 +35,7 @@ export {
     ReportScreen,
     TicketScreen,
     VnPayScreen,
-    ResetPasswordScreen
+    ResetPasswordScreen,
+    HomeScreen,
+    DiagramParkingHome
 };
