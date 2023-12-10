@@ -78,7 +78,7 @@ const DiagramParkingHome = ({ route, navigation }) => {
                     </ScrollView>
                     <View style={styles.viewCommonButton}>
                         <TouchableOpacity style={styles.btnCommon1} onPress={() => navigation.navigate('Signin')}>
-                            <Text style={styles.btnTextCommon1}>Chuyến đến đăng nhập</Text>
+                            <Text style={styles.btnTextCommon1}>Đăng nhập để sử dụng dịch vụ</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
