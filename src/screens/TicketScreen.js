@@ -2,13 +2,19 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { AnimatedIcon } from '../components';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { useEffect } from 'react';
-// import { fetchBookingById } from '../store/bookingSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchBookingById } from '../store/bookingSlice';
+import moment from 'moment';
 
 
 const TicketScreen = ({ route, navigation }) => {
-  const dataToEncode = 'Your Data Here';
+  const bookingId = route.params;
+  const dispatch = useDispatch();
+  const listBooking = useSelector((state) => state.booking.listByBookingId);
+  useEffect(() => {
+    dispatch(fetchBookingById(bookingId))
+}, [dispatch]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -22,15 +28,15 @@ const TicketScreen = ({ route, navigation }) => {
         <View style={styles.ticketWrapper}>
           <View style={styles.ticketWrapperCard}>
             <Text style={styles.ticketWrapperTextL}>Tên</Text>
-            <Text style={styles.ticketWrapperTextR}>Nguyễn Quang Tú</Text>
+            <Text style={styles.ticketWrapperTextR}>{listBooking?.vehicle.user.fullName}</Text>
           </View>
           <View style={styles.ticketWrapperCard}>
             <Text style={styles.ticketWrapperTextL}>Số điện thoại</Text>
-            <Text style={styles.ticketWrapperTextR}>02363767428</Text>
+            <Text style={styles.ticketWrapperTextR}>{listBooking?.vehicle.user.phoneNumber}</Text>
           </View>
           <View style={styles.ticketWrapperCard}>
-            <Text style={styles.ticketWrapperTextL}>Phương tiện cá nhân</Text>
-            <Text style={styles.ticketWrapperTextR}>CAMRY 2.0G</Text>
+            <Text style={styles.ticketWrapperTextL}>Biển số xe</Text>
+            <Text style={styles.ticketWrapperTextR}>{listBooking?.vehicle.plateNumber}</Text>
           </View>
           <View style={styles.ticketWrapperCard}>
             <Text style={styles.ticketWrapperTextL}>Khu vực đậu xe</Text>
@@ -38,11 +44,15 @@ const TicketScreen = ({ route, navigation }) => {
           </View>
           <View style={styles.ticketWrapperCard}>
             <Text style={styles.ticketWrapperTextL}>Chỗ đậu xe</Text>
-            <Text style={styles.ticketWrapperTextR}>Đường số 1 (101)</Text>
+            <Text style={styles.ticketWrapperTextR}>{`${listBooking?.parkingSlot?.area} (${listBooking?.parkingSlot?.name})`}</Text>
           </View>
           <View style={styles.ticketWrapperCard}>
-            <Text style={styles.ticketWrapperTextL}>Ngày giờ</Text>
-            <Text style={styles.ticketWrapperTextR}>Thứ 2, 14, 2023 : 8:00 am - Thứ 3, 25,2023 : 13:00 pm</Text>
+            <Text style={styles.ticketWrapperTextL}>Ngày bắt đầu</Text>
+            <Text style={styles.ticketWrapperTextR}>{moment(listBooking?.start_Date).format('DD/MM/YYYY, h:mm:ss A')}</Text>
+          </View>
+          <View style={styles.ticketWrapperCard}>
+            <Text style={styles.ticketWrapperTextL}>Ngày kết thúc</Text>
+            <Text style={styles.ticketWrapperTextR}>{moment(listBooking?.end_Date).format('DD/MM/YYYY, h:mm:ss A')}</Text>
           </View>
         </View>
         <View
@@ -64,7 +74,7 @@ const TicketScreen = ({ route, navigation }) => {
             </View>
             <View style={styles.Maqr}>
               <QRCode
-                value={dataToEncode}
+                value={bookingId}
                 size={200} // Adjust the size of the QR code as needed
               />
             </View>

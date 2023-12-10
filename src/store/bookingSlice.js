@@ -29,7 +29,21 @@ export const fetchBookingById = createAsyncThunk('booking/fetchBookingById', asy
         headers: authHeader(token), // Pass the token value to the headers
       },
     );
-    console.log(response.data)
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+});
+
+export const cancelBooking = createAsyncThunk('booking/cancelBooking', async (bookingid) => {
+  const token = await StorageService.getToken(); // Await the token value
+  try {
+    const response = await axios.get(
+      `${ApiContans.BACKEND_API.BASE_API_URL}/api/cancel/` + bookingid,
+      {
+        headers: authHeader(token), // Pass the token value to the headers
+      },
+    );
     return response.data;
   } catch (error) {
     throw error.response.data;
@@ -98,6 +112,26 @@ const bookingSlice = createSlice({
         });
       })
       .addCase(createBooking.rejected, (state, action) => {
+        state.loading = false;
+        Toast.show({
+          type: 'error',
+          text1: 'ParkingHT',
+          text2: `${action.error.message}`
+        });
+      })
+      //Cancel booking
+      .addCase(cancelBooking.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(cancelBooking.fulfilled, (state) => {
+        state.loading = false;
+        Toast.show({
+          type: 'success',
+          text1: 'ParkingHT',
+          text2: 'Bạn đã hủy thành công chỗ đỗ xe của mình!'
+        });
+      })
+      .addCase(cancelBooking.rejected, (state, action) => {
         state.loading = false;
         Toast.show({
           type: 'error',

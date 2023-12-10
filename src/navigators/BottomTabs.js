@@ -10,11 +10,11 @@ const BottomTabs = createBottomTabNavigator()
 export default () => (
     <BottomTabs.Navigator
         screenOptions={{ headerShown: false }}>
-        <BottomTabs.Screen name="Bản đồ"
+        <BottomTabs.Screen name="Home"
             component={GoogleMapScreen}
             options={{
                 tabBarIcon: ({ focused }) => (
-                    <FontAwesome5 name="map-marked-alt" size={23} color={focused ? 'silver' : 'gray'} />
+                    <FontAwesome5 name="home" size={23} color={focused ? '#02aab0' : '#000'} />
                 )
             }}
         />
@@ -22,7 +22,7 @@ export default () => (
             component={VehicleScreen}
             options={{
                 tabBarIcon: ({ focused }) => (
-                    <FontAwesome5 name="parking" size={23} color={focused ? 'silver' : 'gray'} />
+                    <FontAwesome5 name="parking" size={23} color={focused ? '#02aab0' : '#000'} />
                 )
             }}
         />
@@ -30,7 +30,7 @@ export default () => (
             component={ProfileScreen}
             options={{
                 tabBarIcon: ({ focused }) => (
-                    <FontAwesome5 name="user-alt" size={23} color={focused ? 'silver' : 'gray'} />
+                    <FontAwesome5 name="user-alt" size={23} color={focused ? '#02aab0' : '#000'} />
                 )
             }}
         />

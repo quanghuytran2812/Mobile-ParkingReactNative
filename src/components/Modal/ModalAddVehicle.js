@@ -23,14 +23,12 @@ const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
 
     const [payload, setPayload] = useState({
         plateNumber: '',
-        vehicleName: '',
         categoryId: ''
     })
 
     const handleReset = () => {
         setPayload({
             plateNumber: '',
-            vehicleName: '',
             categoryId: ''
         })
     }
@@ -67,22 +65,7 @@ const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
                             />
                         </TouchableOpacity>
                         <View>
-                            <Text style={styles.modalformHeading}>Thêm xe</Text>
-                            <View style={styles.inputFieldDiv}>
-                                <InputForm
-                                    className={styles.inputGroup}
-                                    nameKey="vehicleName"
-                                    classNameInput={styles.modalGroupinput}
-                                    value={payload.vehicleName}
-                                    onChangeText={(value) =>
-                                        setPayload((prev) => ({ ...prev, vehicleName: value }))
-                                    }
-                                    placeholder="Tên xe"
-                                    invalidFields={invalidFields}
-                                    setInvalidFields={setInvalidFields}
-                                />
-                            </View>
-
+                            <Text style={styles.modalformHeading}>Thêm xe</Text>                        
                             <View style={styles.inputFieldDiv}>
                                 <InputForm
                                     className={styles.inputGroup}

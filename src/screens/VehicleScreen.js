@@ -62,10 +62,6 @@ const VehicleScreen = ({ navigation }) => {
             <SafeAreaView style={styles.container}>
                 <View style={styles.containerTopHearder}>
                     <View style={styles.headerContainer}>
-                        <Ionicons
-                            name="arrow-back-outline" size={22}
-                            onPress={() => navigation.goBack()}
-                        />
                         <Text style={styles.headerContainerText}>Chọn xe</Text>
                     </View>
                     <AnimatedIcon />

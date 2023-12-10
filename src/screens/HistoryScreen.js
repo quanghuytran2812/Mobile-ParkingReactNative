@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ScrollView, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { Images } from "../contants";
-import { AnimatedIcon } from '../components';
+import { AnimatedIcon, ModalCancelBooking } from '../components';
 import { ApiContans } from '../contants'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchBookingByStatus } from '../store/bookingSlice';
+import { fetchBookingById, fetchBookingByStatus } from '../store/bookingSlice';
+import { Modal } from 'react-native';
 
 const HistoryScreen = ({ navigation }) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [dataB, setDataB] = useState("");
   const listBookingStatus = useSelector((state) => state.booking.list);
   const dispatch = useDispatch();
 
@@ -20,6 +23,31 @@ const HistoryScreen = ({ navigation }) => {
       dispatch(fetchBookingByStatus("Completed"));
     }
   }, [])
+
+  const handleTicket = (bookingId) => {
+    navigation.navigate('Ticket', bookingId);
+  }
+
+  const handleOngoing = (bookingId) => {
+    dispatch(fetchBookingById(bookingId))
+      .then((result) => {
+        if (result.payload.statusCode === 200) {
+          navigation.navigate('Payment', result.payload.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+  }
+
+  const handleCancelBooking = (bookingId) => {
+    setDataB(bookingId)
+    setOpenModal(true)
+  }
+
+  const updateData = () => {
+    dispatch(fetchBookingByStatus("OnGoing"));
+  }
 
   return (
     <>
@@ -74,24 +102,52 @@ const HistoryScreen = ({ navigation }) => {
                       <Text style={{ color: '#02aab0', fontWeight: '700', fontSize: 14 }}>{item.amount}₫</Text>
                       <Text style={{ color: '#6e6e6e', fontSize: 12 }}> / {item.duration_hours} hour</Text>
                     </View>
-                    {item.status === "ONGOING" ? (<Text style={styles.statusBooking}>ĐANG ĐẶT CHỖ</Text>) :
-                      item.status === "COMPLETED" ? (<Text style={styles.statusBookingCompleted}>HOÀN THÀNH</Text>) :
-                        item.status === "CANCELED" ? (<Text style={styles.statusBookingCanceled}>ĐÃ HỦY</Text>) : ''
+                    {item.status === 0 ? (<Text style={styles.statusBooking}>ĐANG ĐẶT CHỖ</Text>) :
+                      item.status === 1 ? (<Text style={styles.statusBookingCompleted}>HOÀN THÀNH</Text>) :
+                        item.status === 2 ? (<Text style={styles.statusBookingCanceled}>ĐÃ HỦY</Text>) : ''
                     }
                   </View>
                 </View>
               </View>
 
-              {item.status !== "CANCELED" || item.duration_hours >= 1 ?
+              {item.status !== 2 ?
                 (
                   <View style={styles.containerButton}>
-                    <TouchableOpacity
-                      style={styles.btnCommon1}
-                    >
-                      <Text style={styles.btnTextCommon1}>
-                        {item.status === "ONGOING" ? 'Tiếp tục đặt chỗ' : 'Xem Vé'}
-                      </Text>
-                    </TouchableOpacity>
+                    {item.status === 0 ?
+                      (
+                        <>
+                          {item.duration_hours >= 1 && (
+                            <View style={styles.containerButtonOngoing}>
+                              <TouchableOpacity
+                                style={styles.btnCommon1}
+                                onPress={() => handleOngoing(item.id)}
+                              >
+                                <Text style={styles.btnTextCommon1}>
+                                  Tiếp tục đặt chỗ
+                                </Text>
+                              </TouchableOpacity>
+                              <TouchableOpacity
+                                style={styles.btnCommon2}
+                                onPress={() => handleCancelBooking(item.id)}
+                              >
+                                <Text style={styles.btnTextCommon2}>
+                                  Hủy đặt chỗ
+                                </Text>
+                              </TouchableOpacity>
+                            </View>
+                          )}
+                        </>
+                      ) : (
+                        <TouchableOpacity
+                          style={styles.btnCommon1}
+                          onPress={() => handleTicket(item.id)}
+                        >
+                          <Text style={styles.btnTextCommon1}>
+                            Xem Vé
+                          </Text>
+                        </TouchableOpacity>
+                      )
+                    }
                   </View>
                 ) : ''}
 
@@ -99,6 +155,17 @@ const HistoryScreen = ({ navigation }) => {
           )}
         />
       </SafeAreaView>
+      <Modal
+        transparent={true}
+        animationType='fade'
+        visible={openModal}
+      >
+        <ModalCancelBooking
+          onClose={() => setOpenModal(false)}
+          dataB={dataB}
+          updateData={updateData}
+        />
+      </Modal>
     </>
   );
 };
@@ -231,6 +298,7 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   btnCommon1: {
+    flex: 1,
     height: 40,
     borderRadius: 15,
     backgroundColor: '#fff',
@@ -245,8 +313,33 @@ const styles = StyleSheet.create({
   },
   btnTextCommon1: {
     color: '#02aab0',
-    fontWeight: 'bold',
+    fontWeight: '600',
     fontSize: 17,
+  },
+  btnCommon2: {
+    flex: 1,
+    height: 40,
+    borderRadius: 15,
+    backgroundColor: '#02aab0',
+    shadowColor: '#02aab0',
+    shadowOffset: { width: 1, height: 2 },
+    shadowOpacity: 0.27,
+    elevation: 4,
+    borderColor: '#02aab0',
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 10,
+  },
+  btnTextCommon2: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 17,
+  },
+  containerButtonOngoing: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   }
 });
 

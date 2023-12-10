@@ -57,7 +57,7 @@ export default function BookingScreen({ route, navigation }) {
         vehicle_Id: vehicleId,
         start_Date: arrive_at,
         end_Date: leave_at,
-        parking_Slot_Id: objSelected.parking_slot_id,
+        parking_Slot_Id: objSelected.parkingSlotId,
       };
       dispatch(createBooking(bookingDetailData))
         .then((result) => {
@@ -165,7 +165,7 @@ function SlotParking({ item, onPress, itemSelect }) {
 
   return (
     <View style={styles.viewParking}>
-      {item.booking_Status === 'COMPLETED' ? (
+      {item.status === 1 ? (
         <View style={styles.imageAuto}>
           <Image
             source={Images.CARUP}
@@ -191,7 +191,7 @@ function SlotParking({ item, onPress, itemSelect }) {
                 : { color: '#000' },
             ]}
           >
-            {item.parking_slot_name}
+            {item.name}
           </Text>
         </TouchableOpacity>
       )}
@@ -270,12 +270,16 @@ const styles = StyleSheet.create({
   },
   imageAuto: {
     alignItems: "center",
+    display: 'flex',
     flex: 1,
     justifyContent: "center",
     paddingVertical: verticalScale(6)
   },
   viewName: {
     borderRadius: 8,
+    alignItems: "center",
+    display: 'flex',
+    justifyContent: "center",
   },
   viewDirect: {
     alignItems: "center",
