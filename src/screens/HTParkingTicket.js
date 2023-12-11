@@ -1,0 +1,195 @@
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React from 'react'
+import { AnimatedIcon } from '../components';
+import { ApiContans } from '../contants';
+import QRCode from 'react-native-qrcode-svg';
+
+export default function HTParkingTicket({ route, navigation }) {
+    const bookingData = route.params
+
+    return (
+        <>
+            <View style={styles.container}>
+                <View style={styles.containerTopHearder}>
+                    <View style={styles.headerContainer}>
+                        <Text style={styles.headerContainerText}>Vé đậu xe</Text>
+                    </View>
+                    <AnimatedIcon />
+                </View>
+                <View style={styles.MainCont}>
+                    <View style={styles.mainLeft}></View>
+                    <View style={styles.mainright}></View>
+                    <View>
+                        <View style={{...styles.MainContCard, paddingTop: 20}}>
+                            <Text style={styles.MainContTextL}>Tên</Text>
+                            <Text style={styles.MainContTextR}>{bookingData?.vehicle?.user?.fullName}</Text>
+                        </View>
+                        <View style={styles.MainContCard}>
+                            <Text style={styles.MainContTextL}>Điện thoại</Text>
+                            <Text style={styles.MainContTextR}>{bookingData?.vehicle?.user?.phoneNumber}</Text>
+                        </View>
+                        <View style={styles.MainContCard}>
+                            <Text style={styles.MainContTextL}>Biển số xe</Text>
+                            <Text style={styles.MainContTextR}>{bookingData?.vehicle?.plateNumber}</Text>
+                        </View>
+                        <View style={styles.MainContCard}>
+                            <Text style={styles.MainContTextL}>Chỗ đậu xe</Text>
+                            <Text style={styles.MainContTextR}>
+                                {`${bookingData?.parkingSlot?.area} (${bookingData?.parkingSlot?.name})`}
+                            </Text>
+                        </View>
+                        <View style={styles.MainContCard}>
+                            <Text style={styles.MainContTextL}>Ngày</Text>
+                            <Text style={styles.MainContTextR}>{`${ApiContans?.splitAndFormatDate(bookingData?.start_Date)} - ${ApiContans?.splitAndFormatDate(bookingData?.end_Date)}`}</Text>
+                        </View>
+                        <View style={styles.MainContCard}>
+                            <Text style={styles.MainContTextL}>Thời hạn</Text>
+                            <Text style={styles.MainContTextR}>{`${ApiContans?.calculateDuration(bookingData?.start_Date, bookingData?.end_Date)} giờ`}</Text>
+                        </View>
+                        <View style={{...styles.MainContCard, paddingBottom: 20}}>
+                            <Text style={styles.MainContTextL}>Thời gian</Text>
+                            <Text style={styles.MainContTextR}>{`${ApiContans?.splitAndFormatTime(bookingData?.start_Date)} - ${ApiContans?.splitAndFormatTime(bookingData?.end_Date)}`}</Text>
+                        </View>
+                    </View>
+                    <View style={styles.texthr}>
+                        <Text style={{ color: 'silver' }}>
+                            - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+                        </Text>
+                    </View>
+                    <View style={styles.containerqr}>
+                        <Text>Quét mã này khi tới cổng</Text>
+                        <View style={styles.wrapperqr}>
+                            <QRCode value={bookingData?.booking_Id} size={200} />
+                        </View>
+                        <Text style={{ paddingBottom: 20 }}>Lưu ý : Chụp màn hình nếu không có mạng</Text>
+                    </View>
+                </View>
+                <View style={styles.viewCommonButton}>
+                    <TouchableOpacity
+                        style={styles.btnCommon1}
+                        onPress={() => navigation.navigate('Vehicle')}
+                    >
+                        <Text style={styles.btnTextCommon1}>
+                            Chuyển đến trang cá nhân
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fcfcfc',
+        paddingTop: 60,
+        paddingRight: 20,
+        paddingBottom: 20,
+        paddingLeft: 20,
+    },
+    containerTopHearder: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+    },
+    headerContainerText: {
+        fontSize: 21,
+        marginLeft: 10,
+        fontWeight: '700'
+    },
+    MainCont: {
+        position: 'relative',
+        marginTop: 20,
+        marginBottom: 10,
+        padding: 15,
+        borderRadius: 15,
+        backgroundColor: '#ffffff',
+        ...Platform.select({
+            ios: {
+                shadowColor: 'rgba(0, 0, 0, 0.4)',
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 1,
+                shadowRadius: 0,
+            },
+            android: {
+                elevation: 2,
+            },
+        }),
+        marginLeft: 1,
+        marginRight: 1,
+    },
+    MainContCard: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10,
+        paddingHorizontal: 15,
+    },
+    MainContTextL: {
+        flex: 1,
+        color: '#6e6e6e'
+    },
+    MainContTextR: {
+        flex: 2,
+        fontWeight: '600',
+        paddingLeft: 30
+    },
+    viewCommonButton: {
+        paddingTop: 20,
+    },
+    btnCommon1: {
+        height: 50,
+        borderRadius: 15,
+        backgroundColor: '#000',
+        shadowColor: '#000',
+        shadowOffset: { width: 4, height: 5 },
+        shadowOpacity: 0.27,
+        shadowRadius: -3,
+        elevation: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    btnTextCommon1: {
+        color: '#fcfcfc',
+        fontWeight: 'bold',
+        fontSize: 17,
+    },
+    texthr: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+        marginTop: 20,
+    },
+    containerqr: {
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    wrapperqr: {
+        paddingVertical: 20
+    },
+    mainLeft: {
+        position: 'absolute',
+        top: '42%',
+        left: -30,
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: '#fcfcfc',
+        zIndex: 2,
+    },
+    mainright: {
+        position: 'absolute',
+        top: '42%',
+        right: -30,
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        backgroundColor: '#fcfcfc',
+        zIndex: 2,
+    }
+})

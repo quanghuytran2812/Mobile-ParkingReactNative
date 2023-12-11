@@ -14,14 +14,13 @@ import {
     EditProfileScreen,
     HistoryScreen,
     ReportScreen,
-    TicketScreen,
     VnPayScreen,
     ResetPasswordScreen,
     HomeScreen,
-    DiagramParkingHome
+    DiagramParkingHome,
+    HTParkingTicket,
 } from "../screens";
 import Vehicle from "./BottomTabs"
-// import FlashMessage from "react-native-flash-message";
 const Stack = createStackNavigator();
 const Navigators = () => {
     return (
@@ -31,6 +30,7 @@ const Navigators = () => {
                 <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="Signin" component={SigninScreen} />
                 <Stack.Screen name="Signup" component={SignupScreen} />
+                <Stack.Screen name="HTParkingTicket" component={HTParkingTicket} />
                 <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
                 <Stack.Screen name="Verification" component={VerificationScreen} />
                 <Stack.Screen name="Vehicle" component={Vehicle} />
@@ -41,7 +41,6 @@ const Navigators = () => {
                 <Stack.Screen name="EditProfile" component={EditProfileScreen} />
                 <Stack.Screen name="History" component={HistoryScreen} />
                 <Stack.Screen name="Report" component={ReportScreen} />
-                <Stack.Screen name="Ticket" component={TicketScreen} />
                 <Stack.Screen name="VnPay" component={VnPayScreen} />
                 <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
                 <Stack.Screen name="DiagramParkingHome" component={DiagramParkingHome} />

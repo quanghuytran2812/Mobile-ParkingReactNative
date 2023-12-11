@@ -8,6 +8,7 @@ import ModalFeedback from "./Modal/ModalFeedback";
 import ModalCancelBooking from "./Modal/ModalCancelBooking";
 import ModalChangePass from "./Modal/ModalChangePass";
 import ModalUpdateUser from "./Modal/ModalUpdateUser";
+import ModalSuccess from "./Modal/ModalSuccess";
 import InputField from "./input/InputField";
 import InputFieldPass from "./input/InputFieldPass";
 import InputForm from "./input/InputForm";

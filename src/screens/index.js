@@ -11,11 +11,11 @@ import PaymentScreen from "./PaymentScreen";
 import EditProfileScreen from "./EditProfileScreen";
 import HistoryScreen from "./HistoryScreen";
 import ReportScreen from "./ReportScreen";
-import TicketScreen from "./TicketScreen";
 import VnPayScreen from "./VnPayScreen";
 import ResetPasswordScreen from "./ResetPasswordScreen";
 import HomeScreen from "./HomeScreen";
 import DiagramParkingHome from "./DiagramParkingHome";
+import HTParkingTicket from "./HTParkingTicket";
 
 export {
     PirstScreen,
@@ -31,9 +31,9 @@ export {
     EditProfileScreen,
     HistoryScreen,
     ReportScreen,
-    TicketScreen,
     VnPayScreen,
     ResetPasswordScreen,
     HomeScreen,
-    DiagramParkingHome
+    DiagramParkingHome,
+    HTParkingTicket
 };

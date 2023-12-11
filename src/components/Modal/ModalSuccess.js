@@ -1,0 +1,131 @@
+import React, { memo } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Colors } from '../contants';
+import Ionicons from "react-native-vector-icons/Ionicons"
+
+const ModalSuccess = ({ onClose, dataS }) => {
+    const handleClick = (e) => {
+        e.stopPropagation();
+    };
+
+    return (
+        <SafeAreaView style={styles.ModalCommonoverlay}>
+            <View onTouchStart={handleClick} style={styles.ModalCommonmodalContainer}>
+                <View style={styles.ModalCommonForm}>
+                    <TouchableOpacity style={styles.closeBtn} onPress={onClose}>
+                        <Ionicons
+                            name="check" size={22}
+                        />
+                    </TouchableOpacity>
+                    <View>
+                        <Text style={styles.modalformHeading}>Kiểm soát khi vào</Text>
+                        <View style={styles.MainCont}>
+                            <View style={{ ...styles.MainContCard, justifyContent: 'center' }}>
+                                <Text style={{
+                                    color: Colors.DEFAULT_GREEN,
+                                    fontWeight: '600',
+                                    letterSpacing: 1,
+                                    fontSize: 18
+                                }}>{dataS.data.message}</Text>
+                            </View>
+                            <TouchableOpacity style={styles.btnCommon1} onPress={onClose}>
+                                <Text style={styles.btnTextCommon1}>Xác nhận</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </View>
+        </SafeAreaView>
+    )
+}
+
+const styles = StyleSheet.create({
+    ModalCommonoverlay: {
+        backgroundColor: 'rgba(49, 49, 49, 0.8)',
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+    },
+    ModalCommonmodalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100%',
+        margin: 0,
+    },
+    ModalCommonForm: {
+        width: 320,
+        paddingVertical: 50,
+        paddingHorizontal: 30,
+        borderRadius: 15,
+        backgroundColor: 'white',
+        elevation: 4,
+        position: 'relative',
+    },
+    closeBtn: {
+        backgroundColor: Colors.DEFAULT_GREEN,
+        position: 'absolute',
+        left: '45%',
+        top: '-25%',
+        borderRadius: 100,
+        justifyContent: 'center',
+        zIndex: 1,
+        height: 90,
+        width: 90,
+        alignItems: 'center'
+    },
+    modalformHeading: {
+        textTransform: 'uppercase',
+        fontSize: 16,
+        letterSpacing: 1,
+        fontWeight: '700',
+        lineHeight: 20,
+        color: '#333',
+        marginBottom: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+        borderStyle: 'solid',
+        textAlign: 'center'
+    },
+    MainCont: {
+        marginTop: 10,
+    },
+    MainContCard: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 20
+    },
+    MainContTextL: {
+        flex: 1,
+        color: '#6e6e6e'
+    },
+    MainContTextR: {
+        flex: 1,
+        fontWeight: '600',
+    },
+    btnCommon1: {
+        height: 40,
+        borderRadius: 5,
+        backgroundColor: Colors.DEFAULT_GREEN,
+        shadowColor: '#000',
+        shadowOffset: { width: 4, height: 5 },
+        shadowOpacity: 0.27,
+        shadowRadius: -3,
+        elevation: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    btnTextCommon1: {
+        color: '#fcfcfc',
+        fontWeight: 'bold',
+        fontSize: 17,
+    },
+})
+
+export default memo(ModalSuccess)
