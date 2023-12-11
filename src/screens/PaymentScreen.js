@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import React from 'react'
+import Ionicons from "react-native-vector-icons/Ionicons"
 import { Images } from '../contants';
 import { AnimatedIcon } from '../components';
 import { ApiContans } from '../contants';
@@ -29,6 +30,10 @@ export default function PaymentScreen({ route, navigation }) {
             <View style={styles.container}>
                 <View style={styles.containerTopHearder}>
                     <View style={styles.headerContainer}>
+                        <Ionicons
+                            name="arrow-back-outline" size={22}
+                            onPress={() => navigation.goBack()}
+                        />
                         <Text style={styles.headerContainerText}>Tóm tắt thông tin</Text>
                     </View>
                     <AnimatedIcon />

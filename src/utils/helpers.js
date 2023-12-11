@@ -51,7 +51,7 @@ export const validate = (payload, setInvalidFields) => {
                 }
                 break;
             case 'plateNumber':
-                const plateNumberRegex = /^(1[1-9]|[2-9][0-9])[A-Z]{1,2}-\d{4,15}$/;
+                const plateNumberRegex = /^(1[1-9]|[2-9][0-9])[A-Z]{1,2}-\d{4,10}$/;
                 if (!plateNumberRegex.test(arr[1])) {
                     invalids++;
                     setInvalidFields(prev => [...prev, { name: arr[0], mes: 'Số biển số không hợp lệ!' }]);
