@@ -2,8 +2,11 @@ import { StyleSheet, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import WebView from 'react-native-webview';
 import queryString from 'query-string';
+import { useDispatch } from 'react-redux';
+import { fetchBookingById } from '../store/bookingSlice';
 
 const VnPayScreen = ({ route, navigation }) => {
+  const dispatch = useDispatch();
   const payment_url = route.params;
 
   const onUrlChange = (webViewState) => {
@@ -18,12 +21,28 @@ const VnPayScreen = ({ route, navigation }) => {
       const bookingId = urlParams.query.bookingId;
       const responseCode = urlParams.query.vnp_ResponseCode;
       if (responseCode === "00") {
-        Toast.show({
-          type: 'success',
-          text1: 'ParkingHT',
-          text2: `Thanh toán thành công!`
-        });
-        navigation.navigate('Ticket', bookingId);
+        if (bookingId) {
+          dispatch(fetchBookingById(bookingId))
+            .then((result) => {
+              if (result.payload.statusCode === 200) {
+                navigation.navigate('Ticket', result.payload.data);
+                Toast.show({
+                  type: 'success',
+                  text1: 'ParkingHT',
+                  text2: `Thanh toán thành công!`
+                });
+              }else{
+                Toast.show({
+                  type: 'error',
+                  text1: 'ParkingHT',
+                  text2: `${result.payload.message}`
+                });
+              }
+            })
+            .catch((error) => {
+              console.log(error)
+            });
+        }
       } else {
         Toast.show({
           type: 'error',

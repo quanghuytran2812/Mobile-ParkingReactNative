@@ -1,4 +1,3 @@
-import FlagItem from "./FlagItem";
 import Separator from "./Separator";
 import ToggleButton from "./ToggleButton";
 import CustomBtn from "./CustomBtn";
@@ -14,6 +13,6 @@ import InputFieldPass from "./input/InputFieldPass";
 import InputForm from "./input/InputForm";
 import InputFormPass from "./input/InputFormPass";
 
-export { FlagItem, Separator, ToggleButton, CustomBtn, ModalAddVehicle, AnimatedIcon, 
+export { Separator, ToggleButton, CustomBtn, ModalAddVehicle, AnimatedIcon, 
     ModalAddReport, ModalFeedback, ModalChangePass, ModalUpdateUser, InputField, InputFieldPass, InputForm,
     InputFormPass, ModalCancelBooking};

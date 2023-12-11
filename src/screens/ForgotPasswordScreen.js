@@ -82,15 +82,17 @@ const styles = StyleSheet.create({
     },
     headerContainer: {
         flexDirection: 'row',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        paddingVertical: 50,
-        paddingHorizontal: 3,
+        paddingTop: 40,
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingBottom: 60
     },
     headerTitle: {
-        fontSize: 20,
-        lineHeight: 20 * 1.4,
-        width: Display.setWidth(80),
-        textAlign: 'center',
+        fontSize: 21,
+        marginLeft: 10,
+        fontWeight: '700'
     },
     title: {
         fontSize: 20,

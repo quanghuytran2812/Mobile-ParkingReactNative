@@ -3,7 +3,7 @@ import Feather from "react-native-vector-icons/Feather";
 import { Colors } from "../../contants";
 
 const InputField = ({ value, className, nameFeather, classNameInput, nameKey, placeholder, classNameContainer,
-    invalidFields, setInvalidFields, onChangeText, keyboardType, placeholderTextColor, selectionColor }) => {
+    invalidFields, setInvalidFields, onChangeText, keyboardType, placeholderTextColor, selectionColor, editable }) => {
     return (
         <>
             <View style={classNameContainer}>
@@ -24,6 +24,7 @@ const InputField = ({ value, className, nameFeather, classNameInput, nameKey, pl
                         value={value}
                         onChangeText={onChangeText}
                         onFocus={() => setInvalidFields([])}
+                        editable={editable}
                     />
                 </View>
             </View>

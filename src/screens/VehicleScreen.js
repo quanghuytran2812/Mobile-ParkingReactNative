@@ -50,7 +50,7 @@ const VehicleScreen = ({ navigation }) => {
             });
         } else {
             Toast.show({
-                type: 'info',
+                type: 'error',
                 text1: 'ParkingHT',
                 text2: 'Bạn chưa chọn xe mà mình sẽ đỗ',
             });

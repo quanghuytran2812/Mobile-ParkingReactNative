@@ -7,6 +7,7 @@ import { Separator } from "../components";
 import { apivalidateOtpResetP } from "../store/otpSlice";
 import { useDispatch } from "react-redux";
 import { SafeAreaView } from "react-native";
+import Toast from "react-native-toast-message";
 
 const VerificationScreen = ({ navigation }) => {
     const dispatch = useDispatch();

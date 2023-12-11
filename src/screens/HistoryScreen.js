@@ -24,8 +24,18 @@ const HistoryScreen = ({ navigation }) => {
     }
   }, [])
 
-  const handleTicket = (bookingId) => {
-    navigation.navigate('Ticket', bookingId);
+  const handleTicket = (data) => {
+    if (data) {
+      dispatch(fetchBookingById(data))
+        .then((result) => {
+          if (result.payload.statusCode === 200) {
+            navigation.navigate('Ticket', result.payload.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        });
+    }
   }
 
   const handleOngoing = (bookingId) => {

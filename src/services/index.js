@@ -1,3 +1,3 @@
-import StaticImagaService from "./StaticImagaService";
+import StorageService from "./StorageService";
 
-export { StaticImagaService };
+export { StorageService };

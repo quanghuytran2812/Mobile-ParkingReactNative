@@ -2,19 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { AnimatedIcon } from '../components';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { fetchBookingById } from '../store/bookingSlice';
 import moment from 'moment';
 
 
 const TicketScreen = ({ route, navigation }) => {
-  const bookingId = route.params;
-  const dispatch = useDispatch();
-  const listBooking = useSelector((state) => state.booking.listByBookingId);
-  useEffect(() => {
-    dispatch(fetchBookingById(bookingId))
-}, [dispatch]);
+  const listBooking = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -28,15 +20,15 @@ const TicketScreen = ({ route, navigation }) => {
         <View style={styles.ticketWrapper}>
           <View style={styles.ticketWrapperCard}>
             <Text style={styles.ticketWrapperTextL}>Tên</Text>
-            <Text style={styles.ticketWrapperTextR}>{listBooking?.vehicle.user.fullName}</Text>
+            <Text style={styles.ticketWrapperTextR}>{listBooking?.vehicle?.user?.fullName}</Text>
           </View>
           <View style={styles.ticketWrapperCard}>
             <Text style={styles.ticketWrapperTextL}>Số điện thoại</Text>
-            <Text style={styles.ticketWrapperTextR}>{listBooking?.vehicle.user.phoneNumber}</Text>
+            <Text style={styles.ticketWrapperTextR}>{listBooking?.vehicle?.user?.phoneNumber}</Text>
           </View>
           <View style={styles.ticketWrapperCard}>
             <Text style={styles.ticketWrapperTextL}>Biển số xe</Text>
-            <Text style={styles.ticketWrapperTextR}>{listBooking?.vehicle.plateNumber}</Text>
+            <Text style={styles.ticketWrapperTextR}>{listBooking?.vehicle?.plateNumber}</Text>
           </View>
           <View style={styles.ticketWrapperCard}>
             <Text style={styles.ticketWrapperTextL}>Khu vực đậu xe</Text>
@@ -74,7 +66,7 @@ const TicketScreen = ({ route, navigation }) => {
             </View>
             <View style={styles.Maqr}>
               <QRCode
-                value={bookingId}
+                value={listBooking?.booking_Id}
                 size={200} // Adjust the size of the QR code as needed
               />
             </View>
@@ -87,7 +79,7 @@ const TicketScreen = ({ route, navigation }) => {
       <View style={styles.viewCommonButton}>
         <TouchableOpacity
           style={styles.btnCommon1}
-          onPress={() => navigation.navigate('GoogleMap')}
+          onPress={() => navigation.navigate('Vehicle')}
         >
           <Text style={styles.btnTextCommon1}>
             Chuyển đến đặt chỗ
@@ -158,7 +150,8 @@ const styles = StyleSheet.create({
     color: '#6e6e6e'
   },
   ticketWrapperTextR: {
-    flex: 1,
+    flex: 2,
+    marginLeft: 20,
     fontWeight: '600',
   },
   ticketHr: {

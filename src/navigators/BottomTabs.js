@@ -3,8 +3,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { VehicleScreen, ProfileScreen } from "../screens";
 import { FontAwesome5 } from '@expo/vector-icons'
 
-
-
 const BottomTabs = createBottomTabNavigator()
 
 export default () => (

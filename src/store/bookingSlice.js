@@ -71,7 +71,6 @@ const bookingSlice = createSlice({
   name: 'booking',
   initialState: {
     list: [],
-    listByBookingId: null,
     loading: false,
   },
   reducers: {},
@@ -94,7 +93,6 @@ const bookingSlice = createSlice({
       })
       .addCase(fetchBookingById.fulfilled, (state, action) => {
         state.loading = false;
-        state.listByBookingId = action.payload.data;
       })
       .addCase(fetchBookingById.rejected, (state) => {
         state.loading = false;

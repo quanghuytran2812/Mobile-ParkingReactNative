@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, StatusBar, TouchableOpacity, SafeAreaView } from "react-native";
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, SafeAreaView, Pressable, Keyboard } from "react-native";
 import Separator from "../components/Separator";
 import { Colors } from "../contants";
 import { Display } from "../utils";
@@ -42,79 +42,84 @@ const SigninScreen = ({ navigation }) => {
                 backgroundColor={Colors.DEFAULT_WHITE}
                 translucent
             />
-            <Separator height={StatusBar.currentHeight} />
-            <View style={styles.headerContainer}>
-                <Text style={styles.headerTitle}>
-                    ĐĂNG NHẬP
-                </Text>
-            </View>
-            <Text style={styles.title}>Chào Bạn.</Text>
-            <Text style={styles.content}>
-                Vui lòng nhập số điện thoại và mật khẩu của bạn.
-            </Text>
-            <InputField
-                nameKey='phoneNumber'
-                classNameContainer={styles.inputContainer}
-                className={styles.inputSubContainer}
-                nameFeather="phone"
-                placeholder="Số điện thoại"
-                placeholderTextColor={Colors.DEFAULT_GREY}
-                selectionColor={Colors.DEFAULT_GREY}
-                classNameInput={styles.inputText}
-                keyboardType="number-pad"
-                value={payload.phoneNumber}
-                onChangeText={(text) => setPayload(prev => ({ ...prev, phoneNumber: text }))}
-                invalidFields={invalidFields}
-                setInvalidFields={setInvalidFields}
-            />
-            <Separator height={15} />
-            <InputFieldPass
-                nameKey='password'
-                classNameContainer={styles.inputContainer}
-                className={styles.inputSubContainer}
-                nameFeather="lock"
-                placeholder="Mật khẩu"
-                placeholderTextColor={Colors.DEFAULT_GREY}
-                selectionColor={Colors.DEFAULT_GREY}
-                classNameInput={styles.inputText}
-                value={payload.password}
-                onChangeText={(text) => setPayload(prev => ({ ...prev, password: text }))}
-                invalidFields={invalidFields}
-                setInvalidFields={setInvalidFields}
-                secureTextEntry={isPasswordShow ? false : true}
-                nameFeatherPass={isPasswordShow ? "eye" : 'eye-off'}
-                onPress={() => setPasswordShow(!isPasswordShow)}
-            />
-            <View style={styles.forgotPasswordContainer}>
-                <View style={styles.toggleContainer}>
-                </View>
-                <Text
-                    style={styles.forgotPasswordText}
-                    onPress={() => navigation.navigate('ForgotPassword')} >
-                    Quên mật khẩu
-                </Text>
-            </View>
-            <TouchableOpacity
-                style={styles.siginButton}
-                onPress={handleLogin}
+            <Pressable
+                style={{ height: '100%' }}
+                onPress={Keyboard.dismiss}
             >
-                <Text
-                    style={styles.signinButtonText}>
-                    Đăng Nhập
+                <Separator height={StatusBar.currentHeight} />
+                <View style={styles.headerContainer}>
+                    <Text style={styles.headerTitle}>
+                        ĐĂNG NHẬP
+                    </Text>
+                </View>
+                <Text style={styles.title}>Chào Bạn.</Text>
+                <Text style={styles.content}>
+                    Vui lòng nhập số điện thoại và mật khẩu của bạn.
                 </Text>
-            </TouchableOpacity>
-            <View
-                style={styles.signupContainer}>
-                <Text
-                    style={styles.accountText}>
-                    Bạn không có tài khoản ?
-                </Text>
-                <Text
-                    style={styles.signupText}
-                    onPress={() => navigation.navigate('Signup')}>
-                    Đăng Kí
-                </Text>
-            </View>
+                <InputField
+                    nameKey='phoneNumber'
+                    classNameContainer={styles.inputContainer}
+                    className={styles.inputSubContainer}
+                    nameFeather="phone"
+                    placeholder="Số điện thoại"
+                    placeholderTextColor={Colors.DEFAULT_GREY}
+                    selectionColor={Colors.DEFAULT_GREY}
+                    classNameInput={styles.inputText}
+                    keyboardType="number-pad"
+                    value={payload.phoneNumber}
+                    onChangeText={(text) => setPayload(prev => ({ ...prev, phoneNumber: text }))}
+                    invalidFields={invalidFields}
+                    setInvalidFields={setInvalidFields}
+                />
+                <Separator height={15} />
+                <InputFieldPass
+                    nameKey='password'
+                    classNameContainer={styles.inputContainer}
+                    className={styles.inputSubContainer}
+                    nameFeather="lock"
+                    placeholder="Mật khẩu"
+                    placeholderTextColor={Colors.DEFAULT_GREY}
+                    selectionColor={Colors.DEFAULT_GREY}
+                    classNameInput={styles.inputText}
+                    value={payload.password}
+                    onChangeText={(text) => setPayload(prev => ({ ...prev, password: text }))}
+                    invalidFields={invalidFields}
+                    setInvalidFields={setInvalidFields}
+                    secureTextEntry={isPasswordShow ? false : true}
+                    nameFeatherPass={isPasswordShow ? "eye" : 'eye-off'}
+                    onPress={() => setPasswordShow(!isPasswordShow)}
+                />
+                <View style={styles.forgotPasswordContainer}>
+                    <View style={styles.toggleContainer}>
+                    </View>
+                    <Text
+                        style={styles.forgotPasswordText}
+                        onPress={() => navigation.navigate('ForgotPassword')} >
+                        Quên mật khẩu
+                    </Text>
+                </View>
+                <TouchableOpacity
+                    style={styles.siginButton}
+                    onPress={handleLogin}
+                >
+                    <Text
+                        style={styles.signinButtonText}>
+                        Đăng Nhập
+                    </Text>
+                </TouchableOpacity>
+                <View
+                    style={styles.signupContainer}>
+                    <Text
+                        style={styles.accountText}>
+                        Bạn không có tài khoản ?
+                    </Text>
+                    <Text
+                        style={styles.signupText}
+                        onPress={() => navigation.navigate('Signup')}>
+                        Đăng Ký
+                    </Text>
+                </View>
+            </Pressable>
         </SafeAreaView>
     );
 };
@@ -207,6 +212,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 18 * 1.4,
         color: Colors.DEFAULT_WHITE,
+        fontWeight: '600',
+        letterSpacing: 2
     },
     signupContainer: {
         marginHorizontal: 20,
