@@ -48,10 +48,6 @@ export default function PaymentScreen({ route, navigation }) {
                         <Text style={styles.MainContTextR}>Tôn Đức Thắng, Hoà Minh, Liên Chiểu, Đà Nẵng</Text>
                     </View>
                     <View style={styles.MainContCard}>
-                        <Text style={styles.MainContTextL}>Phương tiện cá nhân</Text>
-                        <Text style={styles.MainContTextR}>{bookingData?.vehicle?.vehicleName}</Text>
-                    </View>
-                    <View style={styles.MainContCard}>
                         <Text style={styles.MainContTextL}>Chỗ đậu xe</Text>
                         <Text style={styles.MainContTextR}>
                             {`${bookingData?.parkingSlot?.area} (${bookingData?.parkingSlot?.name})`}

@@ -1,13 +1,23 @@
-import { StyleSheet, View } from 'react-native';
+import { Modal, StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
 import WebView from 'react-native-webview';
 import queryString from 'query-string';
-import { useDispatch } from 'react-redux';
-import { fetchBookingById } from '../store/bookingSlice';
+import { useState } from 'react';
+import { SafeAreaView } from 'react-native';
+import { ModalFail, ModalSuccess } from '../components';
 
 const VnPayScreen = ({ route, navigation }) => {
-  const dispatch = useDispatch();
   const payment_url = route.params;
+  const [openModalS, setOpenModalS] = useState(false);
+  const [openModalF, setOpenModalF] = useState(false);
+  const [dataB, setDataB] = useState("");
+
+  const transferP = () => {
+    navigation.navigate('Profile');
+  }
+  const transferTicket = (data) => {
+    navigation.navigate('HTParkingTicket', data);
+  }
 
   const onUrlChange = (webViewState) => {
     if (webViewState.url.includes("https://parkinght-production.up.railway.app/parkinght/api/create-payment")) {
@@ -22,33 +32,11 @@ const VnPayScreen = ({ route, navigation }) => {
       const responseCode = urlParams.query.vnp_ResponseCode;
       if (responseCode === "00") {
         if (bookingId) {
-          dispatch(fetchBookingById(bookingId))
-            .then((result) => {
-              if (result.payload.statusCode === 200) {
-                navigation.navigate('Ticket', result.payload.data);
-                Toast.show({
-                  type: 'success',
-                  text1: 'ParkingHT',
-                  text2: `Thanh toán thành công!`
-                });
-              }else{
-                Toast.show({
-                  type: 'error',
-                  text1: 'ParkingHT',
-                  text2: `${result.payload.message}`
-                });
-              }
-            })
-            .catch((error) => {
-              console.log(error)
-            });
+          setOpenModalS(true)
+          setDataB(bookingId)
         }
       } else {
-        Toast.show({
-          type: 'error',
-          text1: 'ParkingHT',
-          text2: `Thanh toán thất bại`
-        });
+        setOpenModalF(true)
       }
       // You can perform further actions based on the resultCode and message
     } catch (error) {
@@ -57,13 +45,36 @@ const VnPayScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.wrap}>
-      <WebView
-        style={styles.wrap}
-        source={{ uri: payment_url }}
-        onNavigationStateChange={onUrlChange}
-      />
-    </View>
+    <>
+      <SafeAreaView style={styles.wrap}>
+        <WebView
+          style={styles.wrap}
+          source={{ uri: payment_url }}
+          onNavigationStateChange={onUrlChange}
+        />
+        <Modal
+          transparent={true}
+          animationType='fade'
+          visible={openModalS}
+        >
+          <ModalSuccess
+            onClose={() => setOpenModalS(false)}
+            dataS={dataB}
+            transferTicket={transferTicket}
+          />
+        </Modal>
+        <Modal
+          transparent={true}
+          animationType='fade'
+          visible={openModalF}
+        >
+          <ModalFail
+            onClose={() => setOpenModalF(false)}
+            transferP={transferP}
+          />
+        </Modal>
+      </SafeAreaView>
+    </>
   );
 };
 

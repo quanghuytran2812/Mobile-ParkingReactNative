@@ -7,11 +7,9 @@ import { ApiContans } from '../contants'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBookingById, fetchBookingByStatus } from '../store/bookingSlice';
 import { Modal } from 'react-native';
-import ModalSuccess from '../components/Modal/ModalSuccess';
 
 const HistoryScreen = ({ navigation }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [openModalS, setOpenModalS] = useState(false);
   const [dataB, setDataB] = useState("");
   const listBookingStatus = useSelector((state) => state.booking.list);
   const dispatch = useDispatch();
@@ -160,15 +158,6 @@ const HistoryScreen = ({ navigation }) => {
                     }
                   </View>
                 ) : ''}
-              <TouchableOpacity
-                style={styles.btnCommon1}
-                onPress={() => setOpenModalS(true)}
-              >
-                <Text style={styles.btnTextCommon1}>
-                  modal success
-                </Text>
-              </TouchableOpacity>
-
             </View>
           )}
         />
@@ -182,15 +171,6 @@ const HistoryScreen = ({ navigation }) => {
           onClose={() => setOpenModal(false)}
           dataB={dataB}
           updateData={updateData}
-        />
-      </Modal>
-      <Modal
-        transparent={true}
-        animationType='fade'
-        visible={openModalS}
-      >
-        <ModalSuccess
-          onClose={() => setOpenModalS(false)}
         />
       </Modal>
     </>

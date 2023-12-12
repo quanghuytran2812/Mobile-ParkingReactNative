@@ -23,6 +23,10 @@ const store = configureStore({
     feedback: feedbackSlice,
     otp: otpSlice
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    immutableCheck: false,
+    serializableCheck: false,
+  })
 });
 
 

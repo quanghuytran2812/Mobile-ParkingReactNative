@@ -1,26 +1,15 @@
 import React, { memo } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useDispatch } from 'react-redux';
-import { fetchBookingById } from '../../store/bookingSlice';
 
-const ModalSuccess = ({ onClose, dataS, transferTicket}) => {
-    const dispatch = useDispatch();
+const ModalFail = ({ onClose, transferP }) => {
     const handleClick = (e) => {
         e.stopPropagation();
     };
 
-    const handleTicket = () => {
-        dispatch(fetchBookingById(dataS))
-            .then((result) => {
-                if (result.payload.statusCode === 200) {
-                    transferTicket(result.payload.data)
-                    onClose()
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-            });
+    const handleFail = () => {
+        onClose()
+        transferP()
     }
 
     return (
@@ -29,21 +18,21 @@ const ModalSuccess = ({ onClose, dataS, transferTicket}) => {
                 <View style={styles.ModalCommonForm}>
                     <TouchableOpacity style={styles.closeBtn}>
                         <MaterialCommunityIcons
-                            name='check-bold' size={60} color="#fff"
+                            name='alert' size={60} color="#fff"
                         />
                     </TouchableOpacity>
                     <View>
                         <View style={styles.MainCont}>
                             <View style={{ ...styles.MainContCard, justifyContent: 'center' }}>
-                                <Text style={styles.modalformHeading}>Thành công!</Text>
+                                <Text style={styles.modalformHeading}>Thất bại!</Text>
                                 <Text style={{
                                     letterSpacing: 1,
                                     fontSize: 14,
                                     textAlign: 'center'
-                                }}>Đã thanh toán thành công chỗ đậu xe của bạn</Text>
+                                }}>Đã thanh toán thất bại</Text>
                             </View>
-                            <TouchableOpacity style={styles.btnCommon1} onPress={() => handleTicket()}>
-                                <Text style={styles.btnTextCommon1}>Xem vé đỗ xe</Text>
+                            <TouchableOpacity style={styles.btnCommon1} onPress={() => handleFail()}>
+                                <Text style={styles.btnTextCommon1}>Quay lại</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -82,7 +71,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     closeBtn: {
-        backgroundColor: '#02aab0',
+        backgroundColor: 'red',
         borderRadius: 100,
         justifyContent: 'center',
         zIndex: 1,
@@ -96,7 +85,7 @@ const styles = StyleSheet.create({
         letterSpacing: 1,
         fontWeight: '700',
         lineHeight: 20,
-        color: '#02aab0',
+        color: 'red',
         marginBottom: 20,
         textAlign: 'center'
     },
@@ -121,7 +110,7 @@ const styles = StyleSheet.create({
     btnCommon1: {
         height: 40,
         borderRadius: 5,
-        backgroundColor: '#02aab0',
+        backgroundColor: 'red',
         shadowColor: '#000',
         shadowOffset: { width: 4, height: 5 },
         shadowOpacity: 0.27,
@@ -138,4 +127,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default memo(ModalSuccess)
+export default memo(ModalFail)

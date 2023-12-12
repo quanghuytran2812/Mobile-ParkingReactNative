@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { AnimatedIcon } from '../components';
 import { ApiContans } from '../contants';
@@ -16,64 +16,66 @@ export default function HTParkingTicket({ route, navigation }) {
                     </View>
                     <AnimatedIcon />
                 </View>
-                <View style={styles.MainCont}>
-                    <View style={styles.mainLeft}></View>
-                    <View style={styles.mainright}></View>
-                    <View>
-                        <View style={{...styles.MainContCard, paddingTop: 20}}>
-                            <Text style={styles.MainContTextL}>Tên</Text>
-                            <Text style={styles.MainContTextR}>{bookingData?.vehicle?.user?.fullName}</Text>
+                <ScrollView showsHorizontalScrollIndicator={false}>
+                    <View style={styles.MainCont}>
+                        <View style={styles.mainLeft}></View>
+                        <View style={styles.mainright}></View>
+                        <View>
+                            <View style={{ ...styles.MainContCard, paddingTop: 10 }}>
+                                <Text style={styles.MainContTextL}>Tên</Text>
+                                <Text style={styles.MainContTextR}>{bookingData?.vehicle?.user?.fullName}</Text>
+                            </View>
+                            <View style={styles.MainContCard}>
+                                <Text style={styles.MainContTextL}>Điện thoại</Text>
+                                <Text style={styles.MainContTextR}>{bookingData?.vehicle?.user?.phoneNumber}</Text>
+                            </View>
+                            <View style={styles.MainContCard}>
+                                <Text style={styles.MainContTextL}>Biển số xe</Text>
+                                <Text style={styles.MainContTextR}>{bookingData?.vehicle?.plateNumber}</Text>
+                            </View>
+                            <View style={styles.MainContCard}>
+                                <Text style={styles.MainContTextL}>Chỗ đậu xe</Text>
+                                <Text style={styles.MainContTextR}>
+                                    {`${bookingData?.parkingSlot?.area} (${bookingData?.parkingSlot?.name})`}
+                                </Text>
+                            </View>
+                            <View style={styles.MainContCard}>
+                                <Text style={styles.MainContTextL}>Ngày</Text>
+                                <Text style={styles.MainContTextR}>{`${ApiContans?.splitAndFormatDate(bookingData?.start_Date)} - ${ApiContans?.splitAndFormatDate(bookingData?.end_Date)}`}</Text>
+                            </View>
+                            <View style={styles.MainContCard}>
+                                <Text style={styles.MainContTextL}>Thời hạn</Text>
+                                <Text style={styles.MainContTextR}>{`${ApiContans?.calculateDuration(bookingData?.start_Date, bookingData?.end_Date)} giờ`}</Text>
+                            </View>
+                            <View style={{ ...styles.MainContCard }}>
+                                <Text style={styles.MainContTextL}>Thời gian</Text>
+                                <Text style={styles.MainContTextR}>{`${ApiContans?.splitAndFormatTime(bookingData?.start_Date)} - ${ApiContans?.splitAndFormatTime(bookingData?.end_Date)}`}</Text>
+                            </View>
                         </View>
-                        <View style={styles.MainContCard}>
-                            <Text style={styles.MainContTextL}>Điện thoại</Text>
-                            <Text style={styles.MainContTextR}>{bookingData?.vehicle?.user?.phoneNumber}</Text>
-                        </View>
-                        <View style={styles.MainContCard}>
-                            <Text style={styles.MainContTextL}>Biển số xe</Text>
-                            <Text style={styles.MainContTextR}>{bookingData?.vehicle?.plateNumber}</Text>
-                        </View>
-                        <View style={styles.MainContCard}>
-                            <Text style={styles.MainContTextL}>Chỗ đậu xe</Text>
-                            <Text style={styles.MainContTextR}>
-                                {`${bookingData?.parkingSlot?.area} (${bookingData?.parkingSlot?.name})`}
+                        <View style={styles.texthr}>
+                            <Text style={{ color: 'silver' }}>
+                                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                             </Text>
                         </View>
-                        <View style={styles.MainContCard}>
-                            <Text style={styles.MainContTextL}>Ngày</Text>
-                            <Text style={styles.MainContTextR}>{`${ApiContans?.splitAndFormatDate(bookingData?.start_Date)} - ${ApiContans?.splitAndFormatDate(bookingData?.end_Date)}`}</Text>
-                        </View>
-                        <View style={styles.MainContCard}>
-                            <Text style={styles.MainContTextL}>Thời hạn</Text>
-                            <Text style={styles.MainContTextR}>{`${ApiContans?.calculateDuration(bookingData?.start_Date, bookingData?.end_Date)} giờ`}</Text>
-                        </View>
-                        <View style={{...styles.MainContCard, paddingBottom: 20}}>
-                            <Text style={styles.MainContTextL}>Thời gian</Text>
-                            <Text style={styles.MainContTextR}>{`${ApiContans?.splitAndFormatTime(bookingData?.start_Date)} - ${ApiContans?.splitAndFormatTime(bookingData?.end_Date)}`}</Text>
+                        <View style={styles.containerqr}>
+                            <Text>Quét mã này khi tới cổng</Text>
+                            <View style={styles.wrapperqr}>
+                                <QRCode value={bookingData?.booking_Id} size={200} />
+                            </View>
+                            <Text>Lưu ý : Chụp màn hình nếu không có mạng</Text>
                         </View>
                     </View>
-                    <View style={styles.texthr}>
-                        <Text style={{ color: 'silver' }}>
-                            - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-                        </Text>
+                    <View style={styles.viewCommonButton}>
+                        <TouchableOpacity
+                            style={styles.btnCommon1}
+                            onPress={() => navigation.navigate('Vehicle')}
+                        >
+                            <Text style={styles.btnTextCommon1}>
+                                Chuyển đến đặt chỗ
+                            </Text>
+                        </TouchableOpacity>
                     </View>
-                    <View style={styles.containerqr}>
-                        <Text>Quét mã này khi tới cổng</Text>
-                        <View style={styles.wrapperqr}>
-                            <QRCode value={bookingData?.booking_Id} size={200} />
-                        </View>
-                        <Text style={{ paddingBottom: 20 }}>Lưu ý : Chụp màn hình nếu không có mạng</Text>
-                    </View>
-                </View>
-                <View style={styles.viewCommonButton}>
-                    <TouchableOpacity
-                        style={styles.btnCommon1}
-                        onPress={() => navigation.navigate('Vehicle')}
-                    >
-                        <Text style={styles.btnTextCommon1}>
-                            Chuyển đến trang cá nhân
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+                </ScrollView>
             </View>
         </>
     )
