@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, StatusBar, TextInput, TouchableOpacity, Pressable, Keyboard } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { Colors } from "../contants";
 import { Display } from "../utils";
@@ -21,7 +21,6 @@ const VerificationScreen = ({ navigation }) => {
 
     const onOTPVerify = () => {
         const concatenatedOtp = Object.values(otp).join('');
-        console.log(concatenatedOtp);
 
         // Check if the OTP is not null or empty
         if (concatenatedOtp.trim() !== '') {
@@ -49,94 +48,99 @@ const VerificationScreen = ({ navigation }) => {
                 backgroundColor={Colors.DEFAULT_WHITE}
                 translucent
             />
-            <Separator height={StatusBar.currentHeight} />
-            <View style={styles.headerContainer}>
-                <Ionicons
-                    name="arrow-back-outline" size={30}
-                    onPress={() => navigation.goBack()}
-                />
-                <Text style={styles.headerTitle}>Xác minh OTP</Text>
-            </View>
-            <Text style={styles.title}>Xác minh OTP</Text>
-            <View style={styles.otpContainer}>
-                <View style={styles.otpBox}>
-                    <TextInput
-                        style={styles.otpText}
-                        keyboardType="number-pad"
-                        maxLength={1}
-                        ref={firstInput}
-                        onChangeText={text => {
-                            setOtp({ ...otp, 1: text });
-                            text && secondInput.current.focus();
-                        }}
+            <Pressable
+                style={{ height: '100%' }}
+                onPress={Keyboard.dismiss}
+            >
+                <Separator height={StatusBar.currentHeight} />
+                <View style={styles.headerContainer}>
+                    <Ionicons
+                        name="arrow-back-outline" size={30}
+                        onPress={() => navigation.goBack()}
                     />
+                    <Text style={styles.headerTitle}>Xác minh OTP</Text>
                 </View>
-                <View style={styles.otpBox}>
-                    <TextInput
-                        style={styles.otpText}
-                        keyboardType="number-pad"
-                        maxLength={1}
-                        ref={secondInput}
-                        onChangeText={text => {
-                            setOtp({ ...otp, 2: text });
-                            text ? thirdInput.current.focus() : firstInput.current.focus();
-                        }}
-                    />
+                <Text style={styles.title}>Xác minh OTP</Text>
+                <View style={styles.otpContainer}>
+                    <View style={styles.otpBox}>
+                        <TextInput
+                            style={styles.otpText}
+                            keyboardType="number-pad"
+                            maxLength={1}
+                            ref={firstInput}
+                            onChangeText={text => {
+                                setOtp({ ...otp, 1: text });
+                                text && secondInput.current.focus();
+                            }}
+                        />
+                    </View>
+                    <View style={styles.otpBox}>
+                        <TextInput
+                            style={styles.otpText}
+                            keyboardType="number-pad"
+                            maxLength={1}
+                            ref={secondInput}
+                            onChangeText={text => {
+                                setOtp({ ...otp, 2: text });
+                                text ? thirdInput.current.focus() : firstInput.current.focus();
+                            }}
+                        />
+                    </View>
+                    <View style={styles.otpBox}>
+                        <TextInput
+                            style={styles.otpText}
+                            keyboardType="number-pad"
+                            maxLength={1}
+                            ref={thirdInput}
+                            onChangeText={text => {
+                                setOtp({ ...otp, 3: text });
+                                text ? fourthInput.current.focus() : secondInput.current.focus();
+                            }}
+                        />
+                    </View>
+                    <View style={styles.otpBox}>
+                        <TextInput
+                            style={styles.otpText}
+                            keyboardType="number-pad"
+                            maxLength={1}
+                            ref={fourthInput}
+                            onChangeText={text => {
+                                setOtp({ ...otp, 4: text });
+                                !text && fivethInput.current.focus();
+                            }}
+                        />
+                    </View>
+                    <View style={styles.otpBox}>
+                        <TextInput
+                            style={styles.otpText}
+                            keyboardType="number-pad"
+                            maxLength={1}
+                            ref={fivethInput}
+                            onChangeText={text => {
+                                setOtp({ ...otp, 5: text });
+                                !text && sixthInput.current.focus();
+                            }}
+                        />
+                    </View>
+                    <View style={styles.otpBox}>
+                        <TextInput
+                            style={styles.otpText}
+                            keyboardType="number-pad"
+                            maxLength={1}
+                            ref={sixthInput}
+                            onChangeText={text => {
+                                setOtp({ ...otp, 6: text });
+                                !text && firstInput.current.focus();
+                            }}
+                        />
+                    </View>
                 </View>
-                <View style={styles.otpBox}>
-                    <TextInput
-                        style={styles.otpText}
-                        keyboardType="number-pad"
-                        maxLength={1}
-                        ref={thirdInput}
-                        onChangeText={text => {
-                            setOtp({ ...otp, 3: text });
-                            text ? fourthInput.current.focus() : secondInput.current.focus();
-                        }}
-                    />
-                </View>
-                <View style={styles.otpBox}>
-                    <TextInput
-                        style={styles.otpText}
-                        keyboardType="number-pad"
-                        maxLength={1}
-                        ref={fourthInput}
-                        onChangeText={text => {
-                            setOtp({ ...otp, 4: text });
-                            !text && fivethInput.current.focus();
-                        }}
-                    />
-                </View>
-                <View style={styles.otpBox}>
-                    <TextInput
-                        style={styles.otpText}
-                        keyboardType="number-pad"
-                        maxLength={1}
-                        ref={fivethInput}
-                        onChangeText={text => {
-                            setOtp({ ...otp, 5: text });
-                            !text && sixthInput.current.focus();
-                        }}
-                    />
-                </View>
-                <View style={styles.otpBox}>
-                    <TextInput
-                        style={styles.otpText}
-                        keyboardType="number-pad"
-                        maxLength={1}
-                        ref={sixthInput}
-                        onChangeText={text => {
-                            setOtp({ ...otp, 6: text });
-                            !text && firstInput.current.focus();
-                        }}
-                    />
-                </View>
-            </View>
-            <TouchableOpacity
-                style={styles.signinButton}
-                onPress={onOTPVerify}>
-                <Text style={styles.signinButtonText}>Xác minh</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.signinButton}
+                    onPress={onOTPVerify}>
+                    <Text style={styles.signinButtonText}>Xác minh</Text>
+                </TouchableOpacity>
+            </Pressable>
         </SafeAreaView>
     );
 };
@@ -197,7 +201,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     signinButton: {
-        backgroundColor: Colors.DEFAULT_GREEN,
+        backgroundColor: "#000",
         borderRadius: 8,
         marginHorizontal: 20,
         height: Display.setHeight(6),

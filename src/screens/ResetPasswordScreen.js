@@ -1,31 +1,45 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, StatusBar, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, Pressable, Keyboard } from "react-native";
 import { Colors } from "../contants";
 import Ionicons from "react-native-vector-icons/Ionicons"
 import Separator from "../components/Separator";
 import { Display } from "../utils";
 import { InputFieldPass } from "../components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 import { validate } from "../utils/helpers";
 import { SafeAreaView } from "react-native";
+import { apiResetP } from "../store/otpSlice";
 
 const ResetPasswordScreen = ({ navigation }) => {
     const dispatch = useDispatch();
     const [isPasswordShow, setPasswordShow] = useState(false)
     const [isPasswordShow1, setPasswordShow1] = useState(false)
+    const [invalidFields, setInvalidFields] = useState([]);
     const urlResetP = useSelector((state) => state.otp.urlResetPass);
 
+    function getQueryParam(url, param) {
+        const queryParams = url.split('?')[1];
+        const paramPairs = queryParams.split('&');
+
+        for (let pair of paramPairs) {
+            const [key, value] = pair.split('=');
+            if (key === param) {
+                return decodeURIComponent(value);
+            }
+        }
+
+        return null;
+    }
     const [payload, setPayload] = useState({
         password: '',
         confirmPassword: ''
     })
 
     function resetPass() {
-        const invalids = validate(payload, setInvalidFields)
+        const invalids = validate(payload, setInvalidFields);
         if (invalids === 0) {
-            const urlbasic = new URL(urlResetP);
-            const phoneNumber = urlbasic.searchParams.get("phoneNumber");
+            const phoneNumber = getQueryParam(urlResetP, 'phoneNumber');
             dispatch(apiResetP({ phone: phoneNumber, confirmPassword: payload.confirmPassword }))
                 .then((result) => {
                     if (result.payload?.statusCode === 200) {
@@ -33,7 +47,7 @@ const ResetPasswordScreen = ({ navigation }) => {
                         Toast.show({
                             type: 'success',
                             text1: 'ParkingHT',
-                            text2: `Đặt lại mật khẩu thành công!`
+                            text2: 'Đặt lại mật khẩu thành công!'
                         });
                     } else {
                         Toast.show({
@@ -44,7 +58,7 @@ const ResetPasswordScreen = ({ navigation }) => {
                     }
                 })
                 .catch((error) => {
-                    console.log(error)
+                    console.log(error);
                 });
         }
     }
@@ -56,60 +70,65 @@ const ResetPasswordScreen = ({ navigation }) => {
                 backgroundColor={Colors.DEFAULT_WHITE}
                 translucent
             />
-            <Separator height={StatusBar.currentHeight} />
-            <View style={styles.headerContainer}>
-                <Ionicons
-                    name="arrow-back-outline" size={30}
-                    onPress={() => navigation.goBack()}
-                />
-                <Text style={styles.headerTitle}>Đặt lại mật khẩu</Text>
-            </View>
-            <Text style={styles.title}>Tạo mật khẩu mới.</Text>
-            <Text style={styles.content}>
-                Vui lòng nhập mật khẩu của bạn.
-            </Text>
-            <InputFieldPass
-                nameKey='password'
-                classNameContainer={styles.inputContainer}
-                className={styles.inputSubContainer}
-                nameFeather="lock"
-                placeholder="Mật khẩu"
-                placeholderTextColor={Colors.DEFAULT_GREY}
-                selectionColor={Colors.DEFAULT_GREY}
-                classNameInput={styles.inputText}
-                value={payload.password}
-                onChangeText={(text) => setPayload(prev => ({ ...prev, password: text }))}
-                invalidFields={invalidFields}
-                setInvalidFields={setInvalidFields}
-                secureTextEntry={isPasswordShow ? false : true}
-                nameFeatherPass={isPasswordShow ? "eye" : 'eye-off'}
-                onPress={() => setPasswordShow(!isPasswordShow)}
-            />
-            <Separator height={15} />
-            <InputFieldPass
-                nameKey='confirmPassword'
-                classNameContainer={styles.inputContainer}
-                className={styles.inputSubContainer}
-                nameFeather="lock"
-                placeholder="Mật khẩu"
-                placeholderTextColor={Colors.DEFAULT_GREY}
-                selectionColor={Colors.DEFAULT_GREY}
-                classNameInput={styles.inputText}
-                value={payload.confirmPassword}
-                onChangeText={(text) => setPayload(prev => ({ ...prev, confirmPassword: text }))}
-                invalidFields={invalidFields}
-                setInvalidFields={setInvalidFields}
-                secureTextEntry={isPasswordShow1 ? false : true}
-                nameFeatherPass={isPasswordShow1 ? "eye" : 'eye-off'}
-                onPress={() => setPasswordShow1(!isPasswordShow1)}
-            />
-            <TouchableOpacity style={styles.siginButton}
-                onPress={resetPass}>
-                <Text
-                    style={styles.signinButtonText}>
-                    Xác nhận mật khẩu
+            <Pressable
+                style={{ height: '100%' }}
+                onPress={Keyboard.dismiss}
+            >
+                <Separator height={StatusBar.currentHeight} />
+                <View style={styles.headerContainer}>
+                    <Ionicons
+                        name="arrow-back-outline" size={30}
+                        onPress={() => navigation.goBack()}
+                    />
+                    <Text style={styles.headerTitle}>Đặt lại mật khẩu</Text>
+                </View>
+                <Text style={styles.title}>Tạo mật khẩu mới.</Text>
+                <Text style={styles.content}>
+                    Vui lòng nhập mật khẩu của bạn.
                 </Text>
-            </TouchableOpacity>
+                <InputFieldPass
+                    nameKey='password'
+                    classNameContainer={styles.inputContainer}
+                    className={styles.inputSubContainer}
+                    nameFeather="lock"
+                    placeholder="Mật khẩu"
+                    placeholderTextColor={Colors.DEFAULT_GREY}
+                    selectionColor={Colors.DEFAULT_GREY}
+                    classNameInput={styles.inputText}
+                    value={payload.password}
+                    onChangeText={(text) => setPayload(prev => ({ ...prev, password: text }))}
+                    invalidFields={invalidFields}
+                    setInvalidFields={setInvalidFields}
+                    secureTextEntry={isPasswordShow ? false : true}
+                    nameFeatherPass={isPasswordShow ? "eye" : 'eye-off'}
+                    onPress={() => setPasswordShow(!isPasswordShow)}
+                />
+                <Separator height={15} />
+                <InputFieldPass
+                    nameKey='confirmPassword'
+                    classNameContainer={styles.inputContainer}
+                    className={styles.inputSubContainer}
+                    nameFeather="lock"
+                    placeholder="Mật khẩu"
+                    placeholderTextColor={Colors.DEFAULT_GREY}
+                    selectionColor={Colors.DEFAULT_GREY}
+                    classNameInput={styles.inputText}
+                    value={payload.confirmPassword}
+                    onChangeText={(text) => setPayload(prev => ({ ...prev, confirmPassword: text }))}
+                    invalidFields={invalidFields}
+                    setInvalidFields={setInvalidFields}
+                    secureTextEntry={isPasswordShow1 ? false : true}
+                    nameFeatherPass={isPasswordShow1 ? "eye" : 'eye-off'}
+                    onPress={() => setPasswordShow1(!isPasswordShow1)}
+                />
+                <TouchableOpacity style={styles.siginButton}
+                    onPress={resetPass}>
+                    <Text
+                        style={styles.signinButtonText}>
+                        Xác nhận mật khẩu
+                    </Text>
+                </TouchableOpacity>
+            </Pressable>
         </SafeAreaView>
     );
 };
@@ -166,7 +185,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     siginButton: {
-        backgroundColor: Colors.DEFAULT_GREEN,
+        backgroundColor: "#000",
         marginHorizontal: 20,
         borderRadius: 8,
         height: Display.setHeight(6),

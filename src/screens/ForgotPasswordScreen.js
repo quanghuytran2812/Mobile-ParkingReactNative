@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, StatusBar, TouchableOpacity, SafeAreaView } from "react-native";
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, SafeAreaView, Pressable, Keyboard } from "react-native";
 import { Colors } from "../contants";
 import { InputField, Separator } from "../components";
 import Ionicons from "react-native-vector-icons/Ionicons"
@@ -16,7 +16,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
         phoneNumber: ''
     })
 
-    
+
     const sendOTPSMS = async () => {
         const invalids = validate(payload, setInvalidFields)
         if (invalids === 0) {
@@ -40,6 +40,10 @@ const ForgotPasswordScreen = ({ navigation }) => {
                 backgroundColor={Colors.DEFAULT_WHITE}
                 translucent
             />
+            <Pressable
+                style={{ height: '100%' }}
+                onPress={Keyboard.dismiss}
+            >
             <Separator height={StatusBar.currentHeight} />
             <View style={styles.headerContainer}>
                 <Ionicons
@@ -71,6 +75,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
                 onPress={sendOTPSMS}>
                 <Text style={styles.signinButtonText}>Gửi mã qua SMS</Text>
             </TouchableOpacity>
+            </Pressable>
         </SafeAreaView>
     );
 };
@@ -129,7 +134,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     siginButton: {
-        backgroundColor: Colors.DEFAULT_GREEN,
+        backgroundColor: "#000",
         marginHorizontal: 20,
         borderRadius: 8,
         height: Display.setHeight(6),

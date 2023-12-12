@@ -8,9 +8,8 @@ export const apiSendOtpByPh = createAsyncThunk('otp/apiSendOtpByPh', async (dest
         const response = await axios.post(
             `${ApiContans.BACKEND_API.BASE_API_URL}/reset/send-otp`, { destPhoneNumber: destPhoneNumber }
         );
-        return response;
+        return response.data;
     } catch (error) {
-        console.log(error)
         throw error.response.data;
     }
 });
@@ -19,7 +18,7 @@ export const apivalidateOtpResetP = createAsyncThunk('otp/apivalidateOtpResetP',
     try {
         const response = await axios.post(
             `${ApiContans.BACKEND_API.BASE_API_URL}/reset/validateOtp`, { otp: otp });
-        return response;
+        return response.data;
     } catch (error) {
         throw error.response.data;
     }
@@ -29,7 +28,7 @@ export const apiResetP = createAsyncThunk('otp/apiResetP', async (data) => {
     try {
         const response = await axios.post(
             `${ApiContans.BACKEND_API.BASE_API_URL}/reset/resetPassword?phoneNumber=` + data.phone, { confirmPassword: data.confirmPassword });
-        return response;
+        return response.data;
     } catch (error) {
         throw error.response.data;
     }
@@ -64,7 +63,7 @@ const otpSlice = createSlice({
                     });
                 }
             })
-            .addCase(apiSendOtpByPh.rejected, (state) => {
+            .addCase(apiSendOtpByPh.rejected, (state,action) => {
                 state.loading = false;
                 Toast.show({
                     type: 'error',
