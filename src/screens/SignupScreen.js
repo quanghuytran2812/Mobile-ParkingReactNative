@@ -25,6 +25,17 @@ const SignupScreen = ({ navigation }) => {
         birthday: ''
     })
 
+    const resetFormRegister = () => {
+        setPayload({
+            phoneNumber: '',
+            password: '',
+            email: '',
+            fullName: '',
+            confirmPassword: '',
+            birthday: ''
+        })
+    }
+
     const today = new Date()
     const startDate = getFormatedDate(today.setDate(today.getDate() + 1), 'YYYY/MM/DD')
     const [selectedStartDate, setSelectedStartDate] = useState("");
@@ -37,7 +48,23 @@ const SignupScreen = ({ navigation }) => {
     const handleRegister = () => {
         const invalids = validate(payload, setInvalidFields)
         if (invalids === 0) {
-            navigation.navigate('Verification');
+            const registerU = {
+                fullName: payload.fullName,
+                birthday: payload.birthday,
+                phoneNumber: payload.phoneNumber,
+                email: payload.email,
+                password: payload.confirmPassword
+            }
+            // dispatch(registerUser(registerU))
+            //     .then((result) => {
+            //         if (result.payload?.statusCode === 200) {
+            //             resetFormRegister()
+            //             navigation.navigate('VerificationRegister');
+            //         }
+            //     })
+            //     .catch((error) => {
+            //         console.log(error);
+            //     });
         }
     }
 

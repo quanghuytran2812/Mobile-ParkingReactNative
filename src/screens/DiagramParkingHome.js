@@ -92,13 +92,13 @@ function SlotParking({ item }) {
     return (
         <View style={styles.viewParking}>
             {item.status === 1 ? (
-                <View style={styles.imageAuto}>
+                <TouchableOpacity style={styles.imageAuto}>
                     <Image
                         source={Images.CARUP}
                         resizeMode="contain"
                         style={{ width: scale(84), height: verticalScale(40) }}
                     />
-                </View>
+                </TouchableOpacity>
             ) : (
                 <TouchableOpacity
                     style={[

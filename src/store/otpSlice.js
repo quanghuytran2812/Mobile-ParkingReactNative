@@ -17,7 +17,7 @@ export const apiSendOtpByPh = createAsyncThunk('otp/apiSendOtpByPh', async (dest
 export const apivalidateOtpResetP = createAsyncThunk('otp/apivalidateOtpResetP', async (otp) => {
     try {
         const response = await axios.post(
-            `${ApiContans.BACKEND_API.BASE_API_URL}/reset/validateOtp`, { otp: otp });
+            `${ApiContans.BACKEND_API.BASE_API_URL}/reset/validateOtp`, { otp: otp.otp, phoneNumber: otp.phone });
         return response.data;
     } catch (error) {
         throw error.response.data;
@@ -39,6 +39,7 @@ const otpSlice = createSlice({
     initialState: {
         urlResetPass: '',
         loading: false,
+        phoneN: ''
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -50,10 +51,11 @@ const otpSlice = createSlice({
             .addCase(apiSendOtpByPh.fulfilled, (state, action) => {
                 state.loading = false;
                 if (action.payload.code === "200") {
+                    state.phoneN = action.payload.phoneNumber
                     Toast.show({
                         type: 'success',
                         text1: 'ParkingHT',
-                        text2: 'Bạn đã gửi OTP thành công!'
+                        text2: `Bạn đã gửi OTP thành công!`
                     });
                 } else {
                     Toast.show({

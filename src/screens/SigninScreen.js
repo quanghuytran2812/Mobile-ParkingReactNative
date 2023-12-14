@@ -20,10 +20,25 @@ const SigninScreen = ({ navigation }) => {
         phoneNumber: '',
         password: ''
     })
+
+    const resetForm = () => {
+        setPayload({
+            phoneNumber: '',
+            password: ''
+        })
+    }
     const handleLogin = () => {
         const invalids = validate(payload, setInvalidFields)
         if (invalids === 0) {
-            dispatch(login(payload));
+            dispatch(login(payload))
+                .then((result) => {
+                    if (result.payload?.statusCode === 200) {
+                        resetForm()
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     };
 

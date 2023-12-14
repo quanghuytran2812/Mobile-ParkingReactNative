@@ -2,12 +2,12 @@
   "expo": {
     "name": "parking-HT",
     "slug": "parking-HT",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/iconHT.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/iconHT.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,8 +19,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "versionCode" : 3,
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "versionCode" : 5,
+        "foregroundImage": "./assets/iconHT.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.huytq2803.parkingHT"

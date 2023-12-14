@@ -5,7 +5,7 @@ import { Colors } from "../contants";
 import { Display } from "../utils";
 import { Separator } from "../components";
 import { apivalidateOtpResetP } from "../store/otpSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SafeAreaView } from "react-native";
 import Toast from "react-native-toast-message";
 
@@ -17,6 +17,7 @@ const VerificationScreen = ({ navigation }) => {
     const fourthInput = useRef();
     const fivethInput = useRef();
     const sixthInput = useRef();
+    const { phoneN } = useSelector((state) => state.otp);
     const [otp, setOtp] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '', 6: '' });
 
     const onOTPVerify = () => {
@@ -24,7 +25,7 @@ const VerificationScreen = ({ navigation }) => {
 
         // Check if the OTP is not null or empty
         if (concatenatedOtp.trim() !== '') {
-            dispatch(apivalidateOtpResetP(concatenatedOtp))
+            dispatch(apivalidateOtpResetP({otp: concatenatedOtp, phone: phoneN}))
                 .then((result) => {
                     if (result.payload?.statusCode === 200) {
                         navigation.navigate('ResetPassword');

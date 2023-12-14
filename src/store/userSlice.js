@@ -55,6 +55,28 @@ export const updateUser = createAsyncThunk('user/updateUser', async (user, thunk
   }
 });
 
+//register user
+export const registerUser = createAsyncThunk('user/registerUser', async (user) => {
+  try {
+    const response = await axios.post(
+      `${ApiContans.BACKEND_API.BASE_API_URL}/user/requestOTP`, user);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+});
+
+//validation user
+export const validateOTPUser = createAsyncThunk('user/validateOTPUser', async (user) => {
+  try {
+    const response = await axios.post(
+      `${ApiContans.BACKEND_API.BASE_API_URL}/user/validateOTP`, user);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+});
+
 
 const userSlice = createSlice({
   name: 'user',
@@ -109,6 +131,46 @@ const userSlice = createSlice({
         });
       })
       .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        Toast.show({
+          type: 'error',
+          text1: 'ParkingHT',
+          text2: `${action.error.message}`
+        });
+      })
+      //register user
+      .addCase(registerUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(registerUser.fulfilled, (state) => {
+        state.loading = false;
+        Toast.show({
+          type: 'success',
+          text1: 'ParkingHT',
+          text2: 'Xác nhận OTP để sử dụng tài khoản!'
+        });
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        Toast.show({
+          type: 'error',
+          text1: 'ParkingHT',
+          text2: `${action.error.message}`
+        });
+      })
+      //validation user
+      .addCase(validateOTPUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(validateOTPUser.fulfilled, (state) => {
+        state.loading = false;
+        Toast.show({
+          type: 'success',
+          text1: 'ParkingHT',
+          text2: 'Đăng ký tài khoản thành công!'
+        });
+      })
+      .addCase(validateOTPUser.rejected, (state, action) => {
         state.loading = false;
         Toast.show({
           type: 'error',

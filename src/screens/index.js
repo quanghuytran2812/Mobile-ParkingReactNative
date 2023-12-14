@@ -16,6 +16,7 @@ import ResetPasswordScreen from "./ResetPasswordScreen";
 import HomeScreen from "./HomeScreen";
 import DiagramParkingHome from "./DiagramParkingHome";
 import HTParkingTicket from "./HTParkingTicket";
+import VerificationRegister from "./VerificationRegister";
 
 export {
     PirstScreen,
@@ -35,5 +36,6 @@ export {
     ResetPasswordScreen,
     HomeScreen,
     DiagramParkingHome,
-    HTParkingTicket
+    HTParkingTicket,
+    VerificationRegister
 };

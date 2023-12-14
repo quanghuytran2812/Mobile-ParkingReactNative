@@ -19,6 +19,7 @@ import {
     HomeScreen,
     DiagramParkingHome,
     HTParkingTicket,
+    VerificationRegister,
 } from "../screens";
 import Vehicle from "./BottomTabs"
 const Stack = createStackNavigator();
@@ -44,6 +45,7 @@ const Navigators = () => {
                 <Stack.Screen name="VnPay" component={VnPayScreen} />
                 <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
                 <Stack.Screen name="DiagramParkingHome" component={DiagramParkingHome} />
+                <Stack.Screen name="VerificationRegister" component={VerificationRegister} />
             </Stack.Navigator>
         </NavigationContainer>
     )
