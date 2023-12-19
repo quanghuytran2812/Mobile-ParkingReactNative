@@ -62,7 +62,7 @@ const ModalUpdateVehicle = ({ open, onClose, dataUpdate, handleUpdateData }) => 
                             />
                         </TouchableOpacity>
                         <View>
-                            <Text style={styles.modalformHeading}>Cập nhập xe</Text>
+                            <Text style={styles.modalformHeading}>Cập nhật xe</Text>
                             <View style={styles.inputFieldDiv}>
                                 <View style={styles.inputGroup}>
                                     <TextInput

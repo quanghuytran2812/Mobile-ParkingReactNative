@@ -44,7 +44,26 @@ function calculateDuration(startTime, endTime) {
     return parseFloat(roundedDurationInHours);
 }
 
+function isValidDate(dateString) {
+    // Check if the date is in the format "YYYY/MM/DD"
+    if (!/^\d{4}\/\d{2}\/\d{2}$/.test(dateString)) {
+        return false;
+    }
+
+    // Create a Date object from the input string
+    const date = new Date(dateString);
+
+    // Check if the Date object is a valid date
+    if (isNaN(date.getTime())) {
+        return false;
+    }
+
+    // Check if the day is within the valid range (1-31)
+    const day = date.getDate();
+    return day >= 1 && day <= 31;
+}
+
 export default {
     BACKEND_API, statusBookingData, splitAndFormatDate, splitAndFormatTime,
-    calculateDuration, CurrencyFormat
+    calculateDuration, CurrencyFormat, isValidDate
 };

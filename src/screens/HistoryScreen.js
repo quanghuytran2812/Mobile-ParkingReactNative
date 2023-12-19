@@ -124,7 +124,7 @@ const HistoryScreen = ({ navigation }) => {
                     {item.status === 0 ?
                       (
                         <>
-                          {item.duration_hours >= 1 && (
+                          {item.duration_hours >= 0.5 && (
                             <View style={styles.containerButtonOngoing}>
                               <TouchableOpacity
                                 style={styles.btnCommon1}

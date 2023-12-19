@@ -41,9 +41,11 @@ const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
         if (invalids === 0) {
             dispatch(createVehicle(payload))
                 .then((result) => {
-                    handleReset();
-                    onClose();
-                    handleUpdateData();
+                    if(result.payload?.statusCode === 200){
+                        handleReset();
+                        onClose();
+                        handleUpdateData();
+                    }
                 })
                 .catch((error) => {
                     console.log(error)

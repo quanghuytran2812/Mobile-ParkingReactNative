@@ -1,5 +1,4 @@
 import { Modal, StyleSheet } from 'react-native';
-import Toast from 'react-native-toast-message';
 import WebView from 'react-native-webview';
 import queryString from 'query-string';
 import { useState } from 'react';
@@ -13,7 +12,7 @@ const VnPayScreen = ({ route, navigation }) => {
   const [dataB, setDataB] = useState("");
 
   const transferP = () => {
-    navigation.navigate('Profile');
+    navigation.navigate('History');
   }
   const transferTicket = (data) => {
     navigation.navigate('HTParkingTicket', data);

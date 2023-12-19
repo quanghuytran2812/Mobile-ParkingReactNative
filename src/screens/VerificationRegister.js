@@ -7,8 +7,10 @@ import { Separator } from "../components";
 import { useDispatch } from "react-redux";
 import { SafeAreaView } from "react-native";
 import Toast from "react-native-toast-message";
+import { validateOTPUser } from "../store/userSlice";
 
-const VerificationRegister = ({ navigation }) => {
+const VerificationRegister = ({ route, navigation }) => {
+    const registerData = route.params;
     const dispatch = useDispatch();
     const firstInput = useRef();
     const secondInput = useRef();
@@ -23,15 +25,25 @@ const VerificationRegister = ({ navigation }) => {
 
         // Check if the OTP is not null or empty
         if (concatenatedOtp.trim() !== '') {
-            // dispatch(apivalidateOtpResetP({otp: concatenatedOtp, phone: phoneN}))
-            //     .then((result) => {
-            //         if (result.payload?.statusCode === 200) {
-            //             navigation.navigate('ResetPassword');
-            //         }
-            //     })
-            //     .catch((error) => {
-            //         console.log(error);
-            //     });
+            const OTPvalidateUser = {
+                otp: concatenatedOtp,
+                createRequest: {
+                    fullName: registerData.fullName,
+                    birthday: registerData.birthday,
+                    phoneNumber: registerData.phoneNumber,
+                    email: registerData.email,
+                    password: registerData.password
+                }
+            }
+            dispatch(validateOTPUser(OTPvalidateUser))
+                .then((result) => {
+                    if (result.payload?.statusCode === 200) {
+                        navigation.navigate('Signin');
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         } else {
             Toast.show({
                 type: 'error',

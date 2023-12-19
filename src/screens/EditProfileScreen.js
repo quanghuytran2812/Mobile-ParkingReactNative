@@ -103,7 +103,7 @@ export default function EditProfileScreen() {
                             onPress={() => setOpenModalUpdate(true)}
                         >
                             <Text style={styles.btnTextCommon1}>
-                                Cập nhập
+                                Cập nhật
                             </Text>
                         </TouchableOpacity>
 

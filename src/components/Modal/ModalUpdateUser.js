@@ -7,6 +7,7 @@ import DatePicker from "react-native-modern-datepicker"
 import moment from 'moment';
 import { validate } from '../../utils/helpers';
 import InputForm from '../input/InputForm';
+import Toast from 'react-native-toast-message';
 
 const ModalUpdateUser = ({ onClose, handleUpdateData }) => {
     const [openDatePicker, setOpenDatePicker] = useState(false);
@@ -46,7 +47,11 @@ const ModalUpdateUser = ({ onClose, handleUpdateData }) => {
             const formattedBirthday = moment(selectedStartDate, "YYYY/MM/DD").format("YYYY-MM-DD");
 
             if (!moment(formattedBirthday, "YYYY-MM-DD", true).isValid()) {
-                toast.error("Định dạng ngày sinh nhật không hợp lệ");
+                Toast.show({
+                    type: 'error',
+                    text1: 'ParkingHT',
+                    text2: 'Định dạng ngày sinh nhật không hợp lệ!'
+                });
                 return;
             }
 
@@ -82,7 +87,7 @@ const ModalUpdateUser = ({ onClose, handleUpdateData }) => {
                             />
                         </TouchableOpacity>
                         <View>
-                            <Text style={styles.modalformHeading}>Cập nhập người dùng</Text>
+                            <Text style={styles.modalformHeading}>Cập nhật người dùng</Text>
                             <View style={styles.inputFieldDiv}>
                                 <InputForm
                                     className={styles.inputGroup}

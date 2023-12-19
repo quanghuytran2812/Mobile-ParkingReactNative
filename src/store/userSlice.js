@@ -142,13 +142,21 @@ const userSlice = createSlice({
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
       })
-      .addCase(registerUser.fulfilled, (state) => {
+      .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
-        Toast.show({
-          type: 'success',
-          text1: 'ParkingHT',
-          text2: 'Xác nhận OTP để sử dụng tài khoản!'
-        });
+        if (action.payload.data.otpResponse.code === "200") {
+          Toast.show({
+            type: 'success',
+            text1: 'ParkingHT',
+            text2: `Xác nhận OTP để sử dụng tài khoản!`
+          });
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: 'ParkingHT',
+            text2: `${action.payload.data.otpResponse.message}`
+          });
+        }
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -162,13 +170,22 @@ const userSlice = createSlice({
       .addCase(validateOTPUser.pending, (state) => {
         state.loading = true;
       })
-      .addCase(validateOTPUser.fulfilled, (state) => {
+      .addCase(validateOTPUser.fulfilled, (state, action) => {
         state.loading = false;
-        Toast.show({
-          type: 'success',
-          text1: 'ParkingHT',
-          text2: 'Đăng ký tài khoản thành công!'
-        });
+
+        if (action.payload.statusCode === 200) {
+          Toast.show({
+            type: 'success',
+            text1: 'ParkingHT',
+            text2: 'Đăng ký tài khoản thành công!'
+          });
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: 'ParkingHT',
+            text2: `${action.payload.message}`
+          });
+        }
       })
       .addCase(validateOTPUser.rejected, (state, action) => {
         state.loading = false;

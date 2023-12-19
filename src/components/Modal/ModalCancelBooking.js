@@ -46,7 +46,7 @@ const ModalCancelBooking = ({ onClose, dataB, updateData }) => {
                                 <Text style={styles.btnTextCommon1}>Hủy bỏ</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.btnCommon2} onPress={handleCancelB}>
-                                <Text style={styles.btnTextCommon2}>Vâng</Text>
+                                <Text style={styles.btnTextCommon2}>Đồng ý</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

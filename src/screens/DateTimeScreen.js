@@ -78,7 +78,7 @@ const DateTimeScreen = ({ route, navigation }) => {
           const endTime = moment(`${selectedTime2.hours}:${selectedTime2.minutes}`, 'HH:mm');
           const duration = moment.duration(endTime.diff(startTime));
       
-          if (endTime.isAfter(startTime) && duration.asHours() >= 1) {
+          if (endTime.isAfter(startTime) && duration.asHours() >= 0.5) {
             navigation.navigate('Booking', {
               vehicleId: vehicleId,
               categoryId: categoryId,
@@ -89,7 +89,7 @@ const DateTimeScreen = ({ route, navigation }) => {
             Toast.show({
               type: 'error',
               text1: 'ParkingHT',
-              text2: 'Thời gian rời đi phải sau và cách thời gian đến ít nhất 1 giờ',
+              text2: 'Thời gian rời đi phải sau và cách thời gian đến ít nhất 30 phút',
             });
           }
         } else {
