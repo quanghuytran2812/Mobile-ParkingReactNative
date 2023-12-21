@@ -61,7 +61,7 @@ export default function BookingScreen({ route, navigation }) {
       };
       dispatch(createBooking(bookingDetailData))
         .then((result) => {
-          if (result.payload.statusCode === 200) {
+          if (result?.payload?.statusCode === 200) {
             navigation.navigate('Payment', result.payload.data);
           }
         })
@@ -70,7 +70,7 @@ export default function BookingScreen({ route, navigation }) {
         });
     } else {
       Toast.show({
-        type: 'info',
+        type: 'error',
         text1: 'ParkingHT',
         text2: 'Bạn chưa chọn chỗ mà mình sẽ đỗ',
       });

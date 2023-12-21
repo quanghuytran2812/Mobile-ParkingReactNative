@@ -101,14 +101,21 @@ const ReportScreen = ({ navigation }) => {
                                 <DataTable.Title textStyle={styles.tableRowHeaderText}>ACTION</DataTable.Title>
                             </DataTable.Header>
 
-                            {listReport.slice(from, to).map((item) => (
-                                <DataTable.Row key={item.reportId}>
-                                    <DataTable.Cell style={{ ...styles.tableCell }}>{item.content}</DataTable.Cell>
-                                    <DataTable.Cell style={{ ...styles.tableCell }}>{moment(item.createDate).format("DD/MM/YYYY")}</DataTable.Cell>
-                                    <DataTable.Cell style={{ ...styles.tableCell }}>{item.processingStatus === 1 ? 'đã xử lý' : 'đang xử lý'}</DataTable.Cell>
-                                    <DataTable.Cell style={{ ...styles.tableCell, justifyContent: 'center' }}>{renderButton(item)}</DataTable.Cell>
-                                </DataTable.Row>
-                            ))}
+                            {listReport.slice(from, to)
+                                .map((item) => (
+                                    <DataTable.Row key={item.reportId}>
+                                        <DataTable.Cell style={{ ...styles.tableCell }}>{item.content}</DataTable.Cell>
+                                        <DataTable.Cell style={{ ...styles.tableCell }}>
+                                            {moment(item.createDate).format("DD/MM/YYYY")}
+                                        </DataTable.Cell>
+                                        <DataTable.Cell style={{ ...styles.tableCell }}>
+                                            {item.processingStatus === 1 ? "đã xử lý" : "đang xử lý"}
+                                        </DataTable.Cell>
+                                        <DataTable.Cell style={{ ...styles.tableCell, justifyContent: "center" }}>
+                                            {renderButton(item)}
+                                        </DataTable.Cell>
+                                    </DataTable.Row>
+                                ))}
 
                             <DataTable.Pagination
                                 page={page}

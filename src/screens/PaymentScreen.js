@@ -19,7 +19,9 @@ export default function PaymentScreen({ route, navigation }) {
         };
         dispatch(createPayment(paymentDetailData))
             .then((result) => {
-                navigation.navigate('VnPay', result.payload);
+                if(result?.payload?.statusCode === 200){
+                    navigation.navigate('VnPay', result.payload.data);
+                }      
             })
             .catch((error) => {
                 console.log(error)

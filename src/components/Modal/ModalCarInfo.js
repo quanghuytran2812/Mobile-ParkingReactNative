@@ -4,7 +4,7 @@ import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView } from 'react-na
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 
-const ModalDetailReport = ({ onClose, dataF }) => {
+const ModalCarInfo = ({ onClose, dataF }) => {
     const handleClick = (e) => {
         e.stopPropagation();
     };
@@ -19,26 +19,21 @@ const ModalDetailReport = ({ onClose, dataF }) => {
                         />
                     </TouchableOpacity>
                     <View>
-                        <Text style={styles.modalformHeading}>Chi tiết đánh giá</Text>
+                        <Text style={styles.modalformHeading}>Chi tiết chỗ đậu xe</Text>
                         <View style={styles.MainCont}>
                             <View style={styles.MainContCard}>
-                                <Text style={styles.MainContTextL}>Ngày tạo</Text>
-                                <Text style={styles.MainContTextR}>{moment(dataF.createDate).format('DD/MM/YYYY HH:mm:ss A')}</Text>
+                                <Text style={styles.MainContTextL}>Tên ô</Text>
+                                <Text style={styles.MainContTextR}>{dataF.name}</Text>
                             </View>
                             <View style={styles.MainContCard}>
-                                <Text style={styles.MainContTextL}>Ngày xử lý</Text>
-                                <Text style={styles.MainContTextR}>{dataF.processingDate !== null
-                                ? moment(dataF.processingDate).format('DD/MM/YYYY HH:mm:ss A') : 'Chưa xử lý'}
+                                <Text style={styles.MainContTextL}>Ngày bắt đầu</Text>
+                                <Text style={styles.MainContTextR}>{moment(dataF.startD).format('DD/MM/YYYY HH:mm:ss A')}
                                 </Text>
                             </View>
                             <View style={styles.MainContCard}>
-                                <Text style={styles.MainContTextL}>Trạng thái xử lý</Text>
-                                <Text style={styles.MainContTextR}>{dataF.processingStatus === 1 
-                                    ? 'Đã xử lý' : 'Chưa xử lý' }</Text>
-                            </View>
-                            <View style={styles.MainContCard}>
-                                <Text style={styles.MainContTextL}>Nội dung</Text>
-                                <Text style={styles.MainContTextR}>{dataF.content}</Text>
+                                <Text style={styles.MainContTextL}>Ngày kết thúc</Text>
+                                <Text style={styles.MainContTextR}>{moment(dataF.endD).format('DD/MM/YYYY HH:mm:ss A')}
+                                </Text>
                             </View>
                         </View>
                     </View>
@@ -112,4 +107,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default memo(ModalDetailReport)
+export default memo(ModalCarInfo)

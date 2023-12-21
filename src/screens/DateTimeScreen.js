@@ -74,10 +74,10 @@ const DateTimeScreen = ({ route, navigation }) => {
             'DD/MM/YYYYTHH:mm'
           ).format('YYYY-MM-DDTHH:mm:ss');
       
-          const startTime = moment(`${selectedTime.hours}:${selectedTime.minutes}`, 'HH:mm');
-          const endTime = moment(`${selectedTime2.hours}:${selectedTime2.minutes}`, 'HH:mm');
+          const startTime = moment(`${selectedStartDate} ${selectedTime.hours}:${selectedTime.minutes}`, 'DD/MM/YYYY HH:mm');
+          const endTime = moment(`${selectedEndDate} ${selectedTime2.hours}:${selectedTime2.minutes}`, 'DD/MM/YYYY HH:mm');
           const duration = moment.duration(endTime.diff(startTime));
-      
+
           if (endTime.isAfter(startTime) && duration.asHours() >= 0.5) {
             navigation.navigate('Booking', {
               vehicleId: vehicleId,

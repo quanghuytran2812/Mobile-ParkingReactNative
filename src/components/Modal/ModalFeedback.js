@@ -26,30 +26,30 @@ const ModalFeedback = ({ open, onClose, dataF }) => {
     }, [dispatch, dataF]);
 
     useEffect(() => {
-        if (open) {
-            setPayload({ content: getFeedbackbyId !== null ? getFeedbackbyId[0].content : ""});
-            setRankStar(getFeedbackbyId !== null ? getFeedbackbyId[0].rankStar : 0)
+        if (open && getFeedbackbyId && getFeedbackbyId.length > 0) {
+            const feedback = getFeedbackbyId[0];
+            setPayload({ content: feedback.content === null ? '' : feedback.content});
+            setRankStar(feedback.rankStar || 0);
         }
     }, [open, getFeedbackbyId]);
 
     const handleFeedback = () => {
         const invalids = validate(payload, setInvalidFields);
-
         if (invalids === 0) {
-            const feedbackUpdate = {
-                feedBackId: dataF.reportId,
-                content: payload.content,
-                rankStar: rankStar,
-            };
-            dispatch(updateFeedback(feedbackUpdate))
-                .then((result) => {
-                    onClose();
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+          const feedbackUpdate = {
+            feedBackId: dataF.reportId,
+            content: payload.content,
+            rankStar: rankStar,
+          };
+          dispatch(updateFeedback(feedbackUpdate))
+            .then((result) => {
+              onClose();
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         }
-    };
+      };
 
     return (
         <SafeAreaView style={styles.ModalCommonoverlay}>

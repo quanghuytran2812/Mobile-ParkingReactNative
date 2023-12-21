@@ -127,7 +127,7 @@ const userSlice = createSlice({
         Toast.show({
           type: 'success',
           text1: 'ParkingHT',
-          text2: 'Người dùng đã cập nhập thông tin thành công!'
+          text2: 'Người dùng đã cập nhật thông tin thành công!'
         });
       })
       .addCase(updateUser.rejected, (state, action) => {

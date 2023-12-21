@@ -100,7 +100,7 @@ const vehicleSlice = createSlice({
         Toast.show({
           type: 'success',
           text1: 'ParkingHT',
-          text2: 'Xe được cập nhập thành công!'
+          text2: 'Xe được cập nhật thành công!'
         });
       })
       .addCase(updateVehicle.rejected, (state, action) => {

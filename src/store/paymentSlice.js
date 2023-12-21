@@ -30,11 +30,11 @@ const paymentSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      //Create booking
+      //Create payment
       .addCase(createPayment.pending, (state) => {
         state.loading = true;
       })
-      .addCase(createPayment.fulfilled, (state,action) => {
+      .addCase(createPayment.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(createPayment.rejected, (state, action) => {

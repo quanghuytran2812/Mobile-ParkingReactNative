@@ -1,13 +1,15 @@
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect } from 'react'
+import { Image, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { moderateScale, verticalScale, scale } from 'react-native-size-matters';
-import { AnimatedIcon } from '../components'
+import { AnimatedIcon, ModalCarInfo } from '../components'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchParkingslotAreaByCategoryGuest, fetchParkingslotByAreaGuest } from '../store/parkingslotSlice'
 import { Images } from '../contants'
 import Ionicons from "react-native-vector-icons/Ionicons"
 
 const DiagramParkingHome = ({ route, navigation }) => {
+    const [openModal, setOpenModal] = useState(false);
+    const [getdata, setGetData] = useState({});
     const categoryData = route.params;
     const dispatch = useDispatch();
     const { listPSbyAreaGuest, listAreaByCategoryGuest } = useSelector((state) => state.parkingslot);
@@ -26,100 +28,116 @@ const DiagramParkingHome = ({ route, navigation }) => {
         dispatch(fetchParkingslotByAreaGuest(selectedArea));
     };
 
+    const handleDetailCar = (data) => {
+        setOpenModal(true)
+        setGetData(data)
+    }
+
     const data = listPSbyAreaGuest.map((item, index) => ({ ...item, id: index + 1 })).sort((a, b) => a.parking_slot_name - b.parking_slot_name);
     const dataLeft = data.filter((item) => item.id % 2 !== 0);
     const dataRight = data.filter((item) => item.id % 2 === 0);
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.container}>
-                <View style={styles.containerTopHearder}>
-                    <View style={styles.headerContainer}>
-                        <Ionicons
-                            name="arrow-back-outline" size={22}
-                            onPress={() => navigation.goBack()}
+    function SlotParking({ item }) {
+        return (
+            <View style={styles.viewParking}>
+                {item.status === 1 ? (
+                    <TouchableOpacity style={styles.imageAuto}
+                        onPress={() => handleDetailCar(item)}>
+                        <Image
+                            source={Images.CARUP}
+                            resizeMode="contain"
+                            style={{ width: scale(84), height: verticalScale(40) }}
                         />
-                        <Text style={styles.headerContainerText}>Tìm chỗ đậu xe tốt nhất</Text>
-                    </View>
-                    <AnimatedIcon />
-                </View>
-                <View style={styles.wrapperParking}>
-                    <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                        <View style={styles.containerArea}>
-                            {listAreaByCategoryGuest && listAreaByCategoryGuest.map((area, index) => (
-                                <TouchableOpacity
-                                    style={styles.AreaName}
-                                    key={index}
-                                    onPress={() => handleAreaClick(area.parking_Area)}
-                                >
-                                    <Text style={styles.TextAreaName}>{area.parking_Area}</Text>
-                                </TouchableOpacity>
-                            ))}
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity
+                        style={[
+                            styles.viewName,
+                            { backgroundColor: '#fff', borderColor: '#000', borderWidth: 2 }
+                        ]}
+                        activeOpacity={1}
+                    >
+                        <Text
+                            style={[
+                                styles.slotName,
+                                { color: '#000' }
+                            ]}
+                        >
+                            {item.name}
+                        </Text>
+                    </TouchableOpacity>
+                )}
+            </View>
+        );
+    }
+
+    return (
+        <>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.container}>
+                    <View style={styles.containerTopHearder}>
+                        <View style={styles.headerContainer}>
+                            <Ionicons
+                                name="arrow-back-outline" size={22}
+                                onPress={() => navigation.goBack()}
+                            />
+                            <Text style={styles.headerContainerText}>Tìm chỗ đậu xe tốt nhất</Text>
                         </View>
-                    </ScrollView>
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <View style={styles.viewAll}>
-                            <View style={styles.viewLeft}>
-                                {dataLeft.map((e) => (
-                                    <SlotParking key={e.id} item={e} />
+                        <AnimatedIcon />
+                    </View>
+                    <View style={styles.wrapperParking}>
+                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                            <View style={styles.containerArea}>
+                                {listAreaByCategoryGuest && listAreaByCategoryGuest.map((area, index) => (
+                                    <TouchableOpacity
+                                        style={styles.AreaName}
+                                        key={index}
+                                        onPress={() => handleAreaClick(area.parking_Area)}
+                                    >
+                                        <Text style={styles.TextAreaName}>{area.parking_Area}</Text>
+                                    </TouchableOpacity>
                                 ))}
                             </View>
-                            <View style={styles.viewCenter}>
-                                <View style={styles.viewDirect}>
-                                    <Image source={Images.ROAD1} style={{ height: '101%', width: 86 }} />
+                        </ScrollView>
+                        <ScrollView showsVerticalScrollIndicator={false}>
+                            <View style={styles.viewAll}>
+                                <View style={styles.viewLeft}>
+                                    {dataLeft.map((e) => (
+                                        <SlotParking key={e.id} item={e} />
+                                    ))}
+                                </View>
+                                <View style={styles.viewCenter}>
+                                    <View style={styles.viewDirect}>
+                                        <Image source={Images.ROAD1} style={{ height: '101%', width: 86 }} />
+                                    </View>
+                                </View>
+                                <View style={styles.viewRight}>
+                                    {dataRight.map((e) => (
+                                        <SlotParking key={e.id} item={e} />
+                                    ))}
                                 </View>
                             </View>
-                            <View style={styles.viewRight}>
-                                {dataRight.map((e) => (
-                                    <SlotParking key={e.id} item={e} />
-                                ))}
-                            </View>
+                        </ScrollView>
+                        <View style={styles.viewCommonButton}>
+                            <TouchableOpacity style={styles.btnCommon1} onPress={() => navigation.navigate('Signin')}>
+                                <Text style={styles.btnTextCommon1}>Đăng nhập để sử dụng dịch vụ</Text>
+                            </TouchableOpacity>
                         </View>
-                    </ScrollView>
-                    <View style={styles.viewCommonButton}>
-                        <TouchableOpacity style={styles.btnCommon1} onPress={() => navigation.navigate('Signin')}>
-                            <Text style={styles.btnTextCommon1}>Đăng nhập để sử dụng dịch vụ</Text>
-                        </TouchableOpacity>
                     </View>
                 </View>
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+            <Modal
+                transparent={true}
+                animationType='fade'
+                visible={openModal}>
+                <ModalCarInfo
+                    onClose={() => setOpenModal(false)}
+                    dataF={getdata}
+                />
+            </Modal>
+        </>
     );
 };
-
-function SlotParking({ item }) {
-
-    return (
-        <View style={styles.viewParking}>
-            {item.status === 1 ? (
-                <TouchableOpacity style={styles.imageAuto}>
-                    <Image
-                        source={Images.CARUP}
-                        resizeMode="contain"
-                        style={{ width: scale(84), height: verticalScale(40) }}
-                    />
-                </TouchableOpacity>
-            ) : (
-                <TouchableOpacity
-                    style={[
-                        styles.viewName,
-                        { backgroundColor: '#fff', borderColor: '#000', borderWidth: 2 }
-                    ]}
-                    activeOpacity={1}
-                >
-                    <Text
-                        style={[
-                            styles.slotName,
-                            { color: '#000' }
-                        ]}
-                    >
-                        {item.name}
-                    </Text>
-                </TouchableOpacity>
-            )}
-        </View>
-    );
-}
 
 export default DiagramParkingHome
 
