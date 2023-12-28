@@ -6,8 +6,7 @@ import {
     Image,
     FlatList,
     Platform,
-    Text,
-    Dimensions
+    Text
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
