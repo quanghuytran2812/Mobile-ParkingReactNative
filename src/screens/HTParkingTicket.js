@@ -60,7 +60,7 @@ export default function HTParkingTicket({ route, navigation }) {
                         <View style={styles.containerqr}>
                             <Text>Quét mã này khi tới cổng</Text>
                             <View style={styles.wrapperqr}>
-                                {/* <QRCode value={bookingId} size={200} /> */}
+                                <QRCode value={bookingId} size={200} />
                             </View>
                             <Text>Lưu ý : Chụp màn hình nếu không có mạng</Text>
                         </View>
