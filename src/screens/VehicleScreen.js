@@ -1,39 +1,22 @@
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Modal, Platform } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Images } from '../contants';
-import Ionicons from "react-native-vector-icons/Ionicons";
 import { verticalScale } from 'react-native-size-matters';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchVehicle } from '../store/vehicleSlice';
 import { AnimatedIcon, ModalAddVehicle } from '../components';
 import ModalUpdateVehicle from '../components/Modal/ModalUpdateVehicle';
 import Toast from 'react-native-toast-message';
 import { SafeAreaView } from 'react-native';
+import { vehicleData } from '../utils/database';
 
 const VehicleScreen = ({ navigation }) => {
-    const [selectedRadio, setSelectedRadio] = useState({ vehicleId: '', categoryId: '' })
+    const [selectedRadio, setSelectedRadio] = useState({ vehicleId: '' })
     const [openModal, setOpenModal] = useState(false);
     const [openUpdateModal, setOpenUpdateModal] = useState(false);
     const [dataEdit, setDataEdit] = useState({});
-    const listVehicle = useSelector((state) => state.vehicle.list);
-    const dispatch = useDispatch();
-
-    const fetchData = useCallback(() => {
-        try {
-            dispatch(fetchVehicle());
-        } catch (error) {
-            console.error('Error fetching vehicle data:', error);
-        }
-    }, [dispatch]);
-
-    useEffect(() => {
-        fetchData()
-    }, [fetchData]);
 
     const handleGetData = (data) => {
         setSelectedRadio({
-            vehicleId: data.vehicleId,
-            categoryId: data.vehicleCategory?.vehicleCategoryId
+            vehicleId: data.vehicleId
         })
         setDataEdit(data)
     }
@@ -43,18 +26,7 @@ const VehicleScreen = ({ navigation }) => {
     };
 
     const handleOnBook = useCallback(async () => {
-        if (selectedRadio && selectedRadio.vehicleId && selectedRadio.categoryId) {
-            navigation.navigate('DateTime', {
-                vehicleId: selectedRadio.vehicleId,
-                categoryId: selectedRadio.categoryId,
-            });
-        } else {
-            Toast.show({
-                type: 'error',
-                text1: 'ParkingHT',
-                text2: 'Bạn chưa chọn xe mà mình sẽ đỗ',
-            });
-        }
+        navigation.navigate('DateTime');
     }, [selectedRadio]);
 
     return (
@@ -67,7 +39,7 @@ const VehicleScreen = ({ navigation }) => {
                     <AnimatedIcon />
                 </View>
                 <FlatList
-                    data={listVehicle}
+                    data={vehicleData}
                     style={styles.containerListCar}
                     keyExtractor={item => item.vehicleId}
                     renderItem={({ item }) => (

@@ -4,57 +4,39 @@ import Ionicons from "react-native-vector-icons/Ionicons"
 import { Images } from "../contants";
 import { AnimatedIcon, ModalCancelBooking } from '../components';
 import { ApiContans } from '../contants'
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchBookingById, fetchBookingByStatus } from '../store/bookingSlice';
 import { Modal } from 'react-native';
+import { dataBookingStatus } from '../utils/database';
 
 const HistoryScreen = ({ navigation }) => {
   const [openModal, setOpenModal] = useState(false);
+  const [filteredvehicle, setFilteredvehicle] = useState([]);
   const [dataB, setDataB] = useState("");
-  const listBookingStatus = useSelector((state) => state.booking.list);
-  const dispatch = useDispatch();
 
   const handleStatus = (dataStatus) => {
-    dispatch(fetchBookingByStatus(dataStatus));
+    if (dataStatus) {
+      const filtered = dataBookingStatus.filter((item) => item.status === dataStatus);
+      setFilteredvehicle(filtered);
+    } else {
+      setFilteredvehicle(dataBookingStatus);
+    }
   }
 
   useEffect(() => {
-    if (listBookingStatus.length === 0) {
-      dispatch(fetchBookingByStatus("Completed"));
-    }
+    const filtered = dataBookingStatus.filter((item) => item.status === 1);
+    setFilteredvehicle(filtered);
   }, [])
 
   const handleTicket = (bookingId) => {
-    dispatch(fetchBookingById(bookingId))
-      .then((result) => {
-        if (result.payload.statusCode === 200) {
-          navigation.navigate('HTParkingTicket', result.payload.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-      });
+    navigation.navigate('HTParkingTicket');
   }
 
   const handleOngoing = (bookingId) => {
-    dispatch(fetchBookingById(bookingId))
-      .then((result) => {
-        if (result.payload.statusCode === 200) {
-          navigation.navigate('Payment', result.payload.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-      });
+    navigation.navigate('Payment')
   }
 
   const handleCancelBooking = (bookingId) => {
     setDataB(bookingId)
     setOpenModal(true)
-  }
-
-  const updateData = () => {
-    dispatch(fetchBookingByStatus("OnGoing"));
   }
 
   return (
@@ -86,7 +68,7 @@ const HistoryScreen = ({ navigation }) => {
           </ScrollView>
         </View>
         <FlatList
-          data={[...listBookingStatus].sort(
+          data={[...filteredvehicle].sort(
             (a, b) => new Date(b.createDate) - new Date(a.createDate)
           )}
           style={styles.containerListCar}
@@ -110,7 +92,7 @@ const HistoryScreen = ({ navigation }) => {
                       <Text style={{ color: '#02aab0', fontWeight: '700', fontSize: 14 }}>{item.amount}₫</Text>
                       <Text style={{ color: '#6e6e6e', fontSize: 12 }}> / {item.duration_hours} hour</Text>
                     </View>
-                    {item.status === 0 ? (<Text style={styles.statusBooking}>ĐANG ĐẶT CHỖ</Text>) :
+                    {item.status === 3 ? (<Text style={styles.statusBooking}>ĐANG ĐẶT CHỖ</Text>) :
                       item.status === 1 ? (<Text style={styles.statusBookingCompleted}>HOÀN THÀNH</Text>) :
                         item.status === 2 ? (<Text style={styles.statusBookingCanceled}>ĐÃ HỦY</Text>) : ''
                     }
@@ -121,7 +103,7 @@ const HistoryScreen = ({ navigation }) => {
               {item.status !== 2 ?
                 (
                   <View style={styles.containerButton}>
-                    {item.status === 0 ?
+                    {item.status === 3 ?
                       (
                         <>
                           {item.duration_hours >= 0.5 && (
@@ -170,7 +152,6 @@ const HistoryScreen = ({ navigation }) => {
         <ModalCancelBooking
           onClose={() => setOpenModal(false)}
           dataB={dataB}
-          updateData={updateData}
         />
       </Modal>
     </>

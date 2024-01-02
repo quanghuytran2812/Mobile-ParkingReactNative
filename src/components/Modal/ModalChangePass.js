@@ -1,15 +1,11 @@
 import React, { memo, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Pressable, Keyboard } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useDispatch } from 'react-redux';
-import { changepassUser } from '../../store/userSlice';
-import { validate } from '../../utils/helpers';
 import InputFormPass from '../input/InputFormPass';
 
 
 const ModalChangePass = ({ onClose }) => {
     const [invalidFields, setInvalidFields] = useState([]);
-    const dispatch = useDispatch();
     const [isPasswordShow, setPasswordShow] = useState(false)
     const [isPasswordShow1, setPasswordShow1] = useState(false)
     const [isPasswordShow2, setPasswordShow2] = useState(false)
@@ -33,21 +29,8 @@ const ModalChangePass = ({ onClose }) => {
     }
 
     const handleChangePass = () => {
-        const invalids = validate(payload, setInvalidFields)
-        if (invalids === 0) {
-            const changePassNew = {
-                oldPass: payload.oldPass,
-                newPass: payload.password
-            }
-            dispatch(changepassUser(changePassNew))
-                .then((result) => {
-                    handleReset();
-                    onClose();
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
-        }
+        handleReset();
+        onClose();
     }
 
     return (

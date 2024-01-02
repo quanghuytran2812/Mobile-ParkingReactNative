@@ -1,36 +1,25 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Modal, Pressable, Keyboard } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchGetUserById, updateUser } from '../../store/userSlice';
 import DatePicker from "react-native-modern-datepicker"
 import moment from 'moment';
-import { validate } from '../../utils/helpers';
 import InputForm from '../input/InputForm';
-import Toast from 'react-native-toast-message';
 
-const ModalUpdateUser = ({ onClose, handleUpdateData }) => {
+const ModalUpdateUser = ({ onClose }) => {
     const [openDatePicker, setOpenDatePicker] = useState(false);
     const [invalidFields, setInvalidFields] = useState([]);
     const handleOnPressStartDate = () => {
         setOpenDatePicker(!openDatePicker);
     };
 
-    const dispatch = useDispatch();
-    const { current } = useSelector((state) => state.user);
-
-    useEffect(() => {
-        dispatch(fetchGetUserById())
-    }, [dispatch])
-
     const handleClick = (e) => {
         e.stopPropagation();
     };
 
     const [payload, setPayload] = useState({
-        fullName: current?.fullName,
-        birthday: current?.birthday,
-        email: current?.email
+        fullName: "Peter Parker",
+        birthday: "2023-12-12",
+        email: "Peter@gmail.com"
     })
 
     const [selectedStartDate, setSelectedStartDate] = useState(moment(payload.birthday).format("YYYY/MM/DD") || "");
@@ -42,35 +31,7 @@ const ModalUpdateUser = ({ onClose, handleUpdateData }) => {
     }
 
     const handleUpdateUser = () => {
-        const invalids = validate(payload, setInvalidFields)
-        if (invalids === 0) {
-            const formattedBirthday = moment(selectedStartDate, "YYYY/MM/DD").format("YYYY-MM-DD");
-
-            if (!moment(formattedBirthday, "YYYY-MM-DD", true).isValid()) {
-                Toast.show({
-                    type: 'error',
-                    text1: 'ParkingHT',
-                    text2: 'Định dạng ngày sinh nhật không hợp lệ!'
-                });
-                return;
-            }
-
-            const updatedUser = {
-                userId: current.userId,
-                fullName: payload.fullName,
-                birthday: formattedBirthday,
-                email: payload.email,
-            };
-
-            dispatch(updateUser(updatedUser))
-                .then((result) => {
-                    onClose();
-                    handleUpdateData();
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
-        }
+        onClose();
     }
 
     return (

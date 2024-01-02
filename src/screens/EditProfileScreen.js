@@ -1,12 +1,9 @@
 import { View, Text, StyleSheet, StatusBar, TouchableOpacity, Modal, SafeAreaView } from 'react-native'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { Colors } from '../contants'
 import { AnimatedIcon, ModalChangePass, ModalUpdateUser } from '../components'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchGetUserById } from '../store/userSlice'
-import moment from 'moment'
 import { useState } from 'react'
 
 
@@ -14,16 +11,6 @@ export default function EditProfileScreen() {
     const [openModal, setOpenModal] = useState(false);
     const [openModalUpdate, setOpenModalUpdate] = useState(false);
     const navigation = useNavigation();
-    const dispatch = useDispatch();
-    const { current } = useSelector((state) => state.user);
-
-    useEffect(() => {
-        dispatch(fetchGetUserById())
-    }, [dispatch])
-
-    const handleUpdateData = () => {
-        dispatch(fetchGetUserById())
-    }
     
     return (
         <>
@@ -54,7 +41,7 @@ export default function EditProfileScreen() {
                                     <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 16, marginBottom: 5 }}>Name</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
-                                    <Text>{current?.fullName}</Text>
+                                    <Text>Peter Parker</Text>
                                 </View>
                             </View>
                         </View>
@@ -66,7 +53,7 @@ export default function EditProfileScreen() {
                                     <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 16, marginBottom: 5 }}>Birthday</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
-                                    <Text>{moment(current?.birthday).format("DD/MM/YYYY")}</Text>
+                                    <Text>12/12/2023</Text>
                                 </View>
                             </View>
                         </View>
@@ -78,7 +65,7 @@ export default function EditProfileScreen() {
                                     <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 16, marginBottom: 5 }}>Email</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
-                                    <Text>{current?.email}</Text>
+                                    <Text>Peter@gmail.com</Text>
                                 </View>
                             </View>
                         </View>
@@ -90,7 +77,7 @@ export default function EditProfileScreen() {
                                     <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 16, marginBottom: 5 }}>Phone</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row' }}>
-                                    <Text>{current?.phoneNumber}</Text>
+                                    <Text>258745123</Text>
                                 </View>
                             </View>
                         </View>
@@ -134,7 +121,6 @@ export default function EditProfileScreen() {
             >
                 <ModalUpdateUser
                     onClose={() => setOpenModalUpdate(false)}
-                    handleUpdateData={handleUpdateData}
                 />
             </Modal>
         </>

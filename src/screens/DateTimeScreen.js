@@ -15,7 +15,6 @@ const DateTimeScreen = ({ route, navigation }) => {
     const [visible2, setVisible2] = React.useState(false);
     const [selectedTime, setSelectedTime] = React.useState({ hours: 0, minutes: 0 });
     const [selectedTime2, setSelectedTime2] = React.useState({ hours: 0, minutes: 0 });
-    const { vehicleId, categoryId } = route.params;
 
     const onDismiss = useCallback(() => {
         setVisible(false);
@@ -63,42 +62,7 @@ const DateTimeScreen = ({ route, navigation }) => {
     }
 
     const handleOnBook = useCallback(async () => {
-        if (selectedStartDate && selectedEndDate && selectedTime && selectedTime2) {
-          const formattedArriveAt = moment(
-            `${selectedStartDate}T${selectedTime.hours}:${selectedTime.minutes}`,
-            'DD/MM/YYYYTHH:mm'
-          ).format('YYYY-MM-DDTHH:mm:ss');
-      
-          const formattedLeaveAt = moment(
-            `${selectedEndDate}T${selectedTime2.hours}:${selectedTime2.minutes}`,
-            'DD/MM/YYYYTHH:mm'
-          ).format('YYYY-MM-DDTHH:mm:ss');
-      
-          const startTime = moment(`${selectedStartDate} ${selectedTime.hours}:${selectedTime.minutes}`, 'DD/MM/YYYY HH:mm');
-          const endTime = moment(`${selectedEndDate} ${selectedTime2.hours}:${selectedTime2.minutes}`, 'DD/MM/YYYY HH:mm');
-          const duration = moment.duration(endTime.diff(startTime));
-
-          if (endTime.isAfter(startTime) && duration.asHours() >= 0.5) {
-            navigation.navigate('Booking', {
-              vehicleId: vehicleId,
-              categoryId: categoryId,
-              arrive_at: formattedArriveAt,
-              leave_at: formattedLeaveAt,
-            });
-          } else {
-            Toast.show({
-              type: 'error',
-              text1: 'ParkingHT',
-              text2: 'Thời gian rời đi phải sau và cách thời gian đến ít nhất 30 phút',
-            });
-          }
-        } else {
-          Toast.show({
-            type: 'error',
-            text1: 'ParkingHT',
-            text2: 'Bạn chưa chọn thời gian mà mình sẽ đỗ',
-          });
-        }
+        navigation.navigate('Booking');
       }, [selectedStartDate, selectedEndDate, selectedTime, selectedTime2]);
     return (
         <>

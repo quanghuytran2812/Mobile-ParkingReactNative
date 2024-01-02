@@ -7,7 +7,7 @@ const AnimatedIcon = () => {
   const spinValue = useRef(new Animated.Value(0)).current;
 
   function makePhoneCall() {
-    const url = 'tel://0906037470';
+    const url = 'tel://123456789';
     Linking.openURL(url);
   }
 

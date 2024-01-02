@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     View,
     StyleSheet,
@@ -9,23 +9,16 @@ import {
     Text
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategoryGuest } from '../store/categorySlice';
 import { Images } from '../contants';
+import { dataCategory } from '../utils/database';
 
 const HomeScreen = ({ navigation }) => {
-    const dispatch = useDispatch();
-    const listCategory = useSelector((state) => state.category.listGuest);
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     function onSelectCategory(category) {
         setSelectedCategory(category);
-        navigation.navigate('DiagramParkingHome', category.vehicleCategoryId);
+        navigation.navigate('DiagramParkingHome');
     }
-
-    useEffect(() => {
-        dispatch(fetchCategoryGuest());
-    }, [dispatch]);
 
     function renderHeader() {
         return (
@@ -125,7 +118,7 @@ const HomeScreen = ({ navigation }) => {
             <View style={{ padding: 10 * 2 }}>
                 <Text style={{ fontSize: 25, lineHeight: 36, fontWeight: '700' }}>Tìm loại xe của bạn</Text>
                 <FlatList
-                    data={listCategory}
+                    data={dataCategory}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     keyExtractor={item => `${item.vehicleCategoryId}`}

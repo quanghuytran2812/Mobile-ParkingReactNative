@@ -3,29 +3,12 @@ import React from 'react'
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { Images } from '../contants';
 import { AnimatedIcon } from '../components';
-import { ApiContans } from '../contants';
-import { createPayment } from '../store/paymentSlice';
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 
 export default function PaymentScreen({ route, navigation }) {
-    const bookingData = route.params
-    const dispatch = useDispatch();
 
     const handleOnPayment = useCallback(async () => {
-        const paymentDetailData = {
-            amount: bookingData.booking_Total,
-            bookingId: bookingData.booking_Id
-        };
-        dispatch(createPayment(paymentDetailData))
-            .then((result) => {
-                if(result?.payload?.statusCode === 200){
-                    navigation.navigate('VnPay', result.payload.data);
-                }      
-            })
-            .catch((error) => {
-                console.log(error)
-            });
+        navigation.navigate('HTParkingTicket');
     }, []);
     return (
         <>
@@ -52,31 +35,31 @@ export default function PaymentScreen({ route, navigation }) {
                     <View style={styles.MainContCard}>
                         <Text style={styles.MainContTextL}>Chỗ đậu xe</Text>
                         <Text style={styles.MainContTextR}>
-                            {`${bookingData?.parkingSlot?.area} (${bookingData?.parkingSlot?.name})`}
+                            Đường số 1 (101) 
                         </Text>
                     </View>
                     <View style={styles.MainContCard}>
                         <Text style={styles.MainContTextL}>Ngày</Text>
-                        <Text style={styles.MainContTextR}>{`${ApiContans?.splitAndFormatDate(bookingData?.start_Date)} - ${ApiContans?.splitAndFormatDate(bookingData?.end_Date)}`}</Text>
+                        <Text style={styles.MainContTextR}>December 16, 2024</Text>
                     </View>
                     <View style={styles.MainContCard}>
                         <Text style={styles.MainContTextL}>Thời hạn</Text>
-                        <Text style={styles.MainContTextR}>{`${ApiContans?.calculateDuration(bookingData?.start_Date, bookingData?.end_Date)} giờ`}</Text>
+                        <Text style={styles.MainContTextR}>4 hours</Text>
                     </View>
                     <View style={styles.MainContCard}>
                         <Text style={styles.MainContTextL}>Thời gian</Text>
-                        <Text style={styles.MainContTextR}>{`${ApiContans?.splitAndFormatTime(bookingData?.start_Date)} - ${ApiContans?.splitAndFormatTime(bookingData?.end_Date)}`}</Text>
+                        <Text style={styles.MainContTextR}>09.00 AM - 13.00 PM</Text>
                     </View>
                 </View>
                 <View style={styles.MainCont}>
                     <View style={styles.MainContCard}>
                         <Text style={styles.MainContTextL}>Giá tiền</Text>
-                        <Text style={styles.MainContTextR}>{`${ApiContans.CurrencyFormat(bookingData?.booking_Total)}`}</Text>
+                        <Text style={styles.MainContTextR}>$12.00</Text>
                     </View>
                     <View style={styles.MainContHr}></View>
                     <View style={styles.MainContCard}>
                         <Text style={styles.MainContTextL}>Tổng cộng</Text>
-                        <Text style={styles.MainContTextR}>{`${ApiContans.CurrencyFormat(bookingData?.booking_Total)}`}</Text>
+                        <Text style={styles.MainContTextR}>$12.00</Text>
                     </View>
                 </View>
                 <View style={styles.contentContainer}>

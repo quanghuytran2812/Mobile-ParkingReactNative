@@ -1,39 +1,21 @@
 import { Image, Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { moderateScale, verticalScale, scale } from 'react-native-size-matters';
 import { AnimatedIcon, ModalCarInfo } from '../components'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchParkingslotAreaByCategoryGuest, fetchParkingslotByAreaGuest } from '../store/parkingslotSlice'
 import { Images } from '../contants'
 import Ionicons from "react-native-vector-icons/Ionicons"
+import { dataAreaDiagram, dataCategoryDiagram } from '../utils/database';
 
 const DiagramParkingHome = ({ route, navigation }) => {
     const [openModal, setOpenModal] = useState(false);
-    const [getdata, setGetData] = useState({});
-    const categoryData = route.params;
-    const dispatch = useDispatch();
-    const { listPSbyAreaGuest, listAreaByCategoryGuest } = useSelector((state) => state.parkingslot);
-
-    useEffect(() => {
-        dispatch(fetchParkingslotAreaByCategoryGuest(categoryData));
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (listAreaByCategoryGuest && listAreaByCategoryGuest.length > 0) {
-            dispatch(fetchParkingslotByAreaGuest(listAreaByCategoryGuest[0].parking_Area));
-        }
-    }, [listAreaByCategoryGuest, dispatch]);
-
-    const handleAreaClick = (selectedArea) => {
-        dispatch(fetchParkingslotByAreaGuest(selectedArea));
-    };
+    const [getdata,setGetData] = useState({})
 
     const handleDetailCar = (data) => {
         setOpenModal(true)
         setGetData(data)
     }
 
-    const data = listPSbyAreaGuest.map((item, index) => ({ ...item, id: index + 1 })).sort((a, b) => a.parking_slot_name - b.parking_slot_name);
+    const data = dataAreaDiagram.map((item, index) => ({ ...item, id: index + 1 })).sort((a, b) => a.parking_slot_name - b.parking_slot_name);
     const dataLeft = data.filter((item) => item.id % 2 !== 0);
     const dataRight = data.filter((item) => item.id % 2 === 0);
 
@@ -88,7 +70,7 @@ const DiagramParkingHome = ({ route, navigation }) => {
                     <View style={styles.wrapperParking}>
                         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                             <View style={styles.containerArea}>
-                                {listAreaByCategoryGuest && listAreaByCategoryGuest.map((area, index) => (
+                                {dataCategoryDiagram.map((area, index) => (
                                     <TouchableOpacity
                                         style={styles.AreaName}
                                         key={index}

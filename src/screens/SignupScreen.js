@@ -8,12 +8,8 @@ import DatePicker, { getFormatedDate } from "react-native-modern-datepicker"
 import InputField from "../components/input/InputField";
 import InputFieldPass from "../components/input/InputFieldPass";
 import { validate } from "../utils/helpers";
-import { registerUser } from "../store/userSlice";
-import { useDispatch } from "react-redux";
-import moment from "moment";
 
 const SignupScreen = ({ navigation }) => {
-    const dispatch = useDispatch();
     const [isPasswordShow, setPasswordShow] = useState(false)
     const [isPasswordShow1, setPasswordShow1] = useState(false)
     const [invalidFields, setInvalidFields] = useState([]);
@@ -52,27 +48,8 @@ const SignupScreen = ({ navigation }) => {
     const handleRegister = () => {
         const invalids = validate(payload, setInvalidFields)
         if (invalids === 0) {
-            const registerU = {
-                phoneNumber: payload.phoneNumber,
-                email: payload.email,
-                birthday: moment(payload.birthday, "YYYY/MM/DD").format("YYYY-MM-DD")
-            }
-            dispatch(registerUser(registerU))
-                .then((result) => {
-                    if (result.payload?.data?.otpResponse?.status === "DELIVERED") {
-                        resetFormRegister()
-                        navigation.navigate('VerificationRegister', {
-                            fullName: payload.fullName,
-                            birthday: moment(payload.birthday, "YYYY/MM/DD").format("YYYY-MM-DD"),
-                            phoneNumber: payload.phoneNumber,
-                            email: payload.email,
-                            password: payload.password
-                        });
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            resetFormRegister()
+            navigation.navigate('VerificationRegister')
         }
     }
 

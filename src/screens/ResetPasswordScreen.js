@@ -5,32 +5,14 @@ import Ionicons from "react-native-vector-icons/Ionicons"
 import Separator from "../components/Separator";
 import { Display } from "../utils";
 import { InputFieldPass } from "../components";
-import { useDispatch, useSelector } from "react-redux";
-import Toast from "react-native-toast-message";
 import { validate } from "../utils/helpers";
 import { SafeAreaView } from "react-native";
-import { apiResetP } from "../store/otpSlice";
 
 const ResetPasswordScreen = ({ navigation }) => {
-    const dispatch = useDispatch();
     const [isPasswordShow, setPasswordShow] = useState(false)
     const [isPasswordShow1, setPasswordShow1] = useState(false)
     const [invalidFields, setInvalidFields] = useState([]);
-    const urlResetP = useSelector((state) => state.otp.urlResetPass);
 
-    function getQueryParam(url, param) {
-        const queryParams = url.split('?')[1];
-        const paramPairs = queryParams.split('&');
-
-        for (let pair of paramPairs) {
-            const [key, value] = pair.split('=');
-            if (key === param) {
-                return decodeURIComponent(value);
-            }
-        }
-
-        return null;
-    }
     const [payload, setPayload] = useState({
         password: '',
         confirmPassword: ''
@@ -39,27 +21,7 @@ const ResetPasswordScreen = ({ navigation }) => {
     function resetPass() {
         const invalids = validate(payload, setInvalidFields);
         if (invalids === 0) {
-            const phoneNumber = getQueryParam(urlResetP, 'phoneNumber');
-            dispatch(apiResetP({ phone: phoneNumber, confirmPassword: payload.confirmPassword }))
-                .then((result) => {
-                    if (result.payload?.statusCode === 200) {
-                        navigation.navigate('Signin');
-                        Toast.show({
-                            type: 'success',
-                            text1: 'ParkingHT',
-                            text2: 'Đặt lại mật khẩu thành công!'
-                        });
-                    } else {
-                        Toast.show({
-                            type: 'error',
-                            text1: 'ParkingHT',
-                            text2: `${result.payload.message}`
-                        });
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            navigation.navigate('Signin');
         }
     }
 

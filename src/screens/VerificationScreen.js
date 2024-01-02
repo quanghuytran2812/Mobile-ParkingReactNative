@@ -4,20 +4,16 @@ import Ionicons from "react-native-vector-icons/Ionicons"
 import { Colors } from "../contants";
 import { Display } from "../utils";
 import { Separator } from "../components";
-import { apivalidateOtpResetP } from "../store/otpSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { SafeAreaView } from "react-native";
 import Toast from "react-native-toast-message";
 
 const VerificationScreen = ({ navigation }) => {
-    const dispatch = useDispatch();
     const firstInput = useRef();
     const secondInput = useRef();
     const thirdInput = useRef();
     const fourthInput = useRef();
     const fivethInput = useRef();
     const sixthInput = useRef();
-    const { phoneN } = useSelector((state) => state.otp);
     const [otp, setOtp] = useState({ 1: '', 2: '', 3: '', 4: '', 5: '', 6: '' });
 
     const onOTPVerify = () => {
@@ -25,15 +21,7 @@ const VerificationScreen = ({ navigation }) => {
 
         // Check if the OTP is not null or empty
         if (concatenatedOtp.trim() !== '') {
-            dispatch(apivalidateOtpResetP({otp: concatenatedOtp, phone: phoneN}))
-                .then((result) => {
-                    if (result.payload?.statusCode === 200) {
-                        navigation.navigate('ResetPassword');
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+            navigation.navigate('ResetPassword');
         } else {
             Toast.show({
                 type: 'error',
@@ -83,7 +71,7 @@ const VerificationScreen = ({ navigation }) => {
                             ref={secondInput}
                             onChangeText={text => {
                                 setOtp({ ...otp, 2: text });
-                                text ? thirdInput.current.focus() : firstInput.current.focus();
+                                text ? thirdInput.current.focus() : secondInput.current.focus();
                             }}
                         />
                     </View>
@@ -95,7 +83,7 @@ const VerificationScreen = ({ navigation }) => {
                             ref={thirdInput}
                             onChangeText={text => {
                                 setOtp({ ...otp, 3: text });
-                                text ? fourthInput.current.focus() : secondInput.current.focus();
+                                text ? fourthInput.current.focus() : thirdInput.current.focus();
                             }}
                         />
                     </View>
@@ -107,7 +95,7 @@ const VerificationScreen = ({ navigation }) => {
                             ref={fourthInput}
                             onChangeText={text => {
                                 setOtp({ ...otp, 4: text });
-                                !text && fivethInput.current.focus();
+                                text ? fivethInput.current.focus() : fourthInput.current.focus();
                             }}
                         />
                     </View>
@@ -119,7 +107,7 @@ const VerificationScreen = ({ navigation }) => {
                             ref={fivethInput}
                             onChangeText={text => {
                                 setOtp({ ...otp, 5: text });
-                                !text && sixthInput.current.focus();
+                                text ? sixthInput.current.focus() : fivethInput.current.focus();
                             }}
                         />
                     </View>
@@ -131,7 +119,7 @@ const VerificationScreen = ({ navigation }) => {
                             ref={sixthInput}
                             onChangeText={text => {
                                 setOtp({ ...otp, 6: text });
-                                !text && firstInput.current.focus();
+                                text ? firstInput.current.focus() : sixthInput.current.focus();
                             }}
                         />
                     </View>

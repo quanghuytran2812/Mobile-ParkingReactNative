@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, StatusBar, TouchableOpacity, SafeAreaView, Pressable, Keyboard } from "react-native";
 import Separator from "../components/Separator";
 import { Colors } from "../contants";
 import { Display } from "../utils";
-import { useDispatch, useSelector } from "react-redux";
-import { login } from "../store/authSlice";
 import InputField from "../components/input/InputField";
 import { validate } from "../utils/helpers";
 import InputFieldPass from "../components/input/InputFieldPass";
@@ -12,10 +10,7 @@ import InputFieldPass from "../components/input/InputFieldPass";
 const SigninScreen = ({ navigation }) => {
     const [isPasswordShow, setPasswordShow] = useState(false)
     const [invalidFields, setInvalidFields] = useState([]);
-    const dispatch = useDispatch();
-    const { isAuthenticate, currentData } = useSelector(
-        (state) => state.auth
-    )
+
     const [payload, setPayload] = useState({
         phoneNumber: '',
         password: ''
@@ -28,27 +23,9 @@ const SigninScreen = ({ navigation }) => {
         })
     }
     const handleLogin = () => {
-        const invalids = validate(payload, setInvalidFields)
-        if (invalids === 0) {
-            dispatch(login(payload))
-                .then((result) => {
-                    if (result.payload?.statusCode === 200) {
-                        resetForm()
-                    }
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
+        resetForm()
+        navigation.navigate('Vehicle');
     };
-
-    useEffect(() => {
-        if (isAuthenticate || currentData) {
-            if (currentData.role === "DRIVER") {
-                navigation.navigate('Vehicle');
-            }
-        }
-    }, [isAuthenticate, currentData]);
 
     return (
         <SafeAreaView style={styles.container}>

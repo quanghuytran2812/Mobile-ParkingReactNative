@@ -2,14 +2,10 @@ import React, { memo, useEffect, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, TextInput, Pressable, Keyboard } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import SelectDropdown from 'react-native-select-dropdown';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategory } from '../../store/categorySlice';
-import { updateVehicle } from '../../store/vehicleSlice';
+import { dataCategory } from '../../utils/database';
 
 
-const ModalUpdateVehicle = ({ open, onClose, dataUpdate, handleUpdateData }) => {
-    const listCategory = useSelector((state) => state.category.list);
-    const dispatch = useDispatch();
+const ModalUpdateVehicle = ({ open, onClose, dataUpdate }) => {
     const handleClick = (e) => {
         e.stopPropagation();
     };
@@ -25,27 +21,8 @@ const ModalUpdateVehicle = ({ open, onClose, dataUpdate, handleUpdateData }) => 
         }
     }, [open, dataUpdate]);
 
-    useEffect(() => {
-        dispatch(fetchCategory())
-    }, [dispatch]);
-
-
     const handleUpdateVehicle = () => {
-        const updatedV = {
-            vehicleId: dataUpdate.vehicleId,
-            plateNumber: payload.plateNumber,
-            numberOfFouls: dataUpdate.numberOfFouls,
-            categoryId: payload.categoryId !== undefined ? payload.categoryId : dataUpdate.vehicleCategory.vehicleCategoryId
-        };
-
-        dispatch(updateVehicle(updatedV))
-            .then((result) => {
-                onClose();
-                handleUpdateData();
-            })
-            .catch((error) => {
-                console.log(error)
-            });
+        onClose();
     }
 
     return (
@@ -76,7 +53,7 @@ const ModalUpdateVehicle = ({ open, onClose, dataUpdate, handleUpdateData }) => 
                                 </View>
                             </View>
                             <SelectDropdown
-                                data={listCategory}
+                                data={dataCategory}
                                 onSelect={(selectedItem, index) => {
                                     setPayload((prev) => ({ ...prev, categoryId: selectedItem.vehicleCategoryId }));
                                 }}

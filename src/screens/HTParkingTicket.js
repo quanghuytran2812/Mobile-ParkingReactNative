@@ -1,11 +1,11 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { AnimatedIcon } from '../components';
-import { ApiContans } from '../contants';
 import QRCode from 'react-native-qrcode-svg';
 
 export default function HTParkingTicket({ route, navigation }) {
-    const bookingData = route.params
+
+    const bookingId = "BK00000"
 
     return (
         <>
@@ -23,33 +23,33 @@ export default function HTParkingTicket({ route, navigation }) {
                         <View>
                             <View style={{ ...styles.MainContCard, paddingTop: 10 }}>
                                 <Text style={styles.MainContTextL}>Tên</Text>
-                                <Text style={styles.MainContTextR}>{bookingData?.vehicle?.user?.fullName}</Text>
+                                <Text style={styles.MainContTextR}>Peter Parker</Text>
                             </View>
                             <View style={styles.MainContCard}>
                                 <Text style={styles.MainContTextL}>Điện thoại</Text>
-                                <Text style={styles.MainContTextR}>{bookingData?.vehicle?.user?.phoneNumber}</Text>
+                                <Text style={styles.MainContTextR}>+989 757 757 399</Text>
                             </View>
                             <View style={styles.MainContCard}>
                                 <Text style={styles.MainContTextL}>Biển số xe</Text>
-                                <Text style={styles.MainContTextR}>{bookingData?.vehicle?.plateNumber}</Text>
+                                <Text style={styles.MainContTextR}>54A-4587</Text>
                             </View>
                             <View style={styles.MainContCard}>
                                 <Text style={styles.MainContTextL}>Chỗ đậu xe</Text>
                                 <Text style={styles.MainContTextR}>
-                                    {`${bookingData?.parkingSlot?.area} (${bookingData?.parkingSlot?.name})`}
+                                    Đường số 1 (101)
                                 </Text>
                             </View>
                             <View style={styles.MainContCard}>
                                 <Text style={styles.MainContTextL}>Ngày</Text>
-                                <Text style={styles.MainContTextR}>{`${ApiContans?.splitAndFormatDate(bookingData?.start_Date)} - ${ApiContans?.splitAndFormatDate(bookingData?.end_Date)}`}</Text>
+                                <Text style={styles.MainContTextR}>December 16, 2024</Text>
                             </View>
                             <View style={styles.MainContCard}>
                                 <Text style={styles.MainContTextL}>Thời hạn</Text>
-                                <Text style={styles.MainContTextR}>{`${ApiContans?.calculateDuration(bookingData?.start_Date, bookingData?.end_Date)} giờ`}</Text>
+                                <Text style={styles.MainContTextR}>4 hours</Text>
                             </View>
                             <View style={{ ...styles.MainContCard }}>
                                 <Text style={styles.MainContTextL}>Thời gian</Text>
-                                <Text style={styles.MainContTextR}>{`${ApiContans?.splitAndFormatTime(bookingData?.start_Date)} - ${ApiContans?.splitAndFormatTime(bookingData?.end_Date)}`}</Text>
+                                <Text style={styles.MainContTextR}>09.00 AM - 13.00 PM</Text>
                             </View>
                         </View>
                         <View style={styles.texthr}>
@@ -60,7 +60,7 @@ export default function HTParkingTicket({ route, navigation }) {
                         <View style={styles.containerqr}>
                             <Text>Quét mã này khi tới cổng</Text>
                             <View style={styles.wrapperqr}>
-                                <QRCode value={bookingData?.booking_Id} size={200} />
+                                {/* <QRCode value={bookingId} size={200} /> */}
                             </View>
                             <Text>Lưu ý : Chụp màn hình nếu không có mạng</Text>
                         </View>

@@ -1,15 +1,11 @@
 import React, { memo, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, TextInput, Pressable, Keyboard } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useDispatch } from 'react-redux';
-import { createReport } from '../../store/reportSlice';
-import { validate } from '../../utils/helpers';
 import InputForm from '../input/InputForm';
 
 
-const ModalAddReport = ({ onClose, handleUpdateData }) => {
+const ModalAddReport = ({ onClose }) => {
     const [invalidFields, setInvalidFields] = useState([]);
-    const dispatch = useDispatch();
     const handleClick = (e) => {
         e.stopPropagation();
     };
@@ -27,22 +23,8 @@ const ModalAddReport = ({ onClose, handleUpdateData }) => {
     }
 
     const handleAddReport = () => {
-        const invalids = validate(payload, setInvalidFields)
-        if (invalids === 0) {
-            const reportCreate = {
-                content: payload.content,
-                vehiclePlateNumber: vehiclePlateNumber
-            }
-            dispatch(createReport(reportCreate))
-                .then((result) => {
-                    handleReset();
-                    onClose();
-                    handleUpdateData();
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
-        }
+        handleReset();
+        onClose();
     }
 
     return (

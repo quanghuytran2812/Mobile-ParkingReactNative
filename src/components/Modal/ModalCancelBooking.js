@@ -1,34 +1,13 @@
 import React, { memo } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Pressable, Keyboard } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { cancelBooking } from '../../store/bookingSlice';
-import Toast from 'react-native-toast-message';
-
-
 
 const ModalCancelBooking = ({ onClose, dataB, updateData }) => {
-    const dispatch = useDispatch();
     const handleClick = (e) => {
         e.stopPropagation();
     };
 
     const handleCancelB = () => {
-        dispatch(cancelBooking(dataB))
-            .then((result) => {
-                if (result.payload.statusCode === 200) {
-                    onClose();
-                    updateData()
-                } else {
-                    Toast.show({
-                        type: 'error',
-                        text1: 'ParkingHT',
-                        text2: `${result.payload.message}`
-                    });
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-            });
+        onClose();
     }
 
     return (

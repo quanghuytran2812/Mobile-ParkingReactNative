@@ -1,41 +1,21 @@
 import { StyleSheet, Text, View, TouchableOpacity, Modal } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useDispatch, useSelector } from 'react-redux';
 import { AnimatedIcon, ModalAddReport, ModalFeedback } from '../components';
-import { fetchReport } from '../store/reportSlice';
 import moment from 'moment';
 import { Dimensions } from 'react-native';
 import { Provider as PaperProvider, DataTable } from 'react-native-paper';
 import ModalDetailReport from '../components/Modal/ModalDetailReport';
+import { dataReport } from '../utils/database';
 
 const ReportScreen = ({ navigation }) => {
     const [openModal, setOpenModal] = useState(false);
     const [openModalR, setOpenModalR] = useState(false);
     const [openModalF, setOpenModalF] = useState(false);
     const [getdata, setGetData] = useState({});
-    const listReport = useSelector((state) => state.report.list);
-    const dispatch = useDispatch();
-
-    const fetchData = useCallback(() => {
-        try {
-            dispatch(fetchReport());
-        } catch (error) {
-            console.error('Error fetching report data:', error);
-        }
-    }, [dispatch]);
-
-    useEffect(() => {
-        fetchData()
-    }, [fetchData]);
-
-    const handleUpdateData = useCallback(() => {
-        fetchData();
-    }, [fetchData]);
 
     const handleFeedback = (data) => {
         setOpenModalF(true)
-        setGetData(data)
     };
 
     const handleDetailReport = (data) => {
@@ -73,7 +53,7 @@ const ReportScreen = ({ navigation }) => {
     );
 
     const from = page * itemsPerPage;
-    const to = Math.min((page + 1) * itemsPerPage, listReport.length);
+    const to = Math.min((page + 1) * itemsPerPage, dataReport.length);
 
     React.useEffect(() => {
         setPage(0);
@@ -101,7 +81,7 @@ const ReportScreen = ({ navigation }) => {
                                 <DataTable.Title textStyle={styles.tableRowHeaderText}>ACTION</DataTable.Title>
                             </DataTable.Header>
 
-                            {listReport.slice(from, to)
+                            {dataReport.slice(from, to)
                                 .map((item) => (
                                     <DataTable.Row key={item.reportId}>
                                         <DataTable.Cell style={{ ...styles.tableCell }}>{item.content}</DataTable.Cell>
@@ -119,9 +99,9 @@ const ReportScreen = ({ navigation }) => {
 
                             <DataTable.Pagination
                                 page={page}
-                                numberOfPages={Math.ceil(listReport.length / itemsPerPage)}
+                                numberOfPages={Math.ceil(dataReport.length / itemsPerPage)}
                                 onPageChange={(page) => setPage(page)}
-                                label={`${from + 1}-${to} of ${listReport.length}`}
+                                label={`${from + 1}-${to} of ${dataReport.length}`}
                                 numberOfItemsPerPageList={numberOfItemsPerPageList}
                                 numberOfItemsPerPage={itemsPerPage}
                                 onItemsPerPageChange={onItemsPerPageChange}
@@ -148,8 +128,7 @@ const ReportScreen = ({ navigation }) => {
                     animationType='fade'
                     visible={openModal}>
                     <ModalAddReport
-                        onClose={() => setOpenModal(false)}
-                        handleUpdateData={handleUpdateData} />
+                        onClose={() => setOpenModal(false)}/>
                 </Modal>
                 <Modal
                     transparent={true}
@@ -158,7 +137,6 @@ const ReportScreen = ({ navigation }) => {
                     <ModalFeedback
                         open={openModalF}
                         onClose={() => setOpenModalF(false)}
-                        dataF={getdata}
                     />
                 </Modal>
                 <Modal

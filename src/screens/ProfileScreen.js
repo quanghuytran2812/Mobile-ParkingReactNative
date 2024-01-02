@@ -31,7 +31,7 @@ const ProfileScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <StatusBar
                 barStyle="light-content"
-                backgroundColor={Colors.DEFAULT_GREEN}
+                backgroundColor={Colors.DEFAULT_BLACK}
                 translucent
             />
             <Separator height={StatusBar.currentHeight} />
@@ -71,7 +71,7 @@ const ProfileScreen = ({ navigation }) => {
                         <FontAwesome5
                             name="address-card"
                             size={18}
-                            color={Colors.DEFAULT_GREEN}
+                            color={Colors.DEFAULT_BLACK}
                         />
                         <Text style={styles.sectionText}>
                             Quản lý hồ sơ
@@ -89,7 +89,7 @@ const ProfileScreen = ({ navigation }) => {
                         <FontAwesome5
                             name="history"
                             size={18}
-                            color={Colors.DEFAULT_GREEN}
+                            color={Colors.DEFAULT_BLACK}
                         />
                         <Text style={styles.sectionText}>
                             lịch sử đặt chỗ
@@ -107,7 +107,7 @@ const ProfileScreen = ({ navigation }) => {
                         <FontAwesome5
                             name="paper-plane"
                             size={18}
-                            color={Colors.DEFAULT_GREEN}
+                            color={Colors.DEFAULT_BLACK}
                         />
                         <Text style={styles.sectionText}>
                              Ý kiến đánh giá
@@ -127,7 +127,7 @@ const ProfileScreen = ({ navigation }) => {
                         <FontAwesome5
                             name="sign-out-alt"
                             size={18}
-                            color={Colors.DEFAULT_GREEN}
+                            color={Colors.DEFAULT_BLACK}
                         />
                         <Text
                             style={styles.sectionText}
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.SECONDARY_WHITE,
     },
     backgroundCurvedContainer: {
-        backgroundColor: Colors.DEFAULT_GREEN,
+        backgroundColor: Colors.DEFAULT_BLACK,
         height: 2000,
         position: 'absolute',
         top: -1 * (2000 - 230),

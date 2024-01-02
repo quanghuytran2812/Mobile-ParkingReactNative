@@ -1,55 +1,23 @@
 import React, { memo, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Pressable, Keyboard } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
 import InputForm from '../input/InputForm';
-import { fetchFeedback, updateFeedback } from '../../store/feedbackSlice';
-import { validate } from '../../utils/helpers';
 import { AirbnbRating } from 'react-native-ratings';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const ModalFeedback = ({ open, onClose, dataF }) => {
+const ModalFeedback = ({ open, onClose }) => {
     const [invalidFields, setInvalidFields] = useState([]);
     const [payload, setPayload] = useState({
         content: ''
     })
-    const [rankStar, setRankStar] = useState(0);
-    const dispatch = useDispatch();
-    const getFeedbackbyId = useSelector((state) => state.feedback.list);
+    const [rankStar, setRankStar] = useState(1);
     const handleClick = (e) => {
         e.stopPropagation();
     };
 
-    useEffect(() => {
-        dispatch(fetchFeedback(dataF.reportId));
-    }, [dispatch, dataF]);
-
-    useEffect(() => {
-        if (open && getFeedbackbyId && getFeedbackbyId.length > 0) {
-            const feedback = getFeedbackbyId[0];
-            setPayload({ content: feedback.content === null ? '' : feedback.content});
-            setRankStar(feedback.rankStar || 0);
-        }
-    }, [open, getFeedbackbyId]);
-
     const handleFeedback = () => {
-        const invalids = validate(payload, setInvalidFields);
-        if (invalids === 0) {
-          const feedbackUpdate = {
-            feedBackId: dataF.reportId,
-            content: payload.content,
-            rankStar: rankStar,
-          };
-          dispatch(updateFeedback(feedbackUpdate))
-            .then((result) => {
-              onClose();
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        }
-      };
+        onClose();
+    };
 
     return (
         <SafeAreaView style={styles.ModalCommonoverlay}>

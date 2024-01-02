@@ -1,25 +1,16 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Pressable, Keyboard } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import SelectDropdown from 'react-native-select-dropdown';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategory } from '../../store/categorySlice';
-import { createVehicle } from '../../store/vehicleSlice';
 import InputForm from '../input/InputForm';
-import { validate } from '../../utils/helpers';
+import { dataCategory } from '../../utils/database';
 
 
 const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
     const [invalidFields, setInvalidFields] = useState([]);
-    const listCategory = useSelector((state) => state.category.list);
-    const dispatch = useDispatch();
     const handleClick = (e) => {
         e.stopPropagation();
     };
-
-    useEffect(() => {
-        dispatch(fetchCategory())
-    }, [dispatch]);
 
     const [payload, setPayload] = useState({
         plateNumber: '',
@@ -34,23 +25,8 @@ const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
     }
 
     const handleAddVehicle = () => {
-        if (payload.categoryId === "" || !payload.categoryId.length > 0) {
-            setPayload(prev => ({ ...prev, categoryId: listCategory[0]?.vehicleCategoryId }))
-        }
-        const invalids = validate(payload, setInvalidFields)
-        if (invalids === 0) {
-            dispatch(createVehicle(payload))
-                .then((result) => {
-                    if(result.payload?.statusCode === 200){
-                        handleReset();
-                        onClose();
-                        handleUpdateData();
-                    }
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
-        }
+        handleReset();
+        onClose();
     }
 
     return (
@@ -83,7 +59,7 @@ const ModalAddVehicle = ({ onClose, handleUpdateData }) => {
                                 />
                             </View>
                             <SelectDropdown
-                                data={listCategory}
+                                data={dataCategory}
                                 onSelect={(selectedItem, index) => {
                                     setPayload((prev) => ({ ...prev, categoryId: selectedItem.vehicleCategoryId }));
                                 }}

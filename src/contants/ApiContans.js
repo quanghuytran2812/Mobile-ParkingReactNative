@@ -7,9 +7,9 @@ const BACKEND_API = {
 };
 
 const statusBookingData = [
-    { code: 'OnGoing', value: 'ĐANG ĐẶT CHỖ' },
-    { code: 'Completed', value: 'HOÀN THÀNH' },
-    { code: 'Canceled', value: 'ĐÃ HỦY' }
+    { code: 3, value: 'ĐANG ĐẶT CHỖ' },
+    { code: 1, value: 'HOÀN THÀNH' },
+    { code: 2, value: 'ĐÃ HỦY' }
 ]
 
 function CurrencyFormat(num) {

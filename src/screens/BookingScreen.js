@@ -12,36 +12,15 @@ import {
 import { moderateScale, verticalScale, scale } from 'react-native-size-matters';
 import { Images } from '../contants';
 import { AnimatedIcon } from '../components';
-import { fetchParkingslotAreaByCategory, fetchParkingslotByArea } from '../store/parkingslotSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { isEqual } from 'lodash';
 import { createBooking } from '../store/bookingSlice';
 import { useCallback } from 'react';
 import Toast from 'react-native-toast-message';
+import { dataAreaDiagram, dataCategoryDiagram } from '../utils/database';
 
 export default function BookingScreen({ route, navigation }) {
-  const { vehicleId, categoryId, arrive_at, leave_at } = route.params;
-  const dispatch = useDispatch();
-  const { listAreaByCategory, listPSbyArea } = useSelector((state) => state.parkingslot);
   const [objSelected, setobjSelected] = React.useState(null);
-
-  useEffect(() => {
-    dispatch(fetchParkingslotAreaByCategory({
-      vehicleCategoryId: categoryId,
-      start_Date: arrive_at,
-      end_Date: leave_at
-    }));
-  }, [categoryId, dispatch]);
-
-  useEffect(() => {
-    if (listAreaByCategory.length > 0) {
-      dispatch(fetchParkingslotByArea({
-        area: listAreaByCategory[0].parking_Area,
-        start_Date: arrive_at,
-        end_Date: leave_at
-      }));
-    }
-  }, [listAreaByCategory, dispatch])
 
   const handleAreaClick = (selectedArea) => {
     dispatch(fetchParkingslotByArea({
@@ -52,32 +31,10 @@ export default function BookingScreen({ route, navigation }) {
   }
 
   const handleOnBook = useCallback(async () => {
-    if (objSelected) {
-      const bookingDetailData = {
-        vehicle_Id: vehicleId,
-        start_Date: arrive_at,
-        end_Date: leave_at,
-        parking_Slot_Id: objSelected.parkingSlotId,
-      };
-      dispatch(createBooking(bookingDetailData))
-        .then((result) => {
-          if (result?.payload?.statusCode === 200) {
-            navigation.navigate('Payment', result.payload.data);
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-        });
-    } else {
-      Toast.show({
-        type: 'error',
-        text1: 'ParkingHT',
-        text2: 'Bạn chưa chọn chỗ mà mình sẽ đỗ',
-      });
-    }
+    navigation.navigate('Payment')
   }, [objSelected]);
 
-  const data = listPSbyArea.map((item, index) => ({ ...item, id: index + 1 })).sort((a, b) => a.parking_slot_name - b.parking_slot_name);
+  const data = dataAreaDiagram.map((item, index) => ({ ...item, id: index + 1 })).sort((a, b) => a.parking_slot_name - b.parking_slot_name);
   const dataLeft =
     data !== undefined && data.filter((item) => item.id % 2 !== 0);
   const dataRight =
@@ -99,7 +56,7 @@ export default function BookingScreen({ route, navigation }) {
         <View style={styles.wrapperParking}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View style={styles.containerArea}>
-              {listAreaByCategory.map((area, index) => (
+              {dataCategoryDiagram.map((area, index) => (
                 <TouchableOpacity
                   style={styles.AreaName}
                   key={index}

@@ -6,11 +6,9 @@ import Ionicons from "react-native-vector-icons/Ionicons"
 import { Display } from "../utils";
 import { validate } from "../utils/helpers";
 import { useDispatch } from "react-redux";
-import { apiSendOtpByPh } from "../store/otpSlice";
 
 
 const ForgotPasswordScreen = ({ navigation }) => {
-    const dispatch = useDispatch();
     const [invalidFields, setInvalidFields] = useState([]);
     const [payload, setPayload] = useState({
         phoneNumber: ''
@@ -20,16 +18,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
     const sendOTPSMS = async () => {
         const invalids = validate(payload, setInvalidFields)
         if (invalids === 0) {
-            const destPhoneNumber = payload.phoneNumber
-            dispatch(apiSendOtpByPh(destPhoneNumber))
-                .then((result) => {
-                    if (result.payload?.status === "DELIVERED") {
-                        navigation.navigate('Verification');
-                    }
-                })
-                .catch((error) => {
-                    console.log(error)
-                });
+            navigation.navigate('Verification');
         }
     }
 
